@@ -176,6 +176,11 @@ export function createNodeHttpServer(
     },
   );
   server.on("upgrade", async (incoming, socket, head) => {
+    // Node stops handling errors on a socket it hands over for an upgrade. A
+    // client that resets while the request is authorized would otherwise emit
+    // an unhandled 'error' event and stop the process.
+    const abandon = () => socket.destroy();
+    socket.on("error", abandon);
     try {
       const response = await application.fetch(
         webRequest(incoming, origin, new AbortController(), true),
@@ -189,6 +194,8 @@ export function createNodeHttpServer(
         );
         return;
       }
+      // ws installs its own error handling for the accepted socket.
+      socket.off("error", abandon);
       sockets.handleUpgrade(incoming, socket, head, (websocket) =>
         client.attach(websocket),
       );
