@@ -23,11 +23,7 @@ pnpm build
 pnpm exec wrangler deploy --dry-run
 ```
 
-Both type-check commands generate `apps/web/tsconfig.blocksuite.json` with local package paths. Restore that generated file before committing:
-
-```sh
-git restore apps/web/tsconfig.blocksuite.json
-```
+Both type-check commands regenerate `apps/web/tsconfig.blocksuite.json` from the installed BlockSuite packages. The paths are relative, so the file only changes when those packages change. Commit it with the dependency update that changed it.
 
 Frontend builds, Worker builds, and Node packages are separate outputs. A shared service change needs checks on both adapters.
 

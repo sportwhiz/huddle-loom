@@ -1,6 +1,424 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@blocksuite/affine": [
+        "../../node_modules/.pnpm/@blocksuite+affine@0.22.4_@types+node@22.19.11_@types+react@18.3.31_babel-plugin-macros_f836a324e5ca6017e6a1ec12a1d3f2d4/node_modules/@blocksuite/affine/dist/index.d.ts"
+      ],
+      "@blocksuite/affine/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine@0.22.4_@types+node@22.19.11_@types+react@18.3.31_babel-plugin-macros_f836a324e5ca6017e6a1ec12a1d3f2d4/node_modules/@blocksuite/affine/dist/*"
+      ],
+      "@blocksuite/affine-block-attachment": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-attachment@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-attachment/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-block-attachment/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-attachment@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-attachment/dist/*"
+      ],
+      "@blocksuite/affine-block-bookmark": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-bookmark@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-bookmark/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-block-bookmark/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-bookmark@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-bookmark/dist/*"
+      ],
+      "@blocksuite/affine-block-callout": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-callout@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-callout/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-block-callout/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-callout@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-callout/dist/*"
+      ],
+      "@blocksuite/affine-block-code": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-code@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-code/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-block-code/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-code@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-code/dist/*"
+      ],
+      "@blocksuite/affine-block-data-view": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-data-view@0.22.4_@types+node@22.19.11_@types+react@18.3.31_bab_51832cac58d3898c8263cb28e4c80092/node_modules/@blocksuite/affine-block-data-view/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-block-data-view/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-data-view@0.22.4_@types+node@22.19.11_@types+react@18.3.31_bab_51832cac58d3898c8263cb28e4c80092/node_modules/@blocksuite/affine-block-data-view/dist/*"
+      ],
+      "@blocksuite/affine-block-database": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-database@0.22.4_@types+node@22.19.11_@types+react@18.3.31_babe_ebee9687ac94dc38a2e459e81e51dbb6/node_modules/@blocksuite/affine-block-database/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-block-database/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-database@0.22.4_@types+node@22.19.11_@types+react@18.3.31_babe_ebee9687ac94dc38a2e459e81e51dbb6/node_modules/@blocksuite/affine-block-database/dist/*"
+      ],
+      "@blocksuite/affine-block-divider": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-divider@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-divider/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-block-divider/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-divider@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-divider/dist/*"
+      ],
+      "@blocksuite/affine-block-edgeless-text": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-edgeless-text@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-edgeless-text/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-block-edgeless-text/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-edgeless-text@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-edgeless-text/dist/*"
+      ],
+      "@blocksuite/affine-block-embed": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-embed@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-embed/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-block-embed/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-embed@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-embed/dist/*"
+      ],
+      "@blocksuite/affine-block-embed-doc": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-embed-doc@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-embed-doc/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-block-embed-doc/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-embed-doc@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-embed-doc/dist/*"
+      ],
+      "@blocksuite/affine-block-frame": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-frame@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-frame/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-block-frame/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-frame@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-frame/dist/*"
+      ],
+      "@blocksuite/affine-block-image": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-image@0.22.4_@types+react@18.3.31_babel-plugin-macros@3.1.0_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-image/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-block-image/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-image@0.22.4_@types+react@18.3.31_babel-plugin-macros@3.1.0_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-image/dist/*"
+      ],
+      "@blocksuite/affine-block-latex": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-latex@0.22.4_@types+react@18.3.31_babel-plugin-macros@3.1.0_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-latex/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-block-latex/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-latex@0.22.4_@types+react@18.3.31_babel-plugin-macros@3.1.0_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-latex/dist/*"
+      ],
+      "@blocksuite/affine-block-list": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-list@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-list/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-block-list/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-list@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-list/dist/*"
+      ],
+      "@blocksuite/affine-block-note": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-note@0.22.4_@types+react@18.3.31_babel-plugin-macros@3.1.0_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-note/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-block-note/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-note@0.22.4_@types+react@18.3.31_babel-plugin-macros@3.1.0_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-note/dist/*"
+      ],
+      "@blocksuite/affine-block-paragraph": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-paragraph@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-paragraph/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-block-paragraph/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-paragraph@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-paragraph/dist/*"
+      ],
+      "@blocksuite/affine-block-root": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-root@0.22.4_@types+node@22.19.11_@types+react@18.3.31_babel-pl_b9cf7fb3c380fc6d3c23e98a745f4bb7/node_modules/@blocksuite/affine-block-root/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-block-root/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-root@0.22.4_@types+node@22.19.11_@types+react@18.3.31_babel-pl_b9cf7fb3c380fc6d3c23e98a745f4bb7/node_modules/@blocksuite/affine-block-root/dist/*"
+      ],
+      "@blocksuite/affine-block-surface": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-surface@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-surface/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-block-surface/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-surface@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-surface/dist/*"
+      ],
+      "@blocksuite/affine-block-surface-ref": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-surface-ref@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-surface-ref/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-block-surface-ref/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-surface-ref@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-block-surface-ref/dist/*"
+      ],
+      "@blocksuite/affine-block-table": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-table@0.22.4_@types+node@22.19.11_@types+react@18.3.31_change-_a272c99f329413ae6a68436d391d4be5/node_modules/@blocksuite/affine-block-table/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-block-table/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-block-table@0.22.4_@types+node@22.19.11_@types+react@18.3.31_change-_a272c99f329413ae6a68436d391d4be5/node_modules/@blocksuite/affine-block-table/dist/*"
+      ],
+      "@blocksuite/affine-components": [
+        "../../node_modules/.pnpm/@blocksuite+affine-components@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-components/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-components/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-components@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-components/dist/*"
+      ],
+      "@blocksuite/affine-ext-loader": [
+        "../../node_modules/.pnpm/@blocksuite+affine-ext-loader@0.22.4/node_modules/@blocksuite/affine-ext-loader/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-ext-loader/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-ext-loader@0.22.4/node_modules/@blocksuite/affine-ext-loader/dist/*"
+      ],
+      "@blocksuite/affine-foundation": [
+        "../../node_modules/.pnpm/@blocksuite+affine-foundation@0.22.4_@types+node@22.19.11_@types+react@18.3.31_change-c_16264ca8791704765ef10a0c5ce7540a/node_modules/@blocksuite/affine-foundation/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-foundation/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-foundation@0.22.4_@types+node@22.19.11_@types+react@18.3.31_change-c_16264ca8791704765ef10a0c5ce7540a/node_modules/@blocksuite/affine-foundation/dist/*"
+      ],
+      "@blocksuite/affine-fragment-adapter-panel": [
+        "../../node_modules/.pnpm/@blocksuite+affine-fragment-adapter-panel@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-fragment-adapter-panel/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-fragment-adapter-panel/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-fragment-adapter-panel@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-fragment-adapter-panel/dist/*"
+      ],
+      "@blocksuite/affine-fragment-doc-title": [
+        "../../node_modules/.pnpm/@blocksuite+affine-fragment-doc-title@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-fragment-doc-title/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-fragment-doc-title/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-fragment-doc-title@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-fragment-doc-title/dist/*"
+      ],
+      "@blocksuite/affine-fragment-frame-panel": [
+        "../../node_modules/.pnpm/@blocksuite+affine-fragment-frame-panel@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-fragment-frame-panel/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-fragment-frame-panel/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-fragment-frame-panel@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-fragment-frame-panel/dist/*"
+      ],
+      "@blocksuite/affine-fragment-outline": [
+        "../../node_modules/.pnpm/@blocksuite+affine-fragment-outline@0.22.4_@types+react@18.3.31_babel-plugin-macros@3.1.0_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-fragment-outline/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-fragment-outline/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-fragment-outline@0.22.4_@types+react@18.3.31_babel-plugin-macros@3.1.0_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-fragment-outline/dist/*"
+      ],
+      "@blocksuite/affine-gfx-brush": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-brush@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-gfx-brush/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-gfx-brush/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-brush@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-gfx-brush/dist/*"
+      ],
+      "@blocksuite/affine-gfx-connector": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-connector@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-gfx-connector/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-gfx-connector/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-connector@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-gfx-connector/dist/*"
+      ],
+      "@blocksuite/affine-gfx-group": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-group@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-gfx-group/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-gfx-group/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-group@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-gfx-group/dist/*"
+      ],
+      "@blocksuite/affine-gfx-link": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-link@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-gfx-link/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-gfx-link/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-link@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-gfx-link/dist/*"
+      ],
+      "@blocksuite/affine-gfx-mindmap": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-mindmap@0.22.4_@types+react@18.3.31_babel-plugin-macros@3.1.0_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-gfx-mindmap/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-gfx-mindmap/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-mindmap@0.22.4_@types+react@18.3.31_babel-plugin-macros@3.1.0_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-gfx-mindmap/dist/*"
+      ],
+      "@blocksuite/affine-gfx-note": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-note@0.22.4_@types+react@18.3.31_babel-plugin-macros@3.1.0_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-gfx-note/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-gfx-note/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-note@0.22.4_@types+react@18.3.31_babel-plugin-macros@3.1.0_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-gfx-note/dist/*"
+      ],
+      "@blocksuite/affine-gfx-pointer": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-pointer@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-gfx-pointer/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-gfx-pointer/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-pointer@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-gfx-pointer/dist/*"
+      ],
+      "@blocksuite/affine-gfx-shape": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-shape@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-gfx-shape/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-gfx-shape/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-shape@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-gfx-shape/dist/*"
+      ],
+      "@blocksuite/affine-gfx-template": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-template@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-gfx-template/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-gfx-template/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-template@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-gfx-template/dist/*"
+      ],
+      "@blocksuite/affine-gfx-text": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-text@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-gfx-text/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-gfx-text/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-text@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-gfx-text/dist/*"
+      ],
+      "@blocksuite/affine-gfx-turbo-renderer": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-turbo-renderer@0.22.4/node_modules/@blocksuite/affine-gfx-turbo-renderer/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-gfx-turbo-renderer/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-gfx-turbo-renderer@0.22.4/node_modules/@blocksuite/affine-gfx-turbo-renderer/dist/*"
+      ],
+      "@blocksuite/affine-inline-footnote": [
+        "../../node_modules/.pnpm/@blocksuite+affine-inline-footnote@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-inline-footnote/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-inline-footnote/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-inline-footnote@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-inline-footnote/dist/*"
+      ],
+      "@blocksuite/affine-inline-latex": [
+        "../../node_modules/.pnpm/@blocksuite+affine-inline-latex@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-inline-latex/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-inline-latex/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-inline-latex@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-inline-latex/dist/*"
+      ],
+      "@blocksuite/affine-inline-link": [
+        "../../node_modules/.pnpm/@blocksuite+affine-inline-link@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-inline-link/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-inline-link/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-inline-link@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-inline-link/dist/*"
+      ],
+      "@blocksuite/affine-inline-mention": [
+        "../../node_modules/.pnpm/@blocksuite+affine-inline-mention@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-inline-mention/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-inline-mention/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-inline-mention@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-inline-mention/dist/*"
+      ],
+      "@blocksuite/affine-inline-preset": [
+        "../../node_modules/.pnpm/@blocksuite+affine-inline-preset@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-inline-preset/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-inline-preset/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-inline-preset@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-inline-preset/dist/*"
+      ],
+      "@blocksuite/affine-inline-reference": [
+        "../../node_modules/.pnpm/@blocksuite+affine-inline-reference@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-inline-reference/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-inline-reference/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-inline-reference@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-inline-reference/dist/*"
+      ],
+      "@blocksuite/affine-model": [
+        "../../node_modules/.pnpm/@blocksuite+affine-model@0.22.4/node_modules/@blocksuite/affine-model/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-model/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-model@0.22.4/node_modules/@blocksuite/affine-model/dist/*"
+      ],
+      "@blocksuite/affine-rich-text": [
+        "../../node_modules/.pnpm/@blocksuite+affine-rich-text@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-rich-text/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-rich-text/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-rich-text@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-rich-text/dist/*"
+      ],
+      "@blocksuite/affine-shared": [
+        "../../node_modules/.pnpm/@blocksuite+affine-shared@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-shared/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-shared/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-shared@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-shared/dist/*"
+      ],
+      "@blocksuite/affine-widget-drag-handle": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-drag-handle@0.22.4_@types+react@18.3.31_babel-plugin-macros@3_6e9049344b0c94593d712a64dc50c719/node_modules/@blocksuite/affine-widget-drag-handle/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-widget-drag-handle/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-drag-handle@0.22.4_@types+react@18.3.31_babel-plugin-macros@3_6e9049344b0c94593d712a64dc50c719/node_modules/@blocksuite/affine-widget-drag-handle/dist/*"
+      ],
+      "@blocksuite/affine-widget-edgeless-auto-connect": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-edgeless-auto-connect@0.22.4_@types+react@18.3.31_babel-plugi_97292978403cadefad70e8fabb127122/node_modules/@blocksuite/affine-widget-edgeless-auto-connect/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-widget-edgeless-auto-connect/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-edgeless-auto-connect@0.22.4_@types+react@18.3.31_babel-plugi_97292978403cadefad70e8fabb127122/node_modules/@blocksuite/affine-widget-edgeless-auto-connect/dist/*"
+      ],
+      "@blocksuite/affine-widget-edgeless-dragging-area": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-edgeless-dragging-area@0.22.4_@types+react@18.3.31_babel-plug_2d805e9055f450a2b85c1d6e7730930f/node_modules/@blocksuite/affine-widget-edgeless-dragging-area/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-widget-edgeless-dragging-area/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-edgeless-dragging-area@0.22.4_@types+react@18.3.31_babel-plug_2d805e9055f450a2b85c1d6e7730930f/node_modules/@blocksuite/affine-widget-edgeless-dragging-area/dist/*"
+      ],
+      "@blocksuite/affine-widget-edgeless-selected-rect": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-edgeless-selected-rect@0.22.4_@types+react@18.3.31_babel-plug_392a5a4baa422cb0af4428d31393ddd7/node_modules/@blocksuite/affine-widget-edgeless-selected-rect/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-widget-edgeless-selected-rect/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-edgeless-selected-rect@0.22.4_@types+react@18.3.31_babel-plug_392a5a4baa422cb0af4428d31393ddd7/node_modules/@blocksuite/affine-widget-edgeless-selected-rect/dist/*"
+      ],
+      "@blocksuite/affine-widget-edgeless-toolbar": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-edgeless-toolbar@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-widget-edgeless-toolbar/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-widget-edgeless-toolbar/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-edgeless-toolbar@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-widget-edgeless-toolbar/dist/*"
+      ],
+      "@blocksuite/affine-widget-edgeless-zoom-toolbar": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-edgeless-zoom-toolbar@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-widget-edgeless-zoom-toolbar/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-widget-edgeless-zoom-toolbar/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-edgeless-zoom-toolbar@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-widget-edgeless-zoom-toolbar/dist/*"
+      ],
+      "@blocksuite/affine-widget-frame-title": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-frame-title@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-widget-frame-title/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-widget-frame-title/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-frame-title@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-widget-frame-title/dist/*"
+      ],
+      "@blocksuite/affine-widget-keyboard-toolbar": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-keyboard-toolbar@0.22.4_@types+node@22.19.11_@types+react@18._45368edfcdc2d645049cb4ead78bcdc9/node_modules/@blocksuite/affine-widget-keyboard-toolbar/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-widget-keyboard-toolbar/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-keyboard-toolbar@0.22.4_@types+node@22.19.11_@types+react@18._45368edfcdc2d645049cb4ead78bcdc9/node_modules/@blocksuite/affine-widget-keyboard-toolbar/dist/*"
+      ],
+      "@blocksuite/affine-widget-linked-doc": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-linked-doc@0.22.4_@types+react@18.3.31_babel-plugin-macros@3._13d6af412c98ff5ecfc4421b2b7cc03d/node_modules/@blocksuite/affine-widget-linked-doc/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-widget-linked-doc/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-linked-doc@0.22.4_@types+react@18.3.31_babel-plugin-macros@3._13d6af412c98ff5ecfc4421b2b7cc03d/node_modules/@blocksuite/affine-widget-linked-doc/dist/*"
+      ],
+      "@blocksuite/affine-widget-note-slicer": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-note-slicer@0.22.4_@types+react@18.3.31_babel-plugin-macros@3_4c7027e7989ac46f2e6786af3b0194f8/node_modules/@blocksuite/affine-widget-note-slicer/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-widget-note-slicer/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-note-slicer@0.22.4_@types+react@18.3.31_babel-plugin-macros@3_4c7027e7989ac46f2e6786af3b0194f8/node_modules/@blocksuite/affine-widget-note-slicer/dist/*"
+      ],
+      "@blocksuite/affine-widget-page-dragging-area": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-page-dragging-area@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-widget-page-dragging-area/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-widget-page-dragging-area/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-page-dragging-area@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-widget-page-dragging-area/dist/*"
+      ],
+      "@blocksuite/affine-widget-remote-selection": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-remote-selection@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-widget-remote-selection/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-widget-remote-selection/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-remote-selection@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-widget-remote-selection/dist/*"
+      ],
+      "@blocksuite/affine-widget-scroll-anchoring": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-scroll-anchoring@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-widget-scroll-anchoring/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-widget-scroll-anchoring/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-scroll-anchoring@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-widget-scroll-anchoring/dist/*"
+      ],
+      "@blocksuite/affine-widget-slash-menu": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-slash-menu@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-widget-slash-menu/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-widget-slash-menu/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-slash-menu@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-widget-slash-menu/dist/*"
+      ],
+      "@blocksuite/affine-widget-toolbar": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-toolbar@0.22.4_@types+node@22.19.11_@types+react@18.3.31_babe_21bc8112f6c2da6fcf91c28ddafcf9d7/node_modules/@blocksuite/affine-widget-toolbar/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-widget-toolbar/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-toolbar@0.22.4_@types+node@22.19.11_@types+react@18.3.31_babe_21bc8112f6c2da6fcf91c28ddafcf9d7/node_modules/@blocksuite/affine-widget-toolbar/dist/*"
+      ],
+      "@blocksuite/affine-widget-viewport-overlay": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-viewport-overlay@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-widget-viewport-overlay/dist/index.d.ts"
+      ],
+      "@blocksuite/affine-widget-viewport-overlay/*": [
+        "../../node_modules/.pnpm/@blocksuite+affine-widget-viewport-overlay@0.22.4_@types+react@18.3.31_change-case@4.1.2_react@18.3.1/node_modules/@blocksuite/affine-widget-viewport-overlay/dist/*"
+      ],
+      "@blocksuite/data-view": [
+        "../../node_modules/.pnpm/@blocksuite+data-view@0.22.4_@types+node@22.19.11_@types+react@18.3.31_change-case@4.1._1d0291a22e888e6b604e8bbbbabf4395/node_modules/@blocksuite/data-view/dist/index.d.ts"
+      ],
+      "@blocksuite/data-view/*": [
+        "../../node_modules/.pnpm/@blocksuite+data-view@0.22.4_@types+node@22.19.11_@types+react@18.3.31_change-case@4.1._1d0291a22e888e6b604e8bbbbabf4395/node_modules/@blocksuite/data-view/dist/*"
+      ],
+      "@blocksuite/global": [
+        "../../node_modules/.pnpm/@blocksuite+global@0.22.4/node_modules/@blocksuite/global/dist/index.d.ts"
+      ],
+      "@blocksuite/global/*": [
+        "../../node_modules/.pnpm/@blocksuite+global@0.22.4/node_modules/@blocksuite/global/dist/*"
+      ],
+      "@blocksuite/icons/*": [
+        "../../node_modules/.pnpm/@blocksuite+icons@2.2.17_@types+react@18.3.31_change-case@4.1.2_lit@3.3.1_react@18.3.1/node_modules/@blocksuite/icons/dist/*"
+      ],
+      "@blocksuite/std": [
+        "../../node_modules/.pnpm/@blocksuite+std@0.22.4/node_modules/@blocksuite/std/dist/index.d.ts"
+      ],
+      "@blocksuite/std/*": [
+        "../../node_modules/.pnpm/@blocksuite+std@0.22.4/node_modules/@blocksuite/std/dist/*"
+      ],
+      "@blocksuite/store": [
+        "../../node_modules/.pnpm/@blocksuite+store@0.22.4/node_modules/@blocksuite/store/dist/index.d.ts"
+      ],
+      "@blocksuite/store/*": [
+        "../../node_modules/.pnpm/@blocksuite+store@0.22.4/node_modules/@blocksuite/store/dist/*"
+      ],
+      "@blocksuite/sync": [
+        "../../node_modules/.pnpm/@blocksuite+sync@0.22.4_yjs@13.6.21/node_modules/@blocksuite/sync/dist/index.d.ts"
+      ],
+      "@blocksuite/sync/*": [
+        "../../node_modules/.pnpm/@blocksuite+sync@0.22.4_yjs@13.6.21/node_modules/@blocksuite/sync/dist/*"
+      ]
+    }
   }
 }
