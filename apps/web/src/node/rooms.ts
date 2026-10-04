@@ -284,6 +284,7 @@ export async function acquireNodeOwnership(pool: Pool) {
   }
   let lost = false;
   let released = false;
+  let closing: Promise<void> | undefined;
   const listeners = new Set<() => void>();
   const fail = () => {
     if (released || lost) return;
@@ -335,11 +336,27 @@ export async function acquireNodeOwnership(pool: Pool) {
       return () => listeners.delete(listener);
     },
     fail,
-    close() {
-      if (released) return;
+    close(force = false) {
+      if (closing) return closing;
       released = true;
-      connection.destroy();
       listeners.clear();
+      return (closing = (async () => {
+        let deadline: ReturnType<typeof setTimeout> | undefined;
+        try {
+          // A local socket destroy does not acknowledge MySQL's lock release.
+          // On a drained shutdown, wait for its reply before allowing a restart.
+          if (!lost && !force)
+            await Promise.race([
+              connection.query("SELECT RELEASE_LOCK(?)", [lockName]),
+              new Promise<never>((_, reject) => {
+                deadline = setTimeout(() => reject(new Error("Database ownership release timed out")), 2000);
+              }),
+            ]);
+        } finally {
+          if (deadline) clearTimeout(deadline);
+          connection.destroy();
+        }
+      })());
     },
   };
 }
@@ -513,7 +530,7 @@ export async function createNodeRooms(
       await tail;
       // Destroy, rather than return a connection with a named lock to the pool.
       removeLossListener();
-      if (!suppliedOwnership) ownership.close();
+      if (!suppliedOwnership) await ownership.close();
       entries.clear();
     },
   };
