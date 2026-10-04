@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      ref:
+        type: string
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_PASSWORD: disposable-canvas-conformance
+          POSTGRES_DB: canvas_auth_test
+        ports:
+          - 55432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.30.3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: pnpm exec wrangler deploy --dry-run
+      - name: Native authentication, revocation, rotation and restore
+        run: pnpm --filter @whiteboard/web exec node scripts/run-auth-tests.mjs
+      - name: Install Chromium for native OAuth browser regression
+        run: pnpm --filter @whiteboard/web exec playwright install --with-deps chromium
+      - name: Native OAuth browser consent and MCP connection
+        run: pnpm --filter @whiteboard/web run test:oauth-browser
+      - name: PostgreSQL authentication adapter
+        run: pnpm --filter @whiteboard/web run test:auth-postgres
+      - name: Native deployment artifact
+        run: WHITEBOARD_WRANGLER_CONFIG=wrangler.native.jsonc pnpm run build
+      - run: pnpm exec wrangler deploy --dry-run

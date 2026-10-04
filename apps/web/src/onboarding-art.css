@@ -1,0 +1,104 @@
+.welcome-art {
+  overflow: hidden;
+  color: var(--text-primary, #252b35);
+  background: var(--welcome-art-background, #f3f2ec);
+  border-radius: 16px;
+}
+.welcome-art svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.welcome-art-loom img { display: block; width: 100%; height: auto; }
+.welcome-art-huddle { background: #f7f3ea !important; }
+.welcome-art-huddle img { display: block; width: 100%; height: 240px; object-fit: contain; }
+[data-theme="dark"] .welcome-art-huddle { background: transparent !important; }
+@media (max-width: 540px) { .welcome-art-huddle img { height: 185px; } }
+.welcome-dot {
+  fill: var(--text-secondary, #666e7a);
+  opacity: 0.2;
+}
+.welcome-panel {
+  fill: var(--surface, #fff);
+  stroke: var(--line, var(--border, #dfe1e5));
+  stroke-width: 1;
+}
+.welcome-note {
+  stroke: #00000008;
+  filter: drop-shadow(0 3px 3px #1118270e);
+}
+.welcome-note.yellow {
+  fill: #f5e49e;
+}
+.welcome-note.pink {
+  fill: #efb99e;
+}
+.welcome-note.green {
+  fill: #c6d8bd;
+}
+.welcome-note.lavender {
+  fill: #d5deec;
+}
+.welcome-note-text {
+  fill: #39372f;
+  font-size: 14px;
+  font-weight: 550;
+}
+.welcome-text {
+  fill: var(--text-primary, var(--text, #252b35));
+  font-size: 12px;
+}
+.welcome-text.strong {
+  font-size: 15px;
+  font-weight: 650;
+}
+.welcome-text.muted {
+  fill: var(--text-secondary, #656d79);
+  font-size: 11px;
+}
+.welcome-text.small {
+  font-size: 10px;
+}
+.welcome-connector,
+.welcome-arrow {
+  stroke: var(--text-secondary, #667080);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.welcome-icon {
+  stroke: var(--text-secondary, #667080);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.welcome-selection,
+.welcome-accent-fill {
+  fill: var(--accent, #3e4f72);
+}
+.welcome-selected {
+  fill: var(--accent-soft, #eff1fc);
+}
+.welcome-subtle {
+  fill: var(--surface-hover, #f8f9fb);
+}
+.welcome-accent-stroke {
+  stroke: var(--accent, #4262ff);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.welcome-success {
+  fill: #dceee2;
+}
+.welcome-success-ink {
+  fill: #29644c;
+  font-size: 10px;
+  font-weight: 600;
+}
+.welcome-rule {
+  stroke: var(--line, var(--border, #e3e5eb));
+}
+[data-theme="dark"] .welcome-art {
+  --welcome-art-background: #282d33;
+}

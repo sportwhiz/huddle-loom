@@ -1,0 +1,120 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "huddle-loom",
+  "main": "src/worker.ts",
+  "compatibility_date": "2026-09-25",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "vars": {
+    "AUTH_MODE": "native",
+    "ACCESS_INTEGRATION": "off"
+  },
+  "limits": {
+    "cpu_ms": 30000
+  },
+  "triggers": {
+    "crons": [
+      "* * * * *"
+    ]
+  },
+  "keep_vars": true,
+  "workers_dev": true,
+  "preview_urls": true,
+  "assets": {
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": [
+      "/api/*",
+      "/oauth/*",
+      "/.well-known/*",
+      "/mcp",
+      "/mcp/*",
+      "/docs/*"
+    ]
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "BOARD_ROOMS",
+        "class_name": "BoardRoom"
+      },
+      {
+        "name": "INSTALLATION_KEYS",
+        "class_name": "InstallationKeys"
+      }
+    ]
+  },
+  "d1_databases": [
+    {
+      "binding": "CATALOG",
+      "database_name": "huddle-loom-native-catalog",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "BLOBS",
+      "bucket_name": "huddle-loom-native-blobs"
+    }
+  ],
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "BoardRoom"
+      ]
+    },
+    {
+      "tag": "v2-installation-keys",
+      "new_sqlite_classes": [
+        "InstallationKeys"
+      ]
+    }
+  ],
+  "observability": {
+    "enabled": true
+  },
+  "previews": {
+    "vars": {
+      "AUTH_MODE": "native",
+      "ACCESS_INTEGRATION": "off"
+    },
+    "durable_objects": {
+      "bindings": [
+        {
+          "name": "BOARD_ROOMS",
+          "class_name": "BoardRoom"
+        },
+        {
+          "name": "INSTALLATION_KEYS",
+          "class_name": "InstallationKeys"
+        }
+      ]
+    },
+    "d1_databases": [
+      {
+        "binding": "CATALOG",
+        "database_name": "huddle-loom-preview-catalog",
+        "migrations_dir": "migrations"
+      }
+    ],
+    "r2_buckets": [
+      {
+        "binding": "BLOBS",
+        "bucket_name": "huddle-loom-preview-blobs"
+      }
+    ],
+    "send_email": [
+      {
+        "name": "EMAIL"
+      }
+    ]
+  },
+  "upload_source_maps": true,
+  "send_email": [
+    {
+      "name": "EMAIL"
+    }
+  ]
+}

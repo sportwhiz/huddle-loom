@@ -1,0 +1,152 @@
+/* Every product surface uses these roles in both appearances. */
+:root {
+  --radius-control: 8px;
+  --radius-surface: 12px;
+  --canvas: #f5f4ef;
+  --surface: #ffffff;
+  --surface-muted: #f8f7f3;
+  --surface-hover: #eeeee8;
+  --border: #dedfd8;
+  --text: #303748;
+  --text-secondary: #6a716f;
+  --text-muted: #6a716f;
+  --accent: #3e4f72;
+  --accent-soft: #e9edf3;
+  --on-accent: #ffffff;
+  --success: #23805a;
+  --success-soft: #e5f6ee;
+  --danger: #b4364b;
+  --danger-soft: #fff0f2;
+  --shadow: 0 2px 8px #17203305, 0 12px 30px #1720330d;
+  --grid-dot: #d2d5cd;
+}
+:root[data-theme="dark"] {
+  --canvas: #20242b;
+  --surface: #2b313b;
+  --surface-muted: #24292f;
+  --surface-hover: #353d47;
+  --border: #454d57;
+  --text: #f0eee5;
+  --text-secondary: #b9bfc9;
+  --text-muted: #b9bfc9;
+  --accent: #b6c6e7;
+  --accent-soft: #354158;
+  --on-accent: #25314a;
+  --success: #85d4ac;
+  --success-soft: #1b3b32;
+  --danger: #ffa7b4;
+  --danger-soft: #432b36;
+  --shadow: 0 2px 8px #0002, 0 12px 30px #0003;
+  --grid-dot: #3c454c;
+}
+body {
+  color: var(--text);
+  background: var(--canvas);
+}
+input,
+textarea,
+select {
+  color: var(--text);
+  background: var(--surface);
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+button:disabled {
+  cursor: default;
+}
+.theme-menu {
+  position: relative;
+  flex: 0 0 auto;
+}
+.theme-menu > summary {
+  list-style: none;
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 7px;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+.theme-menu summary::-webkit-details-marker {
+  display: none;
+}
+.theme-menu > summary:hover {
+  background: var(--surface-hover);
+}
+.theme-menu svg {
+  width: 20px;
+  height: 20px;
+}
+.appearance-popover {
+  position: absolute;
+  z-index: 110;
+  right: 0;
+  top: 44px;
+  width: 216px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.appearance-popover strong {
+  display: block;
+  padding: 8px;
+  font-size: 12px;
+}
+.appearance-popover button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px;
+  border: 0;
+  border-radius: 6px;
+  color: var(--text);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+.appearance-popover button:hover {
+  background: var(--surface-hover);
+}
+.appearance-popover button[aria-pressed="true"] {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+/* Sticky colors are board content. They keep dark ink in either appearance. */
+.editor-canvas [data-testid="edgeless-note-container"][data-collapse="true"] {
+  color: #303748;
+  --affine-text-primary-color: #303748;
+  --affine-text-secondary-color: #425574;
+  --affine-link-color: #273fba;
+}
+.sticky-text-editor {
+  color: #303748 !important;
+  color-scheme: light;
+}
+.draft-list article {
+  color: #303748;
+}
+:root[data-theme="dark"] .presence-stack > span {
+  border-color: var(--surface);
+}
+:root[data-theme="dark"] .canvas-modal-backdrop,
+:root[data-theme="dark"] .share-backdrop,
+:root[data-theme="dark"] .modal-backdrop {
+  background: #050911a6;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

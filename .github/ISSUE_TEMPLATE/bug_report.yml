@@ -1,0 +1,26 @@
+name: Bug report
+description: Report behavior that did not work as expected
+title: ""
+body:
+  - type: markdown
+    attributes:
+      value: "For vulnerabilities, use private security reporting. Remove secrets and private board content from logs."
+  - type: input
+    id: version
+    attributes:
+      label: Version and host
+      description: App version or commit, and Cloudflare or Node.js hosting
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: What happened?
+      description: Steps to reproduce, expected result, and actual result
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Screenshots or sanitized logs
+      description: Include browser and device details if the problem is visual

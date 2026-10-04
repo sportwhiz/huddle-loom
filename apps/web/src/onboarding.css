@@ -1,0 +1,215 @@
+.onboarding-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2200;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(26, 29, 35, 0.38);
+  backdrop-filter: blur(3px);
+}
+.onboarding-card {
+  position: relative;
+  width: min(520px, 100%);
+  max-height: calc(100dvh - 48px);
+  overflow: auto;
+  border: 1px solid var(--border, #e1e5ef);
+  border-radius: 12px;
+  background: var(--surface, #fff);
+  color: var(--text, #23304a);
+  box-shadow: 0 24px 80px rgba(10, 20, 40, 0.2);
+  outline: none;
+}
+.onboarding-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 24px 16px;
+}
+.onboarding-top > span {
+  max-width: 65%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+  font-weight: 550;
+  letter-spacing: 0;
+  color: var(--text-secondary, #607089);
+}
+.onboarding-top button,
+.onboarding-back,
+.onboarding-error button {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 8px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary, #607089);
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.onboarding-top button:hover,
+.onboarding-back:hover {
+  background: var(--surface-muted, #f1f4fa);
+  color: var(--text, #23304a);
+}
+.onboarding-top svg {
+  width: 14px;
+  height: 14px;
+}
+.onboarding-picture {
+  margin: 0 20px;
+  border: 1px solid var(--border, #e1e5ef);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.onboarding-picture .welcome-art {
+  border-radius: 0;
+}
+.onboarding-copy {
+  padding: 28px 28px 16px;
+}
+.onboarding-copy h2 {
+  font-family: "Whiteboard Editorial", Georgia, serif;
+  margin: 0 0 12px;
+  font-size: 24px;
+  line-height: 1.25;
+  letter-spacing: -0.7px;
+  font-weight: 500;
+}
+.onboarding-copy p {
+  margin: 0;
+  color: var(--text-secondary, #607089);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.onboarding-tip {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 12px;
+  border-radius: 9px;
+  background: var(--surface-muted, #f2f5fc);
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--text-secondary, #607089);
+}
+.onboarding-tip svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.onboarding-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px 28px 28px;
+}
+.onboarding-progress {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.onboarding-progress span {
+  width: 6px;
+  height: 6px;
+  background: var(--border, #dae0ed);
+  border-radius: 6px;
+}
+.onboarding-progress span.current {
+  width: 18px;
+  background: var(--accent, #4262ff);
+}
+.onboarding-progress span.complete {
+  background: var(--accent, #4262ff);
+  opacity: 0.5;
+}
+.onboarding-progress small {
+  margin-left: 5px;
+  color: var(--text-secondary, #607089);
+  font-size: 11px;
+}
+.onboarding-footer > div:last-child {
+  display: flex;
+  gap: 10px;
+}
+.onboarding-back:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.onboarding-next {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 42px;
+  border: 0;
+  border-radius: 9px;
+  padding: 10px 15px;
+  background: var(--accent, #4262ff);
+  color: var(--on-accent, #fff);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.onboarding-next svg {
+  width: 14px;
+  height: 14px;
+}
+.onboarding-next:disabled {
+  opacity: 0.5;
+}
+.onboarding-error {
+  margin: 0 24px;
+  color: var(--danger, #c73848);
+  font-size: 12px;
+}
+.onboarding-spotlight {
+  position: fixed;
+  border: 2px solid var(--accent, #4262ff);
+  border-radius: 12px;
+  pointer-events: none;
+  box-shadow: 0 0 0 4px rgba(62, 79, 114, 0.14);
+}
+.onboarding-card button:focus-visible {
+  outline: 3px solid var(--accent, #4262ff);
+  outline-offset: 3px;
+}
+@media (max-width: 540px) {
+  .onboarding-backdrop {
+    padding: 12px;
+  }
+  .onboarding-card {
+    max-height: calc(100dvh - 24px);
+    border-radius: 16px;
+  }
+  .onboarding-top {
+    padding: 14px 18px;
+  }
+  .onboarding-copy {
+    padding: 20px;
+  }
+  .onboarding-copy h2 {
+  font-family: "Whiteboard Editorial", Georgia, serif;
+    font-size: 22px;
+  }
+  .onboarding-footer {
+    padding: 12px 18px 20px;
+  }
+  .onboarding-picture {
+    margin: 0 14px;
+  }
+  .onboarding-progress small {
+    display: none;
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "name": "huddle-loom",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.30.3",
+  "pnpm": {
+    "overrides": {
+      "yjs": "13.6.21",
+      "vitest": "5.0.2",
+      "tsx>esbuild": "0.28.2",
+      "undici@7.29.0": "7.29.1"
+    }
+  },
+  "scripts": {
+    "dev": "pnpm --filter @whiteboard/web dev",
+    "build": "pnpm -r build && node scripts/write-deploy-redirect.mjs",
+    "deploy": "pnpm --filter @whiteboard/web run deploy",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "test:collaboration": "pnpm --filter @whiteboard/web test:collaboration",
+    "test:oauth": "pnpm --filter @whiteboard/web test:oauth",
+    "test:websocket": "pnpm --filter @whiteboard/web test:websocket",
+    "test:stress": "pnpm --filter @whiteboard/web test:stress",
+    "check": "pnpm typecheck && pnpm test && pnpm build",
+    "deploy:dry": "pnpm build && pnpm exec wrangler deploy --dry-run",
+    "deploy:preview": "pnpm --filter @whiteboard/web run deploy:preview",
+    "build:node": "pnpm --filter @whiteboard/web run build:node",
+    "typecheck:node": "pnpm --filter @whiteboard/web run typecheck:node",
+    "test:node": "pnpm --filter @whiteboard/web exec vitest run src/node",
+    "package:node": "pnpm run build:node"
+  },
+  "cloudflare": {
+    "bindings": {
+      "CATALOG": {
+        "description": "D1 stores folders, workbooks, board metadata, and archive records. It is provisioned automatically on the first deployment."
+      },
+      "BLOBS": {
+        "description": "R2 stores images and other content-addressed whiteboard assets. It is provisioned automatically on the first deployment."
+      },
+      "BOARD_ROOMS": {
+        "description": "The Durable Object keeps live board state, revisions, and synchronization. It is created during Worker deployment."
+      },
+      "SETUP_PASSWORD": {
+        "description": "Choose a private setup password (at least 15 characters). Enter it once on the welcome screen to create your administrator account. This is not an API key."
+      },
+      "INSTALLATION_KEYS": {
+        "description": "Keeps automatically generated sign-in and encryption keys private and stable across updates. Provisioned automatically."
+      },
+      "EMAIL": {
+        "description": "Native Cloudflare email connection. Approve your sending domain and confirm a test email in Huddle Loom when you are ready. Accounts and private invitations work before email is enabled."
+      }
+    }
+  },
+  "devDependencies": {
+    "wrangler": "4.142.0"
+  },
+  "license": "MIT",
+  "description": "A self-hosted whiteboard for shared ideas and editable workflows.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sportwhiz/huddle-loom.git"
+  }
+}

@@ -1,0 +1,3 @@
+# Choose a private setup password of at least 15 characters in the deployment form.
+# No email provider, OAuth app, or generated encryption keys are required.
+SETUP_PASSWORD=

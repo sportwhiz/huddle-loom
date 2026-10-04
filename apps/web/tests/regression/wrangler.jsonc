@@ -1,0 +1,51 @@
+{
+  "name": "canvas-regression-tests",
+  "main": "../../src/worker.ts",
+  "compatibility_date": "2026-09-25",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": [
+      "/api/*",
+      "/oauth/*",
+      "/.well-known/*",
+      "/mcp",
+      "/mcp/*",
+      "/docs/mcp"
+    ]
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "BOARD_ROOMS",
+        "class_name": "BoardRoom"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["BoardRoom"]
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "CATALOG",
+      "database_name": "canvas-regression-tests-catalog",
+      "database_id": "00000000-0000-0000-0000-000000000001",
+      "migrations_dir": "../../migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "BLOBS",
+      "bucket_name": "canvas-regression-tests-blobs"
+    }
+  ],
+  "vars": {
+    "AUTH_MODE": "development",
+    "ENVIRONMENT": "development",
+    "INITIAL_OWNER_EMAIL": "owner@local.test"
+  }
+}

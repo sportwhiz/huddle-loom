@@ -1,0 +1,179 @@
+.welcome-board {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  min-height: 620px;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--board-paper);
+  background-image: radial-gradient(var(--board-dot) .7px, transparent .7px);
+  background-size: 24px 24px;
+}
+.welcome-board-surface {
+  position: relative;
+  width: min(100%, calc((100dvh - 145px) * 1.125), 1080px);
+  aspect-ratio: 900 / 800;
+  max-height: calc(100dvh - 145px);
+  margin: 50px auto 50px;
+  container-type: inline-size;
+}
+.welcome-board-caption {
+  position: absolute;
+  left: 11%;
+  top: 2%;
+  width: 76%;
+  margin: 0;
+  transform: rotate(-2deg);
+  color: var(--text-primary);
+}
+.welcome-board-connections {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  fill: none;
+  stroke: var(--board-ink);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.welcome-board-annotation {
+  position: absolute;
+  top: 27.5%;
+  left: 40%;
+  margin: 0;
+  font: 400 clamp(17px, 2.4cqw, 26px)/1.1 "Whiteboard Hand", cursive;
+  transform: rotate(-6deg);
+  color: var(--text-secondary);
+  pointer-events: none;
+}
+.practice-note {
+  position: absolute;
+  width: 24.222%;
+  height: 25%;
+  background: var(--note-paper);
+  color: #24342c;
+  transform: rotate(var(--note-rotation));
+  box-shadow: 0 2px 3px #17261d09, 0 9px 15px -10px #17261d45;
+  border-radius: 1px 1px 14px 1px;
+}
+.practice-note::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 15px;
+  height: 15px;
+  border-radius: 0 0 14px 0;
+  background: #00000007;
+  pointer-events: none;
+}
+.practice-note-butter { --note-paper: #f5e49e; }
+.practice-note-clay { --note-paper: #efb99e; }
+.practice-note-sage { --note-paper: #c6d8bd; }
+.practice-note.selected { z-index: 2; }
+.practice-note-move {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  border-radius: inherit;
+  background: none;
+  color: inherit;
+  padding: 9% 11%;
+  font: 400 clamp(19px, 2.7cqw, 29px)/1.25 "Whiteboard Hand", cursive;
+  cursor: grab;
+  text-align: left;
+  user-select: none;
+  touch-action: none;
+  overflow: hidden;
+}
+.practice-note-move:active { cursor: grabbing; }
+.practice-note-move strong {
+  display: table;
+  margin-bottom: 10%;
+  padding-bottom: 2px;
+  border-bottom: 1.5px solid #43564177;
+  font-weight: 600;
+  line-height: 1;
+}
+.practice-note-move span { display: block; white-space: pre-wrap; overflow-wrap: anywhere; }
+.practice-note textarea {
+  position: absolute;
+  inset: 30% 8% 6%;
+  width: 84%;
+  height: 64%;
+  padding: 5px;
+  margin: 0;
+  border: 1px solid #294a35;
+  outline: 2px solid #fff8;
+  border-radius: 2px;
+  background: var(--note-paper);
+  color: #24342c;
+  font: 400 clamp(19px, 2.7cqw, 29px)/1.25 "Whiteboard Hand", cursive;
+  resize: none;
+}
+.practice-note-edit {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 4px;
+  color: #294a35;
+  background: #fff9;
+  cursor: pointer;
+}
+.practice-note-edit svg { width: 15px; height: 15px; }
+.welcome-board-bottom {
+  position: absolute;
+  bottom: 28px;
+  left: 42px;
+  right: 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.welcome-board-bottom p { font-size: 12px; margin: 0 0 5px; }
+.welcome-board-bottom small { font-size: 10px; color: var(--text-secondary); }
+.welcome-board-tools {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 2px 8px #15231808;
+  padding: 4px;
+}
+.welcome-board-tools button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-width: 36px;
+  height: 36px;
+  padding: 8px;
+  border: 0;
+  border-radius: 4px;
+  background: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 11px;
+}
+.welcome-board-tools button:hover { background: var(--surface-hover); }
+.welcome-board-tools button:disabled { opacity: .4; cursor: default; }
+.welcome-board-tools svg { width: 17px; height: 17px; }
+[data-theme="dark"] .practice-note { box-shadow: 0 3px 4px #0003, 0 10px 20px -10px #0008; }
+@media (max-width: 1120px) {
+  .welcome-board-bottom { left: 26px; right: 20px; }
+  .welcome-board-tools span { display: none; }
+}
+@media (max-width: 900px) { .welcome-board { display: none; } }

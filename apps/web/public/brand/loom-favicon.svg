@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>.warp{stroke:#a7792b}.weft{stroke:#ca9d43}.cross{stroke:#3d4a73}@media(prefers-color-scheme:dark){.warp{stroke:#d8b366}.weft{stroke:#ebca80}.cross{stroke:#b6c6e7}}</style>
+  <g fill="none" stroke-width="2" stroke-linecap="round">
+    <path class="warp" d="M8 3v26M12 3v26M20 3v26M24 3v26"/>
+    <path class="weft" d="M5 11h22M5 16h22M5 21h22"/>
+    <path class="cross" d="M12 10v2m8-2v2M8 15v2m16-2v2M12 20v2m8-2v2"/>
+  </g>
+</svg>

@@ -1,0 +1,483 @@
+.connections-page {
+  min-height: 100vh;
+  color: var(--text);
+  background: var(--canvas);
+}
+.connections-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 64px;
+  padding: 12px 28px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+}
+.connections-back {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13px;
+}
+.connections-brand {
+  font-size: 15px;
+  font-weight: 750;
+  letter-spacing: -0.3px;
+}
+.connections-content {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 42px 28px 70px;
+}
+.settings-eyebrow {
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.13em;
+}
+.connections-heading h1 {
+  margin: 9px 0 7px;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+.connections-heading > p {
+  margin: 0 0 28px;
+  font-size: 15px;
+  color: var(--text-secondary);
+}
+.connections-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(280px, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+.connection-setup-card,
+.connection-sidebar > section,
+.connected-client-list {
+  padding: 24px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+}
+.connections-page h2 {
+  margin: 0 0 5px;
+  font-size: 17px;
+  letter-spacing: -0.02em;
+}
+.connections-page h3 {
+  margin: 0;
+  font-size: 13px;
+}
+.connections-page p {
+  line-height: 1.6;
+}
+.connection-section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.connection-section-heading p,
+.connection-sidebar > section > p {
+  margin: 4px 0 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.connection-protocol {
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text-muted);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+}
+.connection-client-tabs {
+  display: flex;
+  gap: 5px;
+  padding: 5px;
+  margin: 23px 0;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface-muted);
+}
+.connection-client-tabs button {
+  flex: 1;
+  padding: 9px 8px;
+  border: 0;
+  border-radius: 5px;
+  color: var(--text-secondary);
+  background: transparent;
+  font-size: 12px;
+  cursor: pointer;
+}
+.connection-client-tabs button[aria-pressed="true"] {
+  color: var(--accent);
+  background: var(--surface);
+  box-shadow: 0 1px 4px #0001;
+}
+.connection-endpoint > span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 650;
+}
+.connection-endpoint > div {
+  display: flex;
+  gap: 8px;
+}
+.connection-endpoint input {
+  min-width: 0;
+  flex: 1;
+  padding: 11px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--text);
+  background: var(--surface-muted);
+  font-size: 12px;
+  font-family: ui-monospace, monospace;
+}
+.connections-page button {
+  cursor: pointer;
+}
+.connection-endpoint button,
+.connection-test-prompt button,
+.connection-section-heading button,
+.disconnect-button,
+.connection-confirm button {
+  flex: 0 0 auto;
+  padding: 9px 12px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--text);
+  background: var(--surface);
+  font-size: 12px;
+}
+.connections-page button:hover:not(:disabled) {
+  background: var(--surface-hover);
+}
+.connections-page button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+.connection-local-note {
+  margin: 10px 0 0;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.connection-steps {
+  margin: 24px 0 12px;
+  padding: 0;
+  list-style: none;
+}
+.connection-steps li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin: 16px 0;
+}
+.connection-steps li > span {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 23px;
+  height: 23px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 650;
+}
+.connection-steps p {
+  margin: 1px 0 0;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.connection-guide-link {
+  color: var(--accent);
+  font-size: 12px;
+  text-decoration: none;
+}
+.connection-test-prompt {
+  margin-top: 28px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface-muted);
+}
+.connection-test-prompt > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.connection-test-prompt p {
+  margin: 14px 0;
+  font-size: 12px;
+  color: var(--text);
+}
+.connection-test-prompt small,
+.connection-checks > small {
+  color: var(--text-muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+.connection-sidebar {
+  display: grid;
+  gap: 20px;
+}
+.connection-permissions > div {
+  padding-top: 16px;
+}
+.connection-permissions strong {
+  font-size: 12px;
+  font-weight: 650;
+}
+.connection-permissions > div p {
+  margin: 4px 0 0;
+  color: var(--text-secondary);
+  font-size: 11px;
+}
+.connection-permissions .connection-fineprint {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+}
+.connection-checks > small {
+  display: block;
+  margin-top: 16px;
+}
+.connection-checks .connection-section-heading {
+  align-items: center;
+  gap: 8px;
+}
+.connection-checks button {
+  padding: 7px 8px;
+  white-space: nowrap;
+  font-size: 11px;
+}
+.setup-check {
+  display: flex;
+  gap: 10px;
+  margin: 16px 0;
+}
+.setup-check > span {
+  display: grid;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  font-size: 12px;
+}
+.check-ok {
+  color: var(--success);
+  background: var(--success-soft);
+}
+.check-fix {
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+.setup-check strong {
+  font-size: 12px;
+}
+.setup-check p {
+  margin: 4px 0 0;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+.connected-client-list {
+  margin-top: 24px;
+}
+.connected-client {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-top: 22px;
+  margin-top: 22px;
+  border-top: 1px solid var(--border);
+}
+.client-monogram {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  color: var(--accent);
+  background: var(--accent-soft);
+  font-size: 18px;
+  font-weight: 600;
+}
+.connected-client-details {
+  min-width: 0;
+  flex: 1;
+}
+.connected-client-details h3 {
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.connected-client-details p {
+  margin: 5px 0 8px;
+  color: var(--text-muted);
+  font-size: 11px;
+}
+.connection-scope-tags {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.connection-scope-tags span {
+  padding: 4px 7px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text-secondary);
+  background: var(--surface-muted);
+  font-size: 10px;
+}
+.disconnect-button:hover {
+  color: var(--danger) !important;
+  background: var(--danger-soft) !important;
+}
+.connections-empty {
+  display: grid;
+  justify-items: center;
+  padding: 35px 20px 18px;
+  text-align: center;
+}
+.connections-empty svg {
+  width: 34px;
+  height: 34px;
+  margin-bottom: 16px;
+  color: var(--text-muted);
+}
+.connections-empty strong {
+  font-size: 13px;
+}
+.connections-empty p {
+  max-width: 320px;
+  margin: 7px 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+.connection-troubleshooting {
+  margin-top: 24px;
+  padding: 20px 24px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+}
+.connection-troubleshooting summary {
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+}
+.connection-troubleshooting > div {
+  max-width: 750px;
+  margin-top: 25px;
+}
+.connection-troubleshooting h3 {
+  margin-top: 22px;
+}
+.connection-troubleshooting p {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+.connection-troubleshooting a {
+  color: var(--accent);
+}
+.connection-message {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  color: var(--success);
+  background: var(--success-soft);
+  font-size: 13px;
+}
+.connection-message.error {
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+.connection-message button {
+  color: inherit;
+  border: 0;
+  background: transparent;
+  font-size: 18px;
+}
+.connection-dialog-backdrop {
+  position: fixed;
+  z-index: 120;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: #05091180;
+}
+.connection-confirm {
+  width: min(440px, 100%);
+  padding: 28px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  color: var(--text);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+.connection-confirm p {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.connection-confirm > div {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  margin-top: 22px;
+}
+.connection-confirm button:last-child {
+  border-color: transparent;
+  color: var(--danger);
+  background: var(--danger-soft);
+}
+@media (max-width: 760px) {
+  .connections-grid {
+    grid-template-columns: 1fr;
+  }
+  .connections-content {
+    padding: 28px 18px 50px;
+  }
+  .connections-heading h1 {
+    font-size: 28px;
+  }
+  .connection-setup-card,
+  .connection-sidebar > section,
+  .connected-client-list {
+    padding: 20px;
+  }
+}
+@media (max-width: 480px) {
+  .connections-topbar {
+    padding: 12px 18px;
+  }
+  .connection-client-tabs button {
+    padding: 8px 4px;
+    font-size: 11px;
+  }
+  .connected-client {
+    flex-wrap: wrap;
+  }
+  .connected-client .disconnect-button {
+    margin-left: 56px;
+  }
+}
+.connection-manage{border:1px solid var(--border,#dce1eb);background:var(--surface,#fff);color:var(--text,#23304a);border-radius:8px;padding:9px 12px;font:inherit;cursor:pointer;white-space:nowrap}
+.connection-access-dialog{width:min(560px,calc(100vw - 32px));max-height:calc(100dvh - 40px);overflow:auto}
+.connection-access-dialog fieldset{margin:20px 0;padding:0;border:0;min-width:0}
+.connection-access-dialog legend{font-size:13px;font-weight:650;margin-bottom:8px}
+.connection-permission-option{display:flex;align-items:flex-start;gap:12px;padding:10px 0;font-size:14px;cursor:pointer}
+.connection-permission-option input{margin-top:4px;flex-shrink:0;accent-color:var(--accent,#4262ff)}
+.connection-permission-option span{display:grid;gap:4px;min-width:0;overflow-wrap:anywhere}
+.connection-permission-option small{color:var(--text-secondary,#667085);line-height:1.5}
+.connection-resource-list{max-height:240px;overflow:auto;padding:0 12px;border:1px solid var(--border,#dce1eb);border-radius:10px;margin-left:26px}

@@ -1,0 +1,81 @@
+name: Publish Huddle Loom release
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag matching package.json (v1.2.3)
+        required: true
+      security:
+        description: Includes security fixes (eligible patch releases can auto-update)
+        type: boolean
+        default: false
+      prerelease:
+        description: Publish as a preview (excluded from stable automatic updates)
+        type: boolean
+        default: true
+      notes:
+        description: Plain-language release notes
+        required: true
+permissions:
+  contents: read
+concurrency:
+  group: publish-huddle-loom
+  cancel-in-progress: false
+jobs:
+  cloudflare:
+    uses: ./.github/workflows/ci.yml
+    with:
+      ref: ${{ inputs.tag }}
+  node:
+    uses: ./.github/workflows/node-hosting.yml
+    with:
+      ref: ${{ inputs.tag }}
+  qualify:
+    needs: cloudflare
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: node scripts/releases/manifest.mjs
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+          RELEASE_SECURITY: ${{ inputs.security }}
+          RELEASE_NOTES: ${{ inputs.notes }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: qualified-release
+          path: huddle-loom-release.json
+          retention-days: 7
+  publish:
+    needs: [qualify, node, cloudflare]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: qualified-release
+      - uses: actions/download-artifact@v4
+        with:
+          name: huddle-loom-node
+      - name: Publish immutable source reference
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ inputs.tag }}
+          RELEASE_NOTES: ${{ inputs.notes }}
+          RELEASE_PRERELEASE: ${{ inputs.prerelease }}
+        run: |
+          test "$(gh repo view --json isPrivate --jq .isPrivate)" = false || { echo 'Public updates require a public source repository. Nothing was published.'; exit 1; }
+          printenv RELEASE_NOTES > release-notes.txt
+          preview_args=()
+          if [ "$RELEASE_PRERELEASE" = true ]; then preview_args+=(--prerelease); fi
+          gh release create "$RELEASE_TAG" huddle-loom-release.json huddle-loom-node.zip huddle-loom-node.zip.sha256 --verify-tag --title "Huddle Loom $RELEASE_TAG" --notes-file release-notes.txt "${preview_args[@]}"

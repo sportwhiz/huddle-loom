@@ -1,0 +1,10 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Public test-only asset hash and CSRF fixture; neither is a credential"
+regexTarget = "secret"
+regexes = [
+  '^X-gEV7k8C5DjCYKZubkFd6DJ95pjyldIBulmOmBtcY4=$',
+  '^isolated-csrf-test-secret-with-at-least-32-characters$'
+]

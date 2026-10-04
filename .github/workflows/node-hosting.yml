@@ -1,0 +1,91 @@
+name: Node hosting
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      ref:
+        type: string
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  node:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: disposable-node-root
+          MYSQL_DATABASE: huddle_test
+          MYSQL_ROOT_HOST: "%"
+          MYSQL_USER: huddle
+          MYSQL_PASSWORD: disposable-node-app
+        ports:
+          - 33316:3306
+        options: >-
+          --health-cmd "mysqladmin ping -h localhost"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 33316
+      DB_USER: huddle
+      DB_PASSWORD: disposable-node-app
+      DB_TLS: disabled
+      HUDDLE_TEST_MYSQL_URL: mysql://huddle:disposable-node-app@127.0.0.1:33316/huddle_test
+      NODE_ADAPTER_MYSQL_TEST_URL: mysql://huddle:disposable-node-app@127.0.0.1:33316/huddle_test
+      NODE_LIFECYCLE_MYSQL_TEST_URL: mysql://huddle:disposable-node-app@127.0.0.1:33316/huddle_lifecycle_test
+      CATALOG_MIGRATIONS_MYSQL_TEST_URL: mysql://huddle:disposable-node-app@127.0.0.1:33316/huddle_migrations_test
+      CATALOG_MYSQL_TEST_URL: mysql://huddle:disposable-node-app@127.0.0.1:33316/huddle_sql_test
+      HUDDLE_SCHEMA_TEST_MYSQL_URL: mysql://huddle:disposable-node-app@127.0.0.1:33316/huddle_schema_test
+      HUDDLE_NAMESPACE_MYSQL_TEST_URL: mysql://huddle:disposable-node-app@127.0.0.1:33316/huddle_variant_test
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.30.3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Prepare disposable database fixtures
+        run: |
+          pnpm --filter @whiteboard/web exec node --input-type=module <<'JS'
+          import mysql from 'mysql2/promise';
+          const db = await mysql.createConnection({host: process.env.DB_HOST, port: Number(process.env.DB_PORT), user: 'root', password: 'disposable-node-root'});
+          await db.query('SET GLOBAL log_bin_trust_function_creators=1');
+          for (const name of ['huddle_sql_test', 'huddle_schema_test', 'huddle_source_test', 'huddle_package_test', 'huddle_package_mysql_test', 'huddle_lifecycle_test', 'huddle_migrations_test', 'huddle_variant_test']) {
+            await db.query('CREATE DATABASE ??', [name]);
+            await db.query("GRANT ALL PRIVILEGES ON ??.* TO 'huddle'@'%'", [name]);
+          }
+          await db.end();
+          JS
+      - run: pnpm typecheck:node
+      - run: pnpm test:node
+      - run: pnpm build:node
+      - name: Source runtime setup and durable restart
+        run: HUDDLE_NODE_TEST_DATABASE=huddle_source_test pnpm --filter @whiteboard/web run test:node
+      - name: Install only packaged production dependencies
+        working-directory: apps/web/dist-node
+        run: npm ci --omit=dev && npm run build
+      - name: Packaged GoDaddy setup and durable restart
+        run: HUDDLE_NODE_TEST_PLATFORM=godaddy HUDDLE_MAIL_GATEWAY=off HUDDLE_DATABASE_NAMESPACE=live HUDDLE_NODE_TEST_PACKAGE=1 HUDDLE_NODE_TEST_DATABASE=huddle_package_test pnpm --filter @whiteboard/web run test:node
+      - name: Packaged full MySQL setup and durable restart
+        run: HUDDLE_DATABASE_NAMESPACE=live HUDDLE_NODE_TEST_PACKAGE=1 HUDDLE_NODE_TEST_DATABASE=huddle_package_mysql_test pnpm --filter @whiteboard/web run test:node
+      - uses: actions/upload-artifact@v4
+        with:
+          name: huddle-loom-node
+          path: |
+            apps/web/huddle-loom-node.zip
+            apps/web/huddle-loom-node.zip.sha256
+          if-no-files-found: error

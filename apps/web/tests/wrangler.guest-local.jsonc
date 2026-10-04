@@ -1,0 +1,63 @@
+{
+  "name": "huddle-guest-isolated",
+  "main": "../src/worker.ts",
+  "compatibility_date": "2026-09-25",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "assets": {
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": [
+      "/api/*",
+      "/oauth/*",
+      "/.well-known/*",
+      "/mcp",
+      "/mcp/*",
+      "/docs/mcp"
+    ],
+    "directory": "../dist/client"
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "BOARD_ROOMS",
+        "class_name": "BoardRoom"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "BoardRoom"
+      ]
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "CATALOG",
+      "database_name": "canvas-auth-tests-catalog",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "../migrations"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "BLOBS",
+      "bucket_name": "canvas-auth-tests-blobs"
+    }
+  ],
+  "vars": {
+    "AUTH_MODE": "native",
+    "ENVIRONMENT": "test",
+    "AUTH_ORIGIN": "http://localhost:5186",
+    "AUTH_SECRET": "local-auth-conformance-fixture-never-use-in-production",
+    "AUTH_BOOTSTRAP_SECRET": "local-bootstrap-conformance-fixture-never-use-in-production",
+    "AUTH_ENCRYPTION_KEYS": "[{\"id\":\"test\",\"key\":\"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\"}]",
+    "MAIL_WEBHOOK_SECRET": "whsec_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+    "MAIL_PROVIDER": "test",
+    "MAIL_FROM": "canvas@example.invalid",
+    "SETUP_PASSWORD": "Guest local fixture setup password"
+  }
+}

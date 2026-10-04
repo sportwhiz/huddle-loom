@@ -1,0 +1,14 @@
+.app-shell .board-timer { position: absolute; z-index: 25; bottom: 24px; left: 50%; transform: translateX(-50%); border: 1px solid var(--border); border-radius: 12px; color: var(--text); background: var(--surface); box-shadow: var(--shadow); }
+.board-timer-controls { display: flex; align-items: center; padding: 5px; gap: 5px; }
+.board-timer button { border: 0; color: inherit; background: transparent; cursor: pointer; border-radius: 7px; }
+.board-timer button:hover { background: var(--surface-hover); }
+.board-timer .board-timer-open { display: flex; align-items: center; gap: 12px; padding: 6px 10px; text-align: left; }
+.board-timer-open > .ui-icon { width: 20px; height: 20px; color: var(--accent); }
+.board-timer-open > span { display: grid; gap: 1px; }
+.board-timer-open strong { font-size: 18px; line-height: 1.15; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: .4px; }
+.board-timer-open small { font-size: 10px; color: var(--text-secondary); }
+.board-timer .board-timer-action { display: grid; place-items: center; min-width: 36px; height: 38px; padding: 8px; border-left: 1px solid var(--border); border-radius: 0 7px 7px 0; }
+.board-timer-action .ui-icon { width: 16px; height: 16px; }
+.board-timer.complete { border-color: var(--success); }
+.board-timer > p { max-width: 240px; margin: 0; padding: 8px 14px 12px; font-size: 12px; color: var(--danger); }
+@media (max-width: 900px) { .app-shell .board-timer { bottom: 86px; } }

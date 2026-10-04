@@ -1,0 +1,35 @@
+{
+  "extends": "./tsconfig.blocksuite.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "jsx": "react-jsx",
+    "useDefineForClassFields": false,
+    "strict": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "types": ["vite/client"]
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts", "vitest.config.ts"],
+  "exclude": [
+    "src/updates/service.ts", "src/updates/routes.ts", "src/node/**/*.ts", "src/auth/**/*.ts", "src/security/**/*.ts", "src/mail/**/*.ts", "src/admin/**/*.ts",
+    "src/worker.ts",
+    "src/auth.server.ts",
+    "src/guest-links.server.ts",
+    "src/guest-policy.server.ts",
+    "src/guest-policy.server.test.ts",
+    "src/asset-ownership.server.ts",
+    "src/storage.server.ts",
+    "src/board-room.ts",
+    "src/catalog.server.ts",
+    "src/collaboration.server.ts",
+    "src/mcp.server.ts",
+    "src/native-operations.server.ts",
+    "src/oauth.server.ts"
+  ]
+}
