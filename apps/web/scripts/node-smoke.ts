@@ -318,6 +318,9 @@ try {
   await call("/api/auth/two-factor/verify-totp", { code: totp(seed) });
   await call("/api/v1/auth/bootstrap");
   await call("/api/v1/setup/complete", { title: "Node test" });
+  assert.equal((await call("/api/v1/admin/settings")).settings.reauthentication_seconds, 1800);
+  await call("/api/v1/admin/settings", { reauthentication_seconds: 3600 }, 200, "PATCH");
+  assert.equal((await call("/api/v1/admin/settings")).settings.reauthentication_seconds, 3600);
   const catalog = await call("/api/v1/catalog");
   const workbookId = catalog.workbooks[0].id;
   const board = await call(
@@ -443,6 +446,7 @@ try {
   runtime = undefined;
   runtime = await start();
   assert.equal((await call("/api/v1/auth/bootstrap")).setup, false);
+  assert.equal((await call("/api/v1/admin/settings")).settings.reauthentication_seconds, 3600);
   await checkGuestsAfterRestart();
   const restartedBootstrap = await call(`${boardPath}/bootstrap`);
   assert.equal(
