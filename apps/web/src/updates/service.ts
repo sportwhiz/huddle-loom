@@ -71,7 +71,7 @@ export async function publishedRelease(
   };
   const response = await fetch(
     `https://api.github.com/repos/${RELEASE_REPOSITORY}/releases/${version ? `tags/v${version}` : "latest"}`,
-    { headers, signal: AbortSignal.timeout(15000), redirect: "error" },
+    { headers, signal: AbortSignal.timeout(15000), redirect: "manual" },
   );
   if (!version && response.status === 404) {
     // GitHub also returns 404 when a public repository has only previews.
@@ -79,7 +79,7 @@ export async function publishedRelease(
     const releases = await remoteJson(
       await fetch(
         `https://api.github.com/repos/${RELEASE_REPOSITORY}/releases?per_page=100`,
-        { headers, signal: AbortSignal.timeout(15000), redirect: "error" },
+        { headers, signal: AbortSignal.timeout(15000), redirect: "manual" },
       ),
     );
     if (
@@ -292,7 +292,7 @@ async function triggerUpdate(env: NativeEnv, id: string, hook: string) {
   try {
     const response = await fetch(hook, {
       method: "POST",
-      redirect: "error",
+      redirect: "manual",
       signal: AbortSignal.timeout(15000),
     });
     if (!response.ok) {
