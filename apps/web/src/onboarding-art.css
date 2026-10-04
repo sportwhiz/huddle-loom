@@ -19,7 +19,7 @@
 .welcome-pen.blue { fill: var(--marker-blue, #2554c7); }
 .welcome-pen.red { fill: var(--marker-red, #d2483c); }
 .welcome-pen.green { fill: var(--marker-green, #2f8a57); }
-.welcome-art-huddle { background: #f7f3ea !important; }
+.welcome-art-huddle { background: #f5f6f8 !important; }
 .welcome-art-huddle img { display: block; width: 100%; height: 240px; object-fit: contain; }
 [data-theme="dark"] .welcome-art-huddle { background: transparent !important; }
 @media (max-width: 540px) { .welcome-art-huddle img { height: 185px; } }
