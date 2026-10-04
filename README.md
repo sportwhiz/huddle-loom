@@ -12,7 +12,7 @@ Open Whiteboard is a whiteboard you host yourself. Put sticky notes and sketches
 - Bound arrows that follow objects when you move them. Drag tools onto the board or add a connected next step.
 - Live collaboration, comments, guest links, presentation, timers, and voting.
 - A Studio that organizes boards into folders and workbooks. Start a board from a template, and restore an earlier version from its history.
-- Light and dark themes, a skippable first-use tour, and keyboard shortcuts.
+- Light and dark themes, guides that point to the controls you need, and keyboard shortcuts.
 - Local accounts, passkeys or authenticator verification, invitations, recovery, and administration. Email and external sign-in providers are optional.
 - An OAuth-protected MCP server with 21 tools for workflows, workshops, diagrams, search, images, and board editing.
 - Native archives that keep boards editable, plus image exports.

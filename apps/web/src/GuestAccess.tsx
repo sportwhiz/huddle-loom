@@ -1,11 +1,22 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { lazy, Suspense, useEffect, useState, type FormEvent } from "react";
 import { BoardPage } from "./App";
 import { BrandMark } from "./BrandMark";
 import { PRODUCT_NAME, PRODUCT_TAGLINE } from "./product";
 import { ThemeMenu } from "./theme";
-import { guestAccessEnded, setGuestSession, type GuestSession } from "./guest-client";
+import {
+  guestAccessEnded,
+  setGuestSession,
+  type GuestSession,
+} from "./guest-client";
 import "./auth.css";
 import "./guest-sharing.css";
+
+const GuestTour = lazy(() =>
+  import("./OnboardingTour").then((module) => ({
+    default: module.OnboardingHost,
+  })),
+);
+const noAccountRefresh = async () => undefined;
 
 type LinkInfo = {
   id: string;
@@ -102,9 +113,11 @@ export function GuestAccess() {
         );
         const value = await response.json();
         if (live && response.ok && value.guest?.sessionId !== guest.sessionId)
-          guestAccessEnded(value.guest
-            ? "This guest session changed in another tab. Open this link again to continue."
-            : "Your guest access has ended. Ask the owner for a new link.");
+          guestAccessEnded(
+            value.guest
+              ? "This guest session changed in another tab. Open this link again to continue."
+              : "Your guest access has ended. Ask the owner for a new link.",
+          );
       } catch {
         /* Connection status is also shown by the editor. */
       }
@@ -148,6 +161,21 @@ export function GuestAccess() {
     return (
       <>
         <BoardPage boardId={boardId} guest />
+        {!ended && (
+          <Suspense fallback={null}>
+            <GuestTour
+              localOnly
+              refresh={noAccountRefresh}
+              bootstrap={{
+                mode: "native",
+                configured: true,
+                setup: false,
+                cacheNamespace: `guest-link:${guest.linkId}`,
+                user: { ...guest.user, email: "", avatarUrl: null },
+              }}
+            />
+          </Suspense>
+        )}
         {ended && (
           <aside className="guest-ended" role="alert">
             <strong>Guest access ended</strong>

@@ -135,6 +135,16 @@ describe.skipIf(!process.env.HUDDLE_SCHEMA_TEST_MYSQL_URL)(
       );
       return id;
     }
+    it("preserves a bounded verification window in the native catalog", () =>
+      transaction(async (connection) => {
+        expect((await connection.query("SELECT reauthentication_seconds FROM installation"))[0]).toEqual([{ reauthentication_seconds: 1800 }]);
+        for (const invalid of [299, 43201])
+          await expect(connection.execute("UPDATE installation SET reauthentication_seconds=?", [invalid])).rejects.toThrow();
+        for (const valid of [300, 3600, 43200]) {
+          await connection.execute("UPDATE installation SET reauthentication_seconds=?", [valid]);
+          expect((await connection.query("SELECT reauthentication_seconds FROM installation"))[0]).toEqual([{ reauthentication_seconds: valid }]);
+        }
+      }));
     it("protects the designated owner and enforces only one owner", () =>
       transaction(async (connection) => {
         const owner = await user(connection, "owner");
@@ -398,7 +408,7 @@ describe.skipIf(!process.env.HUDDLE_SCHEMA_TEST_MYSQL_URL)(
         const [migrations] = await connection.query(
           "SELECT name,applied_at FROM d1_migrations ORDER BY id",
         );
-        expect(migrations as unknown[]).toHaveLength(27);
+        expect(migrations as unknown[]).toHaveLength(28);
       }));
     it("evaluates JSON resource ownership when the recipient is valid", () =>
       transaction(async (connection) => {

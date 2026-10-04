@@ -4,7 +4,7 @@ import {
   bootstrapAuthorized,
   installation,
   requireAdministrator,
-  requireFresh,
+  requireFreshForInstallation,
 } from "../auth/policy";
 import { email, json, randomToken, sha256 } from "../security/primitives";
 import { limit } from "../security/limits";
@@ -65,7 +65,7 @@ export async function mailSetupRoutes(
         "Only the Studio owner can configure email.",
         "OWNER_REQUIRED",
       );
-    requireFresh(identity.principal);
+    await requireFreshForInstallation(env, identity.principal);
   } else
     await requireAdministrator(
       env,

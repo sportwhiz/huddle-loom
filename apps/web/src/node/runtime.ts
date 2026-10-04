@@ -290,13 +290,14 @@ export async function startNodeRuntime(config: Environment = process.env) {
   let phase: NodeStartupPhase = "assets";
   // mysql2 exposes the pool connection event and connection.destroy publicly.
   // Track only handles created by this runtime, never inspect pool internals.
-  const databaseConnections = new Set<{ destroy(): void }>();
+  const databaseConnections = new Set<{ threadId: number; destroy(): void }>();
   pool.on("connection", (connection) => {
     databaseConnections.add(connection);
     connection.on("end", () => databaseConnections.delete(connection));
   });
-  const destroyDatabaseConnections = () => {
-    for (const connection of databaseConnections) connection.destroy();
+  const destroyDatabaseConnections = (preservedThread?: number) => {
+    for (const connection of databaseConnections)
+      if (connection.threadId !== preservedThread) connection.destroy();
   };
   let catalog: SqliteCatalog | MysqlCatalog | undefined;
   let catalogClosed = false;
@@ -333,9 +334,15 @@ export async function startNodeRuntime(config: Environment = process.env) {
     return (closing = closeNodeResources([
       () => http?.close(),
       () => drainNodeTasks([...pending]),
+      () => destroyDatabaseConnections(ownership?.connection.threadId),
+      async () => {
+        let drained = !rooms;
+        await drainNodeTasks(rooms ? [rooms.close().then(() => { drained = true; })] : []);
+        // Never release a live room writer's lock. If it cannot drain, close
+        // its socket so MySQL rolls it back before freeing exclusive ownership.
+        await ownership?.close(!drained);
+      },
       () => destroyDatabaseConnections(),
-      () => ownership?.close(),
-      () => drainNodeTasks(rooms ? [rooms.close()] : []),
       closeCatalog,
       () => drainNodeTasks([pool.end()]),
     ]));

@@ -4,7 +4,7 @@ import {
   admit,
   installation,
   requireAdministrator,
-  requireFresh,
+  requireFreshForInstallation,
   securityState,
 } from "../auth/policy";
 import { tombstoneAccount, revokeIdentity } from "../auth/account-routes";
@@ -35,6 +35,7 @@ function settingsDto(value: Awaited<ReturnType<typeof installation>>) {
     "user_board_limit",
     "user_storage_limit",
     "mail_limit",
+    "reauthentication_seconds",
     "session_idle_seconds",
     "session_absolute_seconds",
     "dynamic_registration",
@@ -616,6 +617,7 @@ export async function adminRoutes(
         "user_board_limit",
         "user_storage_limit",
         "mail_limit",
+        "reauthentication_seconds",
         "session_idle_seconds",
         "session_absolute_seconds",
         "dynamic_registration",
@@ -680,6 +682,16 @@ export async function adminRoutes(
             "INVALID_INPUT",
           );
       }
+      if (
+        body.reauthentication_seconds !== undefined &&
+        (Number(body.reauthentication_seconds) < 300 ||
+          Number(body.reauthentication_seconds) > 43200)
+      )
+        throw new HttpError(
+          400,
+          "Choose a verification window between five minutes and 12 hours.",
+          "INVALID_INPUT",
+        );
       const idle = Number(
         body.session_idle_seconds ?? current.session_idle_seconds,
       );
@@ -744,7 +756,7 @@ export async function adminRoutes(
       )
       .all();
     if (url.searchParams.get("export") === "true") {
-      requireFresh(principal);
+      await requireFreshForInstallation(env, principal);
       return Response.json(
         { events: rows.results },
         {
@@ -924,7 +936,7 @@ export async function acceptOwnerTransfer(request: Request, env: NativeEnv) {
     request,
     env,
   );
-  requireFresh(principal, true);
+  await requireFreshForInstallation(env, principal, true);
   if (!identityVerified)
     throw new HttpError(
       403,

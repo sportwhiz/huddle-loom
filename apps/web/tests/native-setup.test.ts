@@ -490,7 +490,7 @@ describe("fresh native owner setup with GitHub", () => {
     expect(connected.status).toBe(200);
     expect(JSON.stringify(await connected.json())).not.toContain(hook);
     db.prepare("UPDATE auth_sessions SET authenticatedAt=?").run(
-      new Date(Date.now() - 600000).toISOString(),
+      new Date(Date.now() - 1800000).toISOString(),
     );
     await expect(
       call("/api/v1/admin/updates/connection", { hook }),

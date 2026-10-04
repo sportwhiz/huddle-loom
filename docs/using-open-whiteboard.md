@@ -4,7 +4,13 @@
 
 The Studio holds folders, workbooks, and boards. Create a workbook for a project and give its boards names people can find. Favorites and search help you return to active work. Shared with me shows content another person has granted you access to.
 
-Templates are starting layouts. A board an assistant creates starts blank unless you ask for a template.
+Templates are starting layouts. Open **Templates** from the board toolbar, then choose a layout. It appears beside existing content and the view fits the new section. Every object remains editable; Undo removes the inserted template in one step.
+
+- **How updates work** maps a published release through owner approval, the installer build, verification, and recovery. It explains how your repository deploys approved upstream code while keeping your Studio's data and settings.
+- **50 ideas** gives you fifty blank sticky notes in a roomy grid. Write on them, move them, and group related thoughts.
+- Brainstorm, Retrospective, Kanban, and Workflow offer smaller starting layouts.
+
+A board an assistant creates starts blank unless you ask for a template.
 
 ## On the board
 
@@ -29,3 +35,15 @@ For someone without an account, use [guest sharing](guest-sharing.md). A guest l
 Open Connected apps from settings or the board menu. It shows the MCP address and a connection guide. After signing in through your assistant, review the requested scopes and selected boards or workbooks before approving.
 
 The assistant edits native content, so you can keep refining its work by hand. Ask it to inspect a diagram, shorten crowded labels, or reorganize a workflow while preserving the existing objects. [MCP guide](mcp.md) has examples and limits.
+
+## Find your way around
+
+![A Studio guide highlighting the New board button](images/guided-tour.png)
+
+The quick guides point to the controls they describe and shade the rest of the page. Each page has its own guide: your Studio, whiteboards, Connected apps, Account and security, and each administration section.
+
+Use **Next** and **Back** to move through a guide. **Skip tour**, Escape, and **Leave the guide and explore** close it immediately. A guide never creates a board, sends an invitation, or changes a setting for you. Your completed or skipped guides are remembered for your account; device storage also keeps them dismissed when a save cannot reach the server.
+
+You can replay a guide with **Quick tour** in Studio navigation, Connected apps, or the settings header. On a board, open **Keyboard shortcuts** and choose **Take a quick board tour**. Guides adapt to your permissions: a viewer learns navigation and comments, while an editor sees the creation tools. Visitors using a guest link get a board guide with dismissal saved on their device; no account is created or changed. Administration guides only appear in sections your role can access.
+
+On a small screen, a guide opens Studio navigation when needed and scrolls the highlighted control into view. If a control is unavailable, the guide explains that instead of pointing at an unrelated part of the page. Keyboard focus stays in the guide until you finish or leave it.

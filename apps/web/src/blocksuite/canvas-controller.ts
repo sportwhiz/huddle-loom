@@ -1,3 +1,5 @@
+import * as Y from "yjs";
+import { demoPattern, type DemoPatternId } from "./demo-patterns";
 import { nativeBlockText } from "./native-block-text";
 import { canvasFitPadding } from "./canvas-layout";
 import {
@@ -23,6 +25,7 @@ import {
   NoteDisplayMode,
   StrokeStyle,
   ShapeStyle,
+  ShapeType,
   ConnectorElementModel,
   ShapeElementModel,
   getShapeType,
@@ -957,13 +960,73 @@ export function createCanvasController(editor: WhiteboardEditorElement) {
       editor.std.command.exec(createGroupFromSelectedCommand);
       store.captureSync();
     },
-    insertTemplate(kind: "brainstorm" | "retro" | "kanban" | "flow") {
+    insertTemplate(kind: "brainstorm" | "retro" | "kanban" | "flow" | DemoPatternId) {
       if (!editable() || !gfx.surface) return;
       const existing = gfx.elementsBound;
       const x = existing
         ? existing.x + existing.w + 180
         : gfx.viewport.center.x - 600;
       const y = existing ? existing.y : gfx.viewport.center.y - 340;
+      if (kind === "update-flow" || kind === "fifty-notes") {
+        const pattern = demoPattern(kind);
+        const ids: string[] = [];
+        const nativeIds = new Map<string, string>();
+        store.captureSync();
+        store.transact(() => {
+          for (const node of pattern.nodes) {
+            const bounds = new Bound(x + node.x, y + node.y, node.w, node.h);
+            const id = node.kind === "sticky"
+              ? createSticky(editor, bounds.x, bounds.y, node.color, node.text, { w: node.w, h: node.h }).id
+              : crud.addElement("shape", {
+                shapeType: node.shape === "diamond" ? ShapeType.Diamond : getShapeType("roundedRect"),
+                radius: node.shape === "diamond" ? 0 : 0.1,
+                xywh: bounds.serialize(), text: new Y.Text(node.text),
+                fillColor: { light: node.color, dark: node.color },
+                color: { light: "#23304a", dark: "#23304a" },
+                strokeColor: { light: "#425574", dark: "#425574" },
+                strokeWidth: 1.5, shapeStyle: ShapeStyle.General, filled: true,
+                fontFamily: "blocksuite:surface:Inter", fontSize: 20,
+                textHorizontalAlign: "center", textVerticalAlign: "center",
+                textResizing: 1, padding: [16, 18],
+              });
+            if (id) { nativeIds.set(node.id, id); ids.push(id); }
+          }
+          for (const frame of pattern.frames) {
+            const id = store.addBlock("affine:frame", {
+              title: new Text(frame.title),
+              xywh: new Bound(x + frame.x, y + frame.y, frame.w, frame.h).serialize(),
+              background: "transparent", index: gfx.layer.generateIndex(),
+              childElementIds: Object.fromEntries(frame.children.flatMap(key => {
+                const id = nativeIds.get(key); return id ? [[id, true]] : [];
+              })),
+            }, gfx.surface!.id);
+            ids.push(id);
+          }
+          for (const edge of pattern.edges) {
+            const source = nativeIds.get(edge.source), target = nativeIds.get(edge.target);
+            if (!source || !target) continue;
+            const id = crud.addElement("connector", {
+              mode: ConnectorMode.Orthogonal, strokeWidth: 2,
+              stroke: { light: "#5c6980", dark: "#aab7cf" },
+              source: { id: source, position: edge.sourcePort },
+              target: { id: target, position: edge.targetPort },
+              rearEndpointStyle: PointStyle.Arrow,
+            });
+            if (id) ids.push(id);
+          }
+        });
+        // Native label/frame layout settles on the next paint. Keep those
+        // normalization updates in this insertion's undo group. Subsequent
+        // authoring actions capture their own boundary before changing data.
+        gfx.tool.setTool(DefaultTool);
+        gfx.selection.set({ elements: [] });
+        // Connector paths initialize during rendering. Fitting immediately
+        // includes their temporary origin bounds on a populated board.
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          if (editor.isConnected) fit(ids);
+        }));
+        return ids;
+      }
       const titles =
         kind === "retro"
           ? ["Went well", "Could be better", "Next steps"]

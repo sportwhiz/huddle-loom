@@ -89,3 +89,11 @@ There are two encryption systems: `AUTH_ENCRYPTION_KEYS` for configured secrets 
 Restrict registration, suspend affected accounts or revoke assistant grants, and preserve sanitized audit records. Protect hosting credentials separately from application accounts. Rotate a compromised credential using its supported procedure and review the data it could access.
 
 For a suspected product vulnerability, use [private reporting](https://github.com/sportwhiz/huddle-loom/security/advisories/new). Include the version and hosting adapter, with tokens and board content removed.
+
+## Repeated identity checks
+
+In **Administration → Sign-in settings → Registration and security**, the Studio owner can choose **Ask again for protected changes after**. The default is 30 minutes; choices range from five minutes to 12 hours. A longer window reduces interruptions when managing accounts, changing security settings or approving connected apps.
+
+The window starts with the last successful identity check in that browser session. Password confirmation alone cannot satisfy a required second factor. New sign-ins still require MFA when the account or Studio policy requires it. Viewing linked login methods does not require a fresh check. Sign-out, account suspension, session expiry and credential revocation still invalidate access. A policy change applies to existing sessions on their next protected request.
+
+This setting is separate from the inactivity and maximum session lifetime settings. Longer verification windows mean someone with access to an unlocked, signed-in browser has more time to make protected changes.

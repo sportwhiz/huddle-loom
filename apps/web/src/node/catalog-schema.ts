@@ -274,6 +274,7 @@ export const CATALOG_TABLES = {
       "user_board_limit",
       "user_storage_limit",
       "mail_limit",
+      "reauthentication_seconds",
       "session_idle_seconds",
       "session_absolute_seconds",
       "created_at",
@@ -1512,6 +1513,20 @@ export const CATALOG_MIGRATIONS: readonly CatalogMigration[] = [{
     id: "0001_expiry_index",
     sql: "CREATE INDEX guest_sessions_expiry ON guest_board_sessions(expires_at)",
     applied: "SELECT ((SELECT COUNT(*) FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='guest_board_sessions' AND INDEX_NAME='guest_sessions_expiry')=1 AND EXISTS(SELECT 1 FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='guest_board_sessions' AND INDEX_NAME='guest_sessions_expiry' AND COLUMN_NAME='expires_at' AND SEQ_IN_INDEX=1 AND NON_UNIQUE=1 AND SUB_PART IS NULL AND IS_VISIBLE='YES')) AS applied"
+  }]
+}, {
+  id: "0004_reauthentication_window",
+  steps: [{
+    id: "0001_verification_window",
+    sql: "ALTER TABLE installation ADD COLUMN reauthentication_seconds BIGINT NOT NULL DEFAULT 1800, ADD CONSTRAINT installation_reauthentication_window CHECK (reauthentication_seconds >= 300 AND reauthentication_seconds <= 43200)",
+    applied: `SELECT (
+      EXISTS(SELECT 1 FROM information_schema.COLUMNS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='installation' AND COLUMN_NAME='reauthentication_seconds' AND COLUMN_TYPE='bigint' AND IS_NULLABLE='NO' AND COLUMN_DEFAULT='1800' AND EXTRA='')
+      AND EXISTS(SELECT 1 FROM information_schema.CHECK_CONSTRAINTS c JOIN information_schema.TABLE_CONSTRAINTS t ON t.CONSTRAINT_SCHEMA=c.CONSTRAINT_SCHEMA AND t.CONSTRAINT_NAME=c.CONSTRAINT_NAME WHERE t.TABLE_SCHEMA=DATABASE() AND t.TABLE_NAME='installation' AND t.CONSTRAINT_NAME='installation_reauthentication_window' AND t.ENFORCED='YES' AND LOWER(REPLACE(REPLACE(REPLACE(REPLACE(c.CHECK_CLAUSE,CHAR(96),''),' ',''),'(',''),')',''))='reauthentication_seconds>=300andreauthentication_seconds<=43200')
+    ) AS applied`
+  }, {
+    id: "0002_migration_marker",
+    sql: "INSERT INTO d1_migrations(id,name,applied_at) VALUES (28,'0028_reauthentication_policy.sql',DATE_FORMAT(UTC_TIMESTAMP(3),'%Y-%m-%dT%H:%i:%s.000Z'))",
+    applied: "SELECT EXISTS(SELECT 1 FROM d1_migrations WHERE id=28 AND name='0028_reauthentication_policy.sql') AS applied"
   }]
 }];
 export const catalogMigrationChecksum = (migration: CatalogMigration) =>

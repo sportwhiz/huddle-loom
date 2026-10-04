@@ -12,7 +12,7 @@ import {
   installation,
   needsStrong,
   publicPrincipal,
-  requireFresh,
+  requireFreshForInstallation,
 } from "./policy";
 import {
   nativePrincipal,
@@ -228,16 +228,15 @@ async function libraryRoute(request: Request, env: NativeEnv) {
         "Replace your lost factor first.",
         "RECOVERY_REQUIRED",
       );
-    requireFresh(
-      identity.principal,
-      Boolean(existingFactor) &&
-        !identity.state.recovery_required &&
-        needsStrong(
-          settings,
-          identity.state,
-          Boolean(identity.user.twoFactorEnabled),
-        ),
-    );
+    // Viewing linked login methods does not change account security.
+    if (!["/list-accounts", "/passkey/list-user-passkeys"].includes(path))
+      await requireFreshForInstallation(
+        env,
+        identity.principal,
+        Boolean(existingFactor) &&
+          !identity.state.recovery_required &&
+          needsStrong(settings, identity.state, Boolean(identity.user.twoFactorEnabled)),
+      );
     if (path === "/passkey/delete-passkey") {
       const count = await env.CATALOG.prepare(
         "SELECT COUNT(*) AS n FROM auth_passkeys WHERE userId = ?",
@@ -667,7 +666,7 @@ export async function identityRoutes(
         "BOOTSTRAP_REQUIRED",
       );
     const identity = await nativePrincipal(request, env, true);
-    requireFresh(identity.principal);
+    await requireFreshForInstallation(env, identity.principal);
     if (!identity.identityVerified || identity.state.recovery_required)
       throw new HttpError(
         403,

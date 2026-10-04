@@ -7,6 +7,7 @@ export type Release = {
   dataFormat: number;
   protocol: number;
   security: boolean;
+  important?: boolean;
   notes: string;
 };
 export function parseRelease(value: unknown): Release {
@@ -22,6 +23,7 @@ export function parseRelease(value: unknown): Release {
     !Number.isSafeInteger(r.dataFormat) ||
     r.dataFormat < 1 ||
     typeof r.security !== "boolean" ||
+    (r.important !== undefined && typeof r.important !== "boolean") ||
     typeof r.notes !== "string" ||
     r.notes.length > 12000
   )
@@ -33,6 +35,7 @@ export function parseRelease(value: unknown): Release {
     dataFormat: r.dataFormat,
     protocol: r.protocol,
     security: r.security,
+    ...(r.important === undefined ? {} : { important: r.important }),
     notes: r.notes,
   };
 }

@@ -255,7 +255,7 @@ describe.skipIf(!url)("Node ownership lifecycle against MySQL", () => {
             .all(),
         ).toEqual([]);
       } finally {
-        replacement.close();
+        await replacement.close();
       }
       await rm(path);
       await rename(backup, path);
@@ -388,7 +388,7 @@ describe.skipIf(!url)("Node ownership lifecycle against MySQL", () => {
       });
       expect((await pool.query("SHOW TABLES"))[0]).toEqual(before);
     } finally {
-      owner.close();
+      await owner.close();
     }
   });
   it("releases exclusive ownership after a listener startup failure", async () => {
@@ -398,15 +398,17 @@ describe.skipIf(!url)("Node ownership lifecycle against MySQL", () => {
     );
     const port = (occupied.address() as { port: number }).port;
     try {
-      await expect(
-        startNodeRuntime({
-          ...config,
-          PORT: String(port),
-          AUTH_ORIGIN: `http://127.0.0.1:${port}`,
-        }),
-      ).rejects.toMatchObject({ code: "PORT_IN_USE" });
-      const replacement = await acquireNodeOwnership(pool);
-      replacement.close();
+      for (let attempt = 0; attempt < 3; attempt++) {
+        await expect(
+          startNodeRuntime({
+            ...config,
+            PORT: String(port),
+            AUTH_ORIGIN: `http://127.0.0.1:${port}`,
+          }),
+        ).rejects.toMatchObject({ code: "PORT_IN_USE" });
+        const replacement = await acquireNodeOwnership(pool);
+        await replacement.close();
+      }
     } finally {
       await new Promise<void>((resolve) => occupied.close(() => resolve()));
     }
@@ -434,7 +436,7 @@ describe.skipIf(!url)("Node ownership lifecycle against MySQL", () => {
       expect(runtime.isReady()).toBe(false);
       await runtime.close();
       const replacement = await acquireNodeOwnership(pool);
-      replacement.close();
+      await replacement.close();
     } finally {
       await runtime.close();
     }
@@ -497,8 +499,8 @@ describe.skipIf(!url)("Node ownership lifecycle against MySQL", () => {
     } finally {
       releaseWriter();
       await writing.catch(() => {});
-      previous.close();
-      successor?.close();
+      await previous.close();
+      await successor?.close();
       await auth.db.destroy();
       await pool.query("DROP TABLE node_fence_probe");
     }

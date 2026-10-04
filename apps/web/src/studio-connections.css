@@ -72,3 +72,6 @@
   .connections-page .connection-client-tabs button { font-size: 13px; padding-inline: 6px; }
   .connections-page .connection-test-prompt { margin-left: 0; padding: 20px; }
 }
+
+.connections-tour { display:flex; align-items:center; gap:6px; border:1px solid var(--border); background:var(--surface); color:var(--text); padding:8px 12px; border-radius:10px; font:inherit; font-size:13px; cursor:pointer; }
+.connections-tour svg { width:16px; height:16px; }
