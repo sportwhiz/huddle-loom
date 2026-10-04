@@ -357,6 +357,9 @@ async function libraryRoute(request: Request, env: NativeEnv) {
           await env.CATALOG.prepare("DELETE FROM auth_sessions WHERE id = ?")
             .bind(after.session.id)
             .run();
+        // A reused code was correct when it was first accepted, so it does
+        // not count as a wrong guess.
+        if (lockoutUser) await releaseTotpAttempt(env.CATALOG, lockoutUser);
         throw new HttpError(
           400,
           "This code was already used. Wait for the next code.",

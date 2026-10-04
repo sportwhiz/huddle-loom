@@ -428,7 +428,15 @@ describe("fresh native owner setup with GitHub", () => {
       "UPDATE auth_two_factors SET lockedUntil = '2000-01-01 00:00:00'",
     ).run();
     db.exec("DELETE FROM request_limits; DELETE FROM mfa_replay");
-    expect(await verify(totp(enrollment.totpURI))).toBe(200);
+    const accepted = totp(enrollment.totpURI);
+    expect(await verify(accepted)).toBe(200);
+    expect(counter()).toEqual({ count: 0, until: null });
+
+    // Resubmitting an accepted code is refused, but it is not a wrong guess.
+    for (let attempt = 0; attempt < 12; attempt++) {
+      db.exec("DELETE FROM request_limits");
+      expect(await verify(accepted)).toBe(400);
+    }
     expect(counter()).toEqual({ count: 0, until: null });
   });
 
