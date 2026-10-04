@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.1
+
+Fixes release checks and deployment-hook requests on Cloudflare Workers. The Updates screen now explains when no stable release is available and distinguishes release checking from the deployment connection needed to install updates.
+
+This release keeps the existing database schema and board format.
+
 ## 0.1.0
 
 First public release of Huddle Loom, with a fresh Git history.
