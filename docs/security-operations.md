@@ -90,6 +90,10 @@ Restrict registration, suspend affected accounts or revoke assistant grants, and
 
 For a suspected product vulnerability, use [private reporting](https://github.com/sportwhiz/huddle-loom/security/advisories/new). Include the version and hosting adapter, with tokens and board content removed.
 
+## Authenticator lockout
+
+After 10 incorrect authenticator or backup codes in a row, the account waits 15 minutes before it accepts another code. A correct code resets the count. This applies however the person signed in. Someone who knows the password but not the authenticator can keep the authenticator locked this way. A passkey still works while the authenticator is locked, so encourage owners and administrators to register one. If an account is under that kind of pressure, change its password.
+
 ## Repeated identity checks
 
 In **Administration → Sign-in settings → Registration and security**, the Studio owner can choose **Ask again for protected changes after**. The default is 30 minutes; choices range from five minutes to 12 hours. A longer window reduces interruptions when managing accounts, changing security settings or approving connected apps.

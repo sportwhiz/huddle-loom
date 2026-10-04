@@ -130,12 +130,14 @@ describe("Node HTTP bridge", () => {
 it("survives a client that resets during an upgrade", async () => {
   let entered!: () => void;
   let release!: () => void;
+  let upgradeSignal: AbortSignal | undefined;
   const authorizing = new Promise<void>((resolve) => (entered = resolve));
   const gate = new Promise<void>((resolve) => (release = resolve));
   const runtime = createNodeHttpServer(
     {
       async fetch(req) {
         if (new URL(req.url).pathname.endsWith("/ws")) {
+          upgradeSignal = req.signal;
           entered();
           await gate;
           return new Response(null, { status: 401 });
@@ -158,6 +160,7 @@ it("survives a client that resets during an upgrade", async () => {
     await authorizing;
     client.resetAndDestroy();
     await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(upgradeSignal?.aborted).toBe(true);
     release();
     await new Promise((resolve) => setTimeout(resolve, 50));
     const status = await new Promise<number>((resolve, reject) =>

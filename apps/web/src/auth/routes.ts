@@ -37,7 +37,12 @@ import { clientIp, limit } from "../security/limits";
 import { audit, auditStatement } from "../security/audit";
 import { invalidationStatement, mailReady } from "../mail/outbox";
 import { currentEmailProof } from "./email-proof";
-import { clearTotpFailures, reserveTotpAttempt } from "./totp-lockout";
+import {
+  clearTotpFailures,
+  rejectedWrongCode,
+  releaseTotpAttempt,
+  reserveTotpAttempt,
+} from "./totp-lockout";
 import { HttpError } from "../security/errors";
 import { methodChangeGuard } from "./method-change";
 
@@ -323,9 +328,18 @@ async function libraryRoute(request: Request, env: NativeEnv) {
       return Response.json({ status: true });
     }
   }
-  if (before && path === "/two-factor/verify-totp")
-    await reserveTotpAttempt(env.CATALOG, before.user.id);
+  // Codes checked against an existing session share the sign-in lockout.
+  const lockoutUser =
+    before &&
+    (path === "/two-factor/verify-totp" ||
+      path === "/two-factor/verify-backup-code")
+      ? before.user.id
+      : null;
+  if (lockoutUser) await reserveTotpAttempt(env.CATALOG, lockoutUser);
   const response = await (await nativeAuth(env)).handler(request);
+  // Only a wrong code counts. Rate limits and other rejections give it back.
+  if (lockoutUser && !response.ok && !(await rejectedWrongCode(response)))
+    await releaseTotpAttempt(env.CATALOG, lockoutUser);
   if (response.ok || response.status === 302) {
     const after = await readNativeSession(
       cookiesFromResponse(request, response),

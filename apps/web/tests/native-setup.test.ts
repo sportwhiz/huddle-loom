@@ -360,6 +360,78 @@ describe("fresh native owner setup with GitHub", () => {
     });
   });
 
+  it("locks authenticator checks made from a password session", async () => {
+    env = {
+      ...env,
+      GITHUB_CLIENT_ID: undefined,
+      GITHUB_CLIENT_SECRET: undefined,
+      SETUP_PASSWORD: "our private installation phrase",
+    };
+    const payload = {
+      name: "Local Owner",
+      username: "studio-owner",
+      password: "distinct test account phrase 471!",
+    };
+    await call("/api/v1/auth/bootstrap");
+    await call("/api/v1/setup/unlock", { secret: env.SETUP_PASSWORD });
+    expect((await call("/api/auth/setup/local", payload)).status).toBe(200);
+    const enrollment = await (
+      await call("/api/auth/two-factor/enable", { password: payload.password })
+    ).json();
+    expect(
+      (
+        await call("/api/auth/two-factor/verify-totp", {
+          code: totp(enrollment.totpURI),
+        })
+      ).status,
+    ).toBe(200);
+    expect(
+      (await call("/api/v1/setup/complete", { title: "Our Studio" })).status,
+    ).toBe(200);
+    await call("/api/auth/sign-out", {});
+    expect((await call("/api/auth/sign-in/local", payload)).status).toBe(200);
+    const verify = async (code: string) => {
+      try {
+        return (await call("/api/auth/two-factor/verify-totp", { code }))
+          .status;
+      } catch (error) {
+        return (error as { status: number }).status;
+      }
+    };
+    const counter = () =>
+      db
+        .prepare(
+          "SELECT failedVerificationCount AS count, lockedUntil AS until FROM auth_two_factors",
+        )
+        .get()!;
+    const wrong = String(
+      (Number(totp(enrollment.totpURI)) + 500000) % 1000000,
+    ).padStart(6, "0");
+    const statuses = [];
+    for (let attempt = 0; attempt < 8; attempt++)
+      statuses.push(await verify(wrong));
+    // better-auth's per-address limit rejects the later attempts. Those
+    // rejections must not use up the account's budget.
+    expect(statuses).toContain(429);
+    expect(counter().count).toBe(statuses.filter((code) => code === 401).length);
+
+    db.exec("DELETE FROM request_limits");
+    db.prepare("UPDATE auth_two_factors SET failedVerificationCount = 9").run();
+    expect(await verify(wrong)).toBe(401);
+    expect(counter().count).toBe(10);
+    expect(counter().until).toBeTruthy();
+    db.exec("DELETE FROM mfa_replay");
+    expect(await verify(totp(enrollment.totpURI))).toBe(429);
+
+    // A lock in the MySQL driver's format is compared as a date.
+    db.prepare(
+      "UPDATE auth_two_factors SET lockedUntil = '2000-01-01 00:00:00'",
+    ).run();
+    db.exec("DELETE FROM request_limits; DELETE FROM mfa_replay");
+    expect(await verify(totp(enrollment.totpURI))).toBe(200);
+    expect(counter()).toEqual({ count: 0, until: null });
+  });
+
   it("creates a local owner without email or OAuth, then requires MFA on every login", async () => {
     env = {
       ...env,
