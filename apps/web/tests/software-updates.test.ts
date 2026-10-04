@@ -121,8 +121,26 @@ describe("software release control", () => {
   });
   it("pins published release identity and rejects mismatched manifests", async () => {
     expect(await publishedRelease()).toEqual(release);
+    expect(fetch).toHaveBeenCalledWith(
+      expect.stringContaining("/releases/latest"),
+      expect.objectContaining({ redirect: "manual" }),
+    );
     await expect(publishedRelease("1.2.2")).rejects.toThrow("does not match");
     await expect(publishedRelease("../../bad")).rejects.toThrow("Invalid");
+  });
+  it("rejects redirected release discovery without following it", async () => {
+    vi.mocked(fetch).mockResolvedValueOnce(
+      new Response(null, {
+        status: 302,
+        headers: { Location: "https://unexpected.example/" },
+      }),
+    );
+    await expect(publishedRelease()).rejects.toThrow("unavailable");
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(fetch).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ redirect: "manual" }),
+    );
   });
   it.each([
     { releases: [] },
@@ -212,7 +230,7 @@ describe("software release control", () => {
     );
     expect(vi.mocked(fetch)).toHaveBeenCalledWith(
       hook,
-      expect.objectContaining({ method: "POST", redirect: "error" }),
+      expect.objectContaining({ method: "POST", redirect: "manual" }),
     );
     for (const value of [
       "https://evil.test/",
