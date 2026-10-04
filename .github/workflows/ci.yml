@@ -48,7 +48,7 @@ jobs:
         run: pnpm --filter @whiteboard/web exec node scripts/run-auth-tests.mjs
       - name: Install Chromium for native OAuth browser regression
         run: pnpm --filter @whiteboard/web exec playwright install --with-deps chromium
-      - name: Important update notice browser regression
+      - name: Product guides, verification policy and update notices
         run: |
           HUDDLE_BUILD_TARGET=node pnpm --filter @whiteboard/web exec vite --host 127.0.0.1 --port 5300 --strictPort > /tmp/huddle-ui-fixture.log 2>&1 &
           fixture_pid=$!
@@ -58,6 +58,8 @@ jobs:
             sleep 0.25
           done
           pnpm --filter @whiteboard/web exec node scripts/update-notice-ui-smoke.mjs
+          pnpm --filter @whiteboard/web exec node scripts/reauthentication-ui-smoke.mjs
+          UI_ORIGIN=http://127.0.0.1:5300 pnpm --filter @whiteboard/web exec node scripts/tour-ui-smoke.mjs
       - name: Native OAuth browser consent and MCP connection
         run: pnpm --filter @whiteboard/web run test:oauth-browser
       - name: PostgreSQL authentication adapter

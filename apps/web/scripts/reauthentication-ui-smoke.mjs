@@ -21,6 +21,7 @@ try {
         if (request.method() === "PATCH") { const body = request.postDataJSON(); writes.push(body); Object.assign(settings, body); return route.fulfill({ json: { saved: true } }); }
         return route.fulfill({ json: { settings, mailReady: false, providers: { providers: [], callbacks: {}, allowedOidcOrigins: [] } } });
       }
+      if (path === "/api/v1/admin/owner-transfer") return route.fulfill({ json: { transfers: [] } });
       return route.fulfill({ json: { notice: null } });
     });
     const page = await context.newPage(); page.on("pageerror", error => failures.push(error.message));
