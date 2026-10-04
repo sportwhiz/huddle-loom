@@ -1088,7 +1088,7 @@ function PolicyForm({
   settings: Record<string, string | number>;
   action: Action;
 }) {
-  const [form, setForm] = useState({ ...settings });
+  const [form, setForm] = useState<Record<string, string | number>>({ reauthentication_seconds: 1800, ...settings });
   return (
     <section className="identity-section">
       <h2>Registration and security</h2>
@@ -1106,6 +1106,7 @@ function PolicyForm({
                   "mfa_required",
                   "magic_link",
                   "dynamic_registration",
+                  "reauthentication_seconds",
                   "session_idle_seconds",
                   "session_absolute_seconds",
                 ].map((key) => [key, form[key]]),
@@ -1154,6 +1155,22 @@ function PolicyForm({
             {label}
           </label>
         ))}
+        <label className="identity-field">
+          <span>Ask again for protected changes after</span>
+          <select
+            aria-describedby="verification-window-help"
+            value={String(form.reauthentication_seconds)}
+            onChange={(event) => setForm({ ...form, reauthentication_seconds: Number(event.target.value) })}
+          >
+            {![300, 900, 1800, 3600, 14400, 43200].includes(Number(form.reauthentication_seconds)) && (
+              <option value={String(form.reauthentication_seconds)}>{Number(form.reauthentication_seconds) / 60} minutes (custom)</option>
+            )}
+            {[[300, "5 minutes"], [900, "15 minutes"], [1800, "30 minutes (recommended)"], [3600, "1 hour"], [14400, "4 hours"], [43200, "12 hours"]].map(([seconds, label]) => (
+              <option key={seconds} value={seconds}>{label}</option>
+            ))}
+          </select>
+          <small id="verification-window-help">A successful password, authenticator or passkey check starts this window. Required second factors still apply. Security settings, account changes and connected app approvals share the window on this device. New sign-ins still require verification.</small>
+        </label>
         <div className="identity-form-grid">
           {[
             ["session_idle_seconds", "Sign out after inactivity"],

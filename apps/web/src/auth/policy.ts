@@ -12,7 +12,7 @@ import { cookie, sha256 } from "../security/primitives";
 import { requiresStrongAuthentication } from "./decisions";
 import { guestBoardAccess } from '../guest-policy.server';
 
-export async function installation(env: NativeEnv) {
+export async function installation(env: Pick<NativeEnv, "CATALOG">) {
   const row = await env.CATALOG.prepare(
     "SELECT * FROM installation WHERE id = ?",
   )
@@ -151,19 +151,45 @@ export function needsStrong(
 ) {
   return requiresStrongAuthentication(settings, state, twoFactorEnabled);
 }
-export function requireFresh(principal: Principal, strong = true) {
+export const DEFAULT_REAUTHENTICATION_SECONDS = 1800;
+export function reauthenticationSeconds(value: unknown) {
+  if (value === undefined) return DEFAULT_REAUTHENTICATION_SECONDS;
+  return typeof value === "number" &&
+    Number.isSafeInteger(value) &&
+    value >= 300 &&
+    value <= 43200
+    ? value
+    : 300;
+}
+export function requireFresh(
+  principal: Principal,
+  strong = true,
+  windowSeconds = DEFAULT_REAUTHENTICATION_SECONDS,
+) {
   const time = principal.authenticatedAt
     ? new Date(principal.authenticatedAt).getTime()
     : 0;
   if (
     (strong && principal.assurance !== "strong") ||
-    Date.now() - time > 300_000
+    !Number.isFinite(time) ||
+    time <= 0 ||
+    time > Date.now() ||
+    Date.now() - time >= reauthenticationSeconds(windowSeconds) * 1000
   )
     throw new HttpError(
       403,
       "Confirm your identity before making this change.",
       "STEP_UP_REQUIRED",
     );
+}
+/** Read current policy for every protected request, including existing sessions. */
+export async function requireFreshForInstallation(
+  env: Pick<NativeEnv, "CATALOG">,
+  principal: Principal,
+  strong = true,
+) {
+  const settings = await installation(env);
+  requireFresh(principal, strong, settings.reauthentication_seconds);
 }
 export async function requireAdministrator(
   env: NativeEnv,
@@ -184,7 +210,7 @@ export async function requireAdministrator(
       "Administrator permission is required.",
       "ADMIN_REQUIRED",
     );
-  if (fresh) requireFresh(principal);
+  if (fresh) await requireFreshForInstallation(env, principal);
   return state;
 }
 export function publicPrincipal(principal: Principal) {

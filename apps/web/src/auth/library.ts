@@ -124,7 +124,12 @@ export function libraryOptions(
         86400,
         Math.floor((settings?.session_idle_seconds ?? 604800) / 4),
       ),
-      freshAge: 300,
+      // Application routes check the most recent verified factor against the
+      // current Studio policy. Better Auth's createdAt check would keep rejecting
+      // an older session even after a successful TOTP confirmation. All exposed
+      // private endpoints are allowlisted and guarded in auth/routes.ts; the
+      // server-only setPassword action is guarded in account-routes.ts.
+      freshAge: 0,
       cookieCache: { enabled: false },
       additionalFields: {
         absoluteExpiresAt: {

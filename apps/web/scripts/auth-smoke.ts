@@ -66,7 +66,7 @@ if (process.argv.includes("--reset")) {
   // updater defaults so this fixture represents a freshly migrated installation.
   database.exec("INSERT INTO software_update_settings(id) VALUES ('instance')");
   database.exec(
-    "UPDATE installation SET state = 'unclaimed', setup_user_id = NULL, owner_id = NULL, version = 1, consent_version = 1, setup_commit = NULL, ownership_commit = NULL, registration = 'invite', approval_required = 0, mfa_required = 0, magic_link = 0, member_limit = 25, guest_limit = 100, board_limit = 1000, user_board_limit = 100, storage_limit = 5368709120, user_storage_limit = 1073741824, mail_limit = 500; COMMIT; PRAGMA foreign_keys = ON;",
+    "UPDATE installation SET state = 'unclaimed', setup_user_id = NULL, owner_id = NULL, version = 1, consent_version = 1, setup_commit = NULL, ownership_commit = NULL, registration = 'invite', approval_required = 0, mfa_required = 0, magic_link = 0, reauthentication_seconds = 1800, member_limit = 25, guest_limit = 100, board_limit = 1000, user_board_limit = 100, storage_limit = 5368709120, user_storage_limit = 1073741824, mail_limit = 500; COMMIT; PRAGMA foreign_keys = ON;",
   );
 }
 database.exec("DELETE FROM request_limits");
@@ -265,6 +265,21 @@ await client.call(
   200,
   "PATCH",
 );
+// Exercise the installed policy against a real Worker session, not a browser timer.
+for (const invalid of [0, 299, 43201, 1.5, "3600", null])
+  await client.call("/api/v1/admin/settings", { reauthentication_seconds: invalid }, 400, "PATCH");
+await client.call("/api/v1/admin/settings", { reauthentication_seconds: 3600 }, 200, "PATCH");
+assert.equal((await client.call("/api/v1/admin/settings")).settings.reauthentication_seconds, 3600);
+const sessionId = security.sessions.find((session: any) => session.current).id;
+const oldVerification = new Date(Date.now() - 20 * 60000).toISOString();
+database.prepare("UPDATE auth_sessions SET authenticatedAt = ?, createdAt = ? WHERE id = ?").run(oldVerification, oldVerification, sessionId);
+await client.call("/api/v1/admin/settings", { reauthentication_seconds: 300 }, 200, "PATCH");
+await client.call("/api/v1/admin/settings", { reauthentication_seconds: 3600 }, 403, "PATCH");
+await client.call("/api/auth/list-accounts");
+await client.call("/api/auth/passkey/list-user-passkeys");
+database.prepare("UPDATE auth_sessions SET authenticatedAt = ? WHERE id = ?").run(new Date().toISOString(), sessionId);
+await client.call("/api/v1/admin/settings", { reauthentication_seconds: 1800 }, 200, "PATCH");
+console.log("Native Worker/D1: verification policy bounds, old session timestamps, immediate policy changes and read-only login methods passed.");
 const member = new Client();
 await member.call("/api/v1/auth/bootstrap");
 const memberEmail = `member-${Date.now()}@example.invalid`;

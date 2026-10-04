@@ -77,6 +77,7 @@ export type Installation = {
   user_board_limit: number;
   user_storage_limit: number;
   mail_limit: number;
+  reauthentication_seconds: number;
   session_idle_seconds: number;
   session_absolute_seconds: number;
   created_at: string;

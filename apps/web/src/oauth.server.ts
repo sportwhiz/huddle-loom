@@ -17,7 +17,7 @@ import {
 } from "./collaboration.server";
 import { readCatalog } from "./catalog.server";
 import {
-  requireFresh,
+  requireFreshForInstallation,
   securityState,
   validateLivePrincipal,
 } from "./auth/policy";
@@ -359,7 +359,8 @@ export async function authorizeOAuth(
   env?: NativeEnv,
 ) {
   const origin = originFor(request, env);
-  if (principal.authentication === "native") requireFresh(principal, false);
+  if (principal.authentication === "native")
+    await requireFreshForInstallation(env ?? { CATALOG: database }, principal, false);
   if (request.method === "GET") {
     const url = new URL(request.url);
     const id = url.searchParams.get("client_id");
@@ -1022,7 +1023,8 @@ export async function updateOAuthConnection(
       "Use your account to manage app access.",
       "ACCOUNT_REQUIRED",
     );
-  if (principal.authentication === "native") requireFresh(principal, false);
+  if (principal.authentication === "native")
+    await requireFreshForInstallation(env, principal, false);
   const body = await json(request);
   const grant = await env.CATALOG.prepare(
     `SELECT g.* FROM oauth_grants g JOIN oauth_clients c ON c.id = g.client_id

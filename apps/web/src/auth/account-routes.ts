@@ -7,7 +7,7 @@ import {
   installation,
   needsStrong,
   publicPrincipal,
-  requireFresh,
+  requireFreshForInstallation,
 } from "./policy";
 import {
   verifyPassword,
@@ -214,7 +214,7 @@ export async function accountRoutes(
     url.pathname === "/api/v1/account/password" &&
     request.method === "POST"
   ) {
-    requireFresh(
+    await requireFreshForInstallation(env,
       principal,
       needsStrong(settings, identity.state, user.twoFactorEnabled),
     );
@@ -326,7 +326,7 @@ export async function accountRoutes(
   );
   if (sessionMatch && request.method === "DELETE") {
     if (decodeURIComponent(sessionMatch[1]) !== principal.sessionId)
-      requireFresh(
+      await requireFreshForInstallation(env,
         principal,
         needsStrong(settings, identity.state, user.twoFactorEnabled),
       );
@@ -350,7 +350,7 @@ export async function accountRoutes(
       url.pathname,
     )
   ) {
-    requireFresh(
+    await requireFreshForInstallation(env,
       principal,
       needsStrong(settings, identity.state, user.twoFactorEnabled),
     );
@@ -369,7 +369,7 @@ export async function accountRoutes(
     url.pathname === "/api/v1/account/recovery-complete" &&
     request.method === "POST"
   ) {
-    requireFresh(principal, false);
+    await requireFreshForInstallation(env, principal, false);
     if (!identity.state.recovery_required)
       throw new HttpError(
         409,
@@ -416,7 +416,7 @@ export async function accountRoutes(
     return Response.json({ recovered: true, signInAgain: true });
   }
   if (url.pathname === "/api/v1/account/export" && request.method === "GET") {
-    requireFresh(
+    await requireFreshForInstallation(env,
       principal,
       needsStrong(settings, identity.state, user.twoFactorEnabled),
     );
@@ -460,7 +460,7 @@ export async function accountRoutes(
         "Finish account recovery before replacing your key.",
         "ADMISSION_REQUIRED",
       );
-    requireFresh(
+    await requireFreshForInstallation(env,
       principal,
       needsStrong(settings, identity.state, user.twoFactorEnabled),
     );
@@ -483,7 +483,7 @@ export async function accountRoutes(
     );
   }
   if (url.pathname === "/api/v1/account/delete" && request.method === "POST") {
-    requireFresh(
+    await requireFreshForInstallation(env,
       principal,
       needsStrong(settings, identity.state, user.twoFactorEnabled),
     );
