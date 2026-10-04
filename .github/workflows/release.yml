@@ -74,8 +74,8 @@ jobs:
           RELEASE_NOTES: ${{ inputs.notes }}
           RELEASE_PRERELEASE: ${{ inputs.prerelease }}
         run: |
-          test "$(gh repo view --json isPrivate --jq .isPrivate)" = false || { echo 'Public updates require a public source repository. Nothing was published.'; exit 1; }
+          test "$(gh repo view "$GH_REPO" --json isPrivate --jq .isPrivate)" = false || { echo 'Public updates require a public source repository. Nothing was published.'; exit 1; }
           printenv RELEASE_NOTES > release-notes.txt
           preview_args=()
           if [ "$RELEASE_PRERELEASE" = true ]; then preview_args+=(--prerelease); fi
-          gh release create "$RELEASE_TAG" huddle-loom-release.json huddle-loom-node.zip huddle-loom-node.zip.sha256 --verify-tag --title "Huddle Loom $RELEASE_TAG" --notes-file release-notes.txt "${preview_args[@]}"
+          gh release create "$RELEASE_TAG" huddle-loom-release.json huddle-loom-node.zip huddle-loom-node.zip.sha256 --repo "$GH_REPO" --verify-tag --title "Huddle Loom $RELEASE_TAG" --notes-file release-notes.txt "${preview_args[@]}"
