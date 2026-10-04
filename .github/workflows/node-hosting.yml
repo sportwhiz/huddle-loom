@@ -47,13 +47,13 @@ jobs:
       HUDDLE_SCHEMA_TEST_MYSQL_URL: mysql://huddle:disposable-node-app@127.0.0.1:33316/huddle_schema_test
       HUDDLE_NAMESPACE_MYSQL_TEST_URL: mysql://huddle:disposable-node-app@127.0.0.1:33316/huddle_variant_test
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           ref: ${{ inputs.ref || github.sha }}
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
         with:
           version: 10.30.3
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 22
           cache: pnpm
@@ -82,7 +82,7 @@ jobs:
         run: HUDDLE_NODE_TEST_PLATFORM=godaddy HUDDLE_MAIL_GATEWAY=off HUDDLE_DATABASE_NAMESPACE=live HUDDLE_NODE_TEST_PACKAGE=1 HUDDLE_NODE_TEST_DATABASE=huddle_package_test pnpm --filter @whiteboard/web run test:node
       - name: Packaged full MySQL setup and durable restart
         run: HUDDLE_DATABASE_NAMESPACE=live HUDDLE_NODE_TEST_PACKAGE=1 HUDDLE_NODE_TEST_DATABASE=huddle_package_mysql_test pnpm --filter @whiteboard/web run test:node
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: huddle-loom-node
           path: |
