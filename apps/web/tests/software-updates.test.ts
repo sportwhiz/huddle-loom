@@ -124,6 +124,69 @@ describe("software release control", () => {
     await expect(publishedRelease("1.2.2")).rejects.toThrow("does not match");
     await expect(publishedRelease("../../bad")).rejects.toThrow("Invalid");
   });
+  it.each([
+    { releases: [] },
+    { releases: [{ tag_name: "v0.1.0", draft: false, prerelease: true }] },
+  ])(
+    "treats a readable repository without stable releases as a successful empty check: %j",
+    async ({ releases }) => {
+      await checkReleases(env);
+      db.exec(
+        "UPDATE software_update_settings SET check_error='Previous failure',automatic_security=1,checked_at=0",
+      );
+      vi.mocked(fetch).mockImplementation(async (input) =>
+        String(input).endsWith("/releases?per_page=100")
+          ? Response.json(releases)
+          : Response.json({ message: "Not Found" }, { status: 404 }),
+      );
+      await automaticUpdates(env);
+      const status = await updateStatus(env);
+      expect(status.available).toBeNull();
+      expect(status.checkError).toBeNull();
+      expect(status.checkedAt).toBeGreaterThan(0);
+      expect(status.updateAvailable).toBe(false);
+      expect(status.history).toHaveLength(0);
+    },
+  );
+  it.each([403, 404, 429, 500])(
+    "keeps lookup failures visible when the fallback repository request fails with %i",
+    async (statusCode) => {
+      await checkReleases(env);
+      vi.mocked(fetch).mockImplementation(async (input) =>
+        new Response("", {
+          status: String(input).endsWith("/releases/latest") ? 404 : statusCode,
+        }),
+      );
+      await checkReleases(env);
+      const status = await updateStatus(env);
+      expect(status.checkError).toBeTruthy();
+      expect(status.available).toEqual(release);
+    },
+  );
+  it("does not treat a missing requested release as an empty channel", async () => {
+    vi.mocked(fetch).mockResolvedValue(new Response("", { status: 404 }));
+    await expect(publishedRelease("1.2.1")).rejects.toThrow();
+    expect(fetch).toHaveBeenCalledTimes(1);
+  });
+  it.each([
+    { releases: [{ tag_name: "v1.2.1", draft: false, prerelease: false }] },
+    { releases: [{}] },
+    { releases: { message: "invalid response" } },
+  ])(
+    "rejects inconsistent or malformed fallback metadata: %j",
+    async ({ releases }) => {
+      vi.mocked(fetch)
+        .mockResolvedValueOnce(new Response("", { status: 404 }))
+        .mockResolvedValueOnce(Response.json(releases));
+      await expect(publishedRelease()).rejects.toThrow("could not be verified");
+    },
+  );
+  it("never accepts a preview as a stable installation target", async () => {
+    vi.mocked(fetch).mockResolvedValueOnce(
+      Response.json({ tag_name: "v1.2.1", draft: false, prerelease: true }),
+    );
+    await expect(publishedRelease("1.2.1")).rejects.toThrow("No stable release");
+  });
   it("serializes concurrent update requests and never discloses hook credentials", async () => {
     const results = await Promise.allSettled([
       requestUpdate(env, release, null),

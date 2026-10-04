@@ -34,6 +34,8 @@ After success, D1 records the installed release. Rebuilding the older installer 
 
 Official releases come from [sportwhiz/huddle-loom](https://github.com/sportwhiz/huddle-loom/releases). Stable releases include a manifest that pins the reviewed source commit, package version, schema digest, board format, and updater protocol. Preview releases are not offered as stable updates.
 
+The GitHub pre-release flag decides whether a release is offered; a version such as `0.1.0` can be stable. If a readable repository has no stable release, Updates shows **No stable release yet**. A missing deployment connection does not prevent checking releases; it prevents installation until the deploy hook is connected.
+
 Maintainer process:
 
 1. Update root/application package versions and release notes; make an existing `vX.Y.Z` tag at the reviewed commit.

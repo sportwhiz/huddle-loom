@@ -58,19 +58,40 @@ async function remoteJson(response: Response) {
     new TextDecoder().decode(await boundedBody(response, 65536)),
   );
 }
-export async function publishedRelease(version?: string): Promise<Release> {
+export function publishedRelease(version: string): Promise<Release>;
+export function publishedRelease(): Promise<Release | null>;
+export async function publishedRelease(
+  version?: string,
+): Promise<Release | null> {
   if (version && !/^\d{1,5}\.\d{1,5}\.\d{1,5}$/.test(version))
     throw new Error("Invalid release version.");
   const headers = {
     "User-Agent": "Huddle-Loom-Updater",
     Accept: "application/vnd.github+json",
   };
-  const release = await remoteJson(
-    await fetch(
-      `https://api.github.com/repos/${RELEASE_REPOSITORY}/releases/${version ? `tags/v${version}` : "latest"}`,
-      { headers, signal: AbortSignal.timeout(15000), redirect: "error" },
-    ),
+  const response = await fetch(
+    `https://api.github.com/repos/${RELEASE_REPOSITORY}/releases/${version ? `tags/v${version}` : "latest"}`,
+    { headers, signal: AbortSignal.timeout(15000), redirect: "error" },
   );
+  if (!version && response.status === 404) {
+    // GitHub also returns 404 when a public repository has only previews.
+    // Confirm that the repository is readable before reporting an empty channel.
+    const releases = await remoteJson(
+      await fetch(
+        `https://api.github.com/repos/${RELEASE_REPOSITORY}/releases?per_page=100`,
+        { headers, signal: AbortSignal.timeout(15000), redirect: "error" },
+      ),
+    );
+    if (
+      Array.isArray(releases) &&
+      releases.every(
+        (item) => item && (item.draft === true || item.prerelease === true),
+      )
+    )
+      return null;
+    throw new Error("The latest stable release could not be verified.");
+  }
+  const release = await remoteJson(response);
   if (
     release.draft ||
     release.prerelease ||
@@ -113,7 +134,7 @@ export async function checkReleases(env: NativeEnv) {
     await env.CATALOG.prepare(
       "UPDATE software_update_settings SET available_release=?,checked_at=?,check_error=NULL,check_lease_until=0 WHERE id='instance'",
     )
-      .bind(JSON.stringify(release), now)
+      .bind(release ? JSON.stringify(release) : null, now)
       .run();
   } catch {
     await env.CATALOG.prepare(
