@@ -390,6 +390,9 @@ try {
   await qualifyMcp(board.id);
   const updates = await call("/api/v1/admin/updates");
   assert.equal(updates.deploymentMode, "manual-node");
+  const ownerNotice = await call("/api/v1/updates/notice");
+  assert.ok(Object.hasOwn(ownerNotice, "notice"));
+  assert.equal(JSON.stringify(ownerNotice).includes("hook"), false);
   await call(
     "/api/v1/admin/updates/connection",
     {
@@ -415,6 +418,9 @@ try {
   assert.ok(guest.recoveryCode);
   await call("/api/v1/auth/bootstrap");
   await call("/api/v1/admin/people", undefined, 403);
+  const guestNotice = await call("/api/v1/updates/notice");
+  assert.ok(Object.hasOwn(guestNotice, "notice"));
+  await call("/api/v1/admin/updates", undefined, 403);
   const privateBoard = await fetch(origin + boardPath + "/semantic", {
     headers: {
       Cookie: [...cookies].map(([key, value]) => `${key}=${value}`).join("; "),

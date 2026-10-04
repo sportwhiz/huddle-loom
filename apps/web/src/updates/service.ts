@@ -208,6 +208,32 @@ export async function updateStatus(env: NativeEnv) {
     }),
   };
 }
+/** Only public release information, without deployment history or credentials. */
+export async function releaseNotice(env: NativeEnv) {
+  let configuration = await settings(env);
+  if ((configuration.checked_at ?? 0) < Date.now() - 86400000) {
+    await checkReleases(env);
+    configuration = await settings(env);
+  }
+  const available = configuration.available_release
+    ? parseRelease(JSON.parse(configuration.available_release))
+    : null;
+  if (!available || compareVersions(available.version, currentRelease.version) <= 0 ||
+      !(available.security || available.important)) return null;
+  const active = await env.CATALOG.prepare(
+    `SELECT status,updated_at FROM software_updates WHERE status IN ${ACTIVE} LIMIT 1`,
+  ).first<{ status: string; updated_at: number }>();
+  return {
+    id: `${available.version}:${available.commit}`,
+    version: available.version,
+    security: available.security,
+    notes: available.notes.slice(0, 2000),
+    inProgress: Boolean(active && active.status !== "uncertain" && active.updated_at > Date.now() - 1200000),
+    guidedUpgrade: Boolean(compatibleRelease(available, currentRelease)),
+    deploymentMode: env.HOSTING_PLATFORM && env.HOSTING_PLATFORM !== "cloudflare"
+      ? "manual-node" as const : "cloudflare" as const,
+  };
+}
 export async function saveConnection(
   env: NativeEnv,
   hook: unknown,
@@ -397,15 +423,12 @@ export async function retryDeployment(
 export async function automaticUpdates(env: NativeEnv) {
   if (env.HOSTING_PLATFORM && env.HOSTING_PLATFORM !== "cloudflare") return;
   const configuration = await settings(env);
-  if (
-    !(configuration.hook_ciphertext || env.SOFTWARE_UPDATE_HOOK) ||
-    !configuration.runner_seen_at
-  )
-    return;
-  if ((configuration.checked_at ?? 0) > Date.now() - 86400000) return;
-  await checkReleases(env);
+  if ((configuration.checked_at ?? 0) < Date.now() - 86400000)
+    await checkReleases(env);
   const refreshed = await settings(env);
   if (
+    !(refreshed.hook_ciphertext || env.SOFTWARE_UPDATE_HOOK) ||
+    !refreshed.runner_seen_at ||
     !refreshed.automatic_security ||
     refreshed.check_error ||
     !refreshed.available_release

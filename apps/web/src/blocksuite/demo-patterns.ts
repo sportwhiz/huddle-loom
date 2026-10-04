@@ -61,8 +61,8 @@ export const UPDATE_FLOW_PATTERN: DemoPattern = {
   frames: [
     { id: "release-frame", x: 0, y: 0, w: 1820, h: 290, title: "01 · Release and approval →", children: nodes.slice(0, 5).map(n => n.id) },
     { id: "build-frame", x: 0, y: 330, w: 1820, h: 290, title: "02 · Build and preserve your Studio ←", children: nodes.slice(5, 10).map(n => n.id) },
-    { id: "verify-frame", x: 0, y: 650, w: 1820, h: 330, title: "03 · Verify and remember", children: nodes.slice(10, 15).map(n => n.id) },
-    { id: "recovery-frame", x: 0, y: 1000, w: 1820, h: 320, title: "04 · Recovery when verification fails", children: nodes.slice(15).map(n => n.id) },
+    { id: "verify-frame", x: 0, y: 650, w: 1820, h: 330, title: "03 · Verification", children: nodes.slice(10, 15).map(n => n.id) },
+    { id: "recovery-frame", x: 0, y: 1000, w: 1820, h: 320, title: "04 · Recovery", children: nodes.slice(15).map(n => n.id) },
   ],
   edges: [
     edge("release", "discover"), edge("discover", "approve"), edge("approve", "hook"), edge("hook", "installer"),

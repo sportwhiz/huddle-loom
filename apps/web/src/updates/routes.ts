@@ -10,6 +10,7 @@ import {
   ACTIVE,
   checkReleases,
   publishedRelease,
+  releaseNotice,
   requestUpdate,
   retryDeployment,
   runnerReady,
@@ -23,6 +24,14 @@ export async function updateRoutes(
   env: NativeEnv,
 ): Promise<Response | null> {
   const path = new URL(request.url).pathname;
+  if (path === "/api/v1/updates/notice") {
+    if (request.method !== "GET")
+      throw new HttpError(405, "Method not allowed.", "METHOD_NOT_ALLOWED");
+    await nativePrincipal(request, env);
+    return Response.json({ notice: await releaseNotice(env) }, {
+      headers: { "Cache-Control": "no-store" },
+    });
+  }
   if (!path.startsWith("/api/v1/admin/updates")) return null;
   const { principal } = await nativePrincipal(request, env);
   await requireAdministrator(

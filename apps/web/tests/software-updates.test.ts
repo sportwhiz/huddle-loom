@@ -11,6 +11,7 @@ import {
   automaticUpdates,
   checkReleases,
   publishedRelease,
+  releaseNotice,
   requestUpdate,
   retryDeployment,
   saveConnection,
@@ -141,6 +142,62 @@ describe("software release control", () => {
       expect.any(String),
       expect.objectContaining({ redirect: "manual" }),
     );
+  });
+  it("discovers important releases without a deploy hook and exposes only public notice data", async () => {
+    const local = { ...env, SOFTWARE_UPDATE_HOOK: undefined };
+    db.exec("UPDATE software_update_settings SET runner_seen_at=NULL,runner_origin=NULL");
+    const notice = await releaseNotice(local);
+    expect(notice).toEqual({
+      id: `${release.version}:${release.commit}`, version: release.version,
+      security: true, notes: release.notes, inProgress: false,
+      guidedUpgrade: false, deploymentMode: "cloudflare",
+    });
+    expect(JSON.stringify(notice)).not.toContain(hook);
+    expect(JSON.stringify(notice)).not.toContain("checkpoint");
+    const calls = vi.mocked(fetch).mock.calls.length;
+    await releaseNotice(local);
+    expect(fetch).toHaveBeenCalledTimes(calls);
+    expect((await updateStatus(local)).history).toHaveLength(0);
+  });
+  it.each([
+    { candidate: { ...release, security: false }, visible: false },
+    { candidate: { ...release, security: false, important: true }, visible: true },
+    { candidate: { ...release, security: true, important: false }, visible: true },
+    { candidate: { ...current, important: true }, visible: false },
+    { candidate: { ...release, version: "1.1.9", important: true }, visible: false },
+  ])("shows only newer priority releases: $candidate.version / $visible", async ({candidate, visible}) => {
+    db.prepare("UPDATE software_update_settings SET available_release=?,checked_at=?").run(JSON.stringify(candidate), Date.now());
+    expect(Boolean(await releaseNotice(env))).toBe(visible);
+    expect(fetch).not.toHaveBeenCalled();
+  });
+  it("shows guided and Node updates without starting deployments", async () => {
+    db.prepare("UPDATE software_update_settings SET available_release=?,checked_at=?").run(JSON.stringify({ ...release, protocol: 2 }), Date.now());
+    const notice = await releaseNotice({ ...env, HOSTING_PLATFORM: "godaddy" });
+    expect(notice?.guidedUpgrade).toBe(true);
+    expect(notice?.deploymentMode).toBe("manual-node");
+    expect(fetch).not.toHaveBeenCalled();
+  });
+  it("keeps discovery independent of installing automatic patches", async () => {
+    db.exec("UPDATE software_update_settings SET automatic_security=1");
+    await releaseNotice(env);
+    const calls = vi.mocked(fetch).mock.calls.length;
+    await automaticUpdates(env);
+    expect(fetch).toHaveBeenCalledTimes(calls + 1);
+    expect((await updateStatus(env)).history).toHaveLength(1);
+  });
+  it("distinguishes a running update from an uncertain or stalled deployment", async () => {
+    await checkReleases(env);
+    await requestUpdate(env, release, null);
+    expect((await releaseNotice(env))?.inProgress).toBe(true);
+    db.exec("UPDATE software_updates SET status='uncertain'");
+    expect((await releaseNotice(env))?.inProgress).toBe(false);
+    db.exec("UPDATE software_updates SET status='building',updated_at=0");
+    expect((await releaseNotice(env))?.inProgress).toBe(false);
+  });
+  it("rejects invalid priority metadata and keeps old manifests compatible", () => {
+    expect(parseRelease(release)).toEqual(release);
+    expect(parseRelease({ ...release, important: true }).important).toBe(true);
+    expect(() => parseRelease({ ...release, important: "true" })).toThrow();
   });
   it.each([
     { releases: [] },

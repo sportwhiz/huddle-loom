@@ -16,6 +16,7 @@ const AuthPage = lazy(() =>
   import("./AuthPage").then((module) => ({ default: module.AuthPage })),
 );
 const GuestAccess = lazy(() => import('./GuestAccess').then(module => ({default:module.GuestAccess})));
+const UpdateNoticeHost = lazy(() => import('./UpdateNotice').then(module => ({default:module.UpdateNoticeHost})));
 export function AuthGate({ children }: { children: ReactNode }) {
   const location = useAppLocation();
   if (location.pathname.startsWith('/guest/')) return <Suspense fallback={<main className="canvas-loading">Opening your shared board…</main>}><GuestAccess /></Suspense>;
@@ -162,6 +163,8 @@ function AuthContent({ children }: { children: ReactNode }) {
       {children}
       <Suspense fallback={null}>
         <OnboardingHost bootstrap={bootstrap} refresh={refresh} />
+        {account?.status === "active" && !account.needsMfa && !account.recoveryRequired && !bootstrap.setup &&
+          <UpdateNoticeHost bootstrap={bootstrap} />}
       </Suspense>
     </div>
   );

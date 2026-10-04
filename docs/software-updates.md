@@ -32,6 +32,14 @@ After success, D1 records the installed release. Rebuilding the older installer 
 
 ## Release publication
 
+### Important update notices
+
+Signed-in users see a notice when a newer stable release contains a security fix or the maintainer selects **important** in the release workflow. Owners and administrators can open Updates to review the release; installation still requires the owner's approval and fresh MFA. Other users see who handles the update and can continue working. Guest links and sign-in screens do not show installation notices.
+
+The prompt waits for an idle moment and respects onboarding, open dialogs, text editing, and canvas gestures. **Remind me tomorrow** postpones the prompt for that account and installation in the current browser for 24 hours. A small update button remains available. A different important release prompts again, and installing the release removes its notice. Notice preferences also synchronize across tabs in the same browser.
+
+Release discovery works without a deployment hook. Cloudflare checks daily; signed-in clients also refresh cached notices every five minutes while visible. The server shares one daily release check across users. Node.js installations show the same notices and direct administrators to their hosting dashboard. Marking a release important does not authorize automatic installation; the existing compatible-security-patch policy remains unchanged. Older manifests without an important flag still work.
+
 Official releases come from [sportwhiz/huddle-loom](https://github.com/sportwhiz/huddle-loom/releases). Stable releases include a manifest that pins the reviewed source commit, package version, schema digest, board format, and updater protocol. Preview releases are not offered as stable updates.
 
 The GitHub pre-release flag decides whether a release is offered; a version such as `0.1.0` can be stable. If a readable repository has no stable release, Updates shows **No stable release yet**. A missing deployment connection does not prevent checking releases; it prevents installation until the deploy hook is connected.

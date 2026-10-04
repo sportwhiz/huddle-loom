@@ -22,6 +22,7 @@ if (
 )
   throw new Error("Release source must be clean.");
 info.security = process.env.RELEASE_SECURITY === "true";
+info.important = process.env.RELEASE_IMPORTANT === "true";
 info.notes = (process.env.RELEASE_NOTES ?? "").slice(0, 12000);
 if (!info.notes.trim()) throw new Error("Release notes are required.");
 writeFileSync("huddle-loom-release.json", JSON.stringify(info, null, 2) + "\n");

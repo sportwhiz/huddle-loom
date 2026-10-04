@@ -13,6 +13,10 @@ on:
         description: Publish as a preview (excluded from stable automatic updates)
         type: boolean
         default: true
+      important:
+        description: Notify signed-in users that this release needs attention
+        type: boolean
+        default: false
       notes:
         description: Plain-language release notes
         required: true
@@ -48,6 +52,7 @@ jobs:
         env:
           RELEASE_TAG: ${{ inputs.tag }}
           RELEASE_SECURITY: ${{ inputs.security }}
+          RELEASE_IMPORTANT: ${{ inputs.important }}
           RELEASE_NOTES: ${{ inputs.notes }}
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
