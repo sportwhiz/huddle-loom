@@ -320,7 +320,7 @@ export function AdminPanel({ section }: { section: string }) {
               </div>
             </section>
           )}
-          <section className="identity-section">
+          <section className="identity-section" data-onboarding="people-list">
             {data.people?.length ? (
               data.people.map((item) => (
                 <div className="identity-row" key={item.id}>

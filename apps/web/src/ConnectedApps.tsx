@@ -1,4 +1,5 @@
 import { api, apiFetch } from "./auth-client";
+import { openTour } from "./onboarding-events";
 import { UiIcon } from "./UiIcon";
 import { BrandMark } from "./BrandMark";
 import { ThemedImage } from "./ThemedImage";
@@ -281,6 +282,7 @@ export function ConnectedApps() {
           <UiIcon name="back" /> {back === "/" ? "Back to studio" : "Back to board"}
         </a>
         <a href="/" className="connections-brand" aria-label="Huddle Loom home"><BrandMark /><span className="brand-wordmark">{PRODUCT_WORDMARK}</span></a>
+        <button className="connections-tour" type="button" onClick={openTour}><UiIcon name="help" /> Quick tour</button>
         <ThemeMenu />
       </header>
       <div className="connections-content" {...(confirm || editing ? { inert: "" } : {})}>

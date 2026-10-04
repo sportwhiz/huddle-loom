@@ -35,3 +35,13 @@ For someone without an account, use [guest sharing](guest-sharing.md). A guest l
 Open Connected apps from settings or the board menu. It shows the MCP address and a connection guide. After signing in through your assistant, review the requested scopes and selected boards or workbooks before approving.
 
 The assistant edits native content, so you can keep refining its work by hand. Ask it to inspect a diagram, shorten crowded labels, or reorganize a workflow while preserving the existing objects. [MCP guide](mcp.md) has examples and limits.
+
+## Find your way around
+
+The quick guides point to the controls they describe and shade the rest of the page. Each page has its own guide: your Studio, whiteboards, Connected apps, Account and security, and each administration section.
+
+Use **Next** and **Back** to move through a guide. **Skip tour**, Escape, and **Leave the guide and explore** close it immediately. A guide never creates a board, sends an invitation, or changes a setting for you. Your completed or skipped guides are remembered for your account; device storage also keeps them dismissed when a save cannot reach the server.
+
+You can replay a guide with **Quick tour** in Studio navigation, Connected apps, or the settings header. On a board, open **Keyboard shortcuts** and choose **Take a quick board tour**. Guides adapt to your permissions: a viewer learns navigation and comments, while an editor sees the creation tools. Visitors using a guest link get a board guide with dismissal saved on their device; no account is created or changed. Administration guides only appear in sections your role can access.
+
+On a small screen, a guide opens Studio navigation when needed and scrolls the highlighted control into view. If a control is unavailable, the guide explains that instead of pointing at an unrelated part of the page. Keyboard focus stays in the guide until you finish or leave it.

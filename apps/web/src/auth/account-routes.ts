@@ -165,10 +165,10 @@ export async function accountRoutes(
         "ADMISSION_REQUIRED",
       );
     const body = await json(request);
-    const bits: Record<string, number> = { home: 1, board: 2, admin: 4 };
+    const bits: Record<string, number> = { home: 1, board: 2, admin: 4, account: 8, connections: 16 };
     if (
       typeof body.journey !== "string" ||
-      !bits[body.journey] ||
+      !Object.hasOwn(bits, body.journey) ||
       !["completed", "skipped", "replay"].includes(String(body.status))
     )
       throw new HttpError(400, "Invalid onboarding action.", "INVALID_INPUT");
