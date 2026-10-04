@@ -266,6 +266,13 @@ export function tourSteps(
         },
       ),
       step(
+        "Set a comfortable verification window",
+        "Choose how long a successful identity check lasts for protected changes. The default is 30 minutes, so routine administration needs fewer interruptions.",
+        "New sign-ins still require any second factor your account or Studio requires.",
+        'select[aria-describedby="verification-window-help"]',
+        { icon: "lock" },
+      ),
+      step(
         "Configure your sign-in providers",
         "Provider settings connect supported identity services. Keep callback addresses and credentials consistent with your deployment.",
         "Changes to security settings can require a fresh confirmation.",

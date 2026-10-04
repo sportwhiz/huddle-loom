@@ -52,6 +52,9 @@ describe("permission aware page guides", () => {
       ),
     ).toBe(false);
   });
+  it("points directly to the configurable verification window", () => {
+    expect(tourSteps("admin", "owner", false, "/settings/sign-in").some(step => step.target.includes("verification-window-help"))).toBe(true);
+  });
   it("uses unique persistence bits and only actionable controls", () => {
     expect(new Set(Object.values(tourBits)).size).toBe(5);
     for (const journey of Object.keys(tourBits) as (keyof typeof tourBits)[])

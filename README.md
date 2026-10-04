@@ -12,7 +12,7 @@ A whiteboard you can host yourself. Gather sticky notes, sketch a workflow, and 
 - Bound arrows that follow objects when you move them. Drag tools onto the board or add a connected next step.
 - Live collaboration, comments, guest links, presentation, timers, and voting.
 - A Studio to organize boards into folders and workbooks. Start from Patterns and revisit revisions with Unravel.
-- Light and dark themes, a skippable first-use tour, and keyboard shortcuts.
+- Light and dark themes, guides that point to the controls you need, and keyboard shortcuts.
 - Local accounts, passkeys or authenticator verification, invitations, recovery, and administration. Email and external sign-in providers are optional.
 - An OAuth-protected MCP server with 21 tools for workflows, workshops, diagrams, search, images, and board editing.
 - Native archives that keep boards editable, plus image exports.

@@ -38,6 +38,8 @@ The assistant edits native content, so you can keep refining its work by hand. A
 
 ## Find your way around
 
+![A Studio guide highlighting the New board button](images/guided-tour.png)
+
 The quick guides point to the controls they describe and shade the rest of the page. Each page has its own guide: your Studio, whiteboards, Connected apps, Account and security, and each administration section.
 
 Use **Next** and **Back** to move through a guide. **Skip tour**, Escape, and **Leave the guide and explore** close it immediately. A guide never creates a board, sends an invitation, or changes a setting for you. Your completed or skipped guides are remembered for your account; device storage also keeps them dismissed when a save cannot reach the server.

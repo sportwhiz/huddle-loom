@@ -92,7 +92,7 @@ For a suspected product vulnerability, use [private reporting](https://github.co
 
 ## Repeated identity checks
 
-In **Administration → Registration and security**, the Studio owner can choose **Ask again for protected changes after**. The default is 30 minutes; choices range from five minutes to 12 hours. A longer window reduces interruptions when managing accounts, changing security settings or approving connected apps.
+In **Administration → Sign-in settings → Registration and security**, the Studio owner can choose **Ask again for protected changes after**. The default is 30 minutes; choices range from five minutes to 12 hours. A longer window reduces interruptions when managing accounts, changing security settings or approving connected apps.
 
 The window starts with the last successful identity check in that browser session. Password confirmation alone cannot satisfy a required second factor. New sign-ins still require MFA when the account or Studio policy requires it. Viewing linked login methods does not require a fresh check. Sign-out, account suspension, session expiry and credential revocation still invalidate access. A policy change applies to existing sessions on their next protected request.
 
