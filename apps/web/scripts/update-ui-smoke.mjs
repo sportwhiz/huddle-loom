@@ -160,6 +160,18 @@ try {
     if (await page.getByRole("button", {name: "Retry the same deployment", exact: true}).count()) throw new Error("Bootstrap offered recovery through an unregistered hook");
     if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)) throw new Error("Bootstrap recovery has horizontal overflow");
     await page.screenshot({path: `${output}/${name}-bootstrap.png`, fullPage: true});
+    data.history = [];
+    data.available = null;
+    data.updateAvailable = false;
+    await page.reload();
+    await page.getByRole("heading", {name: "No stable release yet"}).waitFor();
+    await page.getByText("Deployment connection needed", {exact: true}).waitFor();
+    await page.getByRole("button", {name: "Check for updates", exact: true}).click();
+    await page.getByRole("heading", {name: "No stable release yet"}).waitFor();
+    if (installs !== 1 || retries !== 1) throw new Error("Empty release check triggered deployment");
+    if (await page.getByRole("heading", {name: "You’re up to date"}).count()) throw new Error("Empty channel claimed a stable release was installed");
+    if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)) throw new Error("Empty channel has horizontal overflow");
+    await page.screenshot({path: `${output}/${name}-no-stable-release.png`, fullPage: true});
     if (failures.length) throw new Error(failures.join("\n"));
     await page.close();
     console.log(`${name}: layout, cancel, confirmation, progress, stopped-build recovery and bootstrap guidance passed`);
