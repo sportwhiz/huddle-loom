@@ -3,12 +3,13 @@ import { avatarInk } from "./avatar-color";
 import { UiIcon } from "./UiIcon";
 import "./marker-color.css";
 
-// A dry-erase marker set. Existing profile colors outside it show as custom.
+// Marker colors that stay visible as cursors on light and dark boards.
+// Existing profile colors outside the set show as custom.
 const colors = [
   { name: "Blue", value: "#2554c7" },
   { name: "Red", value: "#d2483c" },
   { name: "Green", value: "#2f8a57" },
-  { name: "Black", value: "#1f2633" },
+  { name: "Teal", value: "#138a8a" },
   { name: "Purple", value: "#7b4fc9" },
   { name: "Orange", value: "#e07a1f" },
 ];

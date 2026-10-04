@@ -12,22 +12,6 @@
   font-weight: 400 600;
   font-display: swap;
 }
-:root {
-  --font-display: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
-  --font-hand: "Whiteboard Hand", "Segoe Print", "Bradley Hand", cursive;
-  --marker-blue: #2554c7;
-  --marker-red: #d2483c;
-  --marker-green: #2f8a57;
-  --marker-black: #1f2633;
-  --note-yellow: #f5c84c;
-}
-[data-theme="dark"] {
-  --marker-blue: #8eaaf5;
-  --marker-red: #f09083;
-  --marker-green: #83cfa2;
-  --marker-black: #e8ecf2;
-  --note-yellow: #f2cf6b;
-}
 .brand-wordmark { font-family: var(--font-display); font-weight: 700; letter-spacing: -.02em; }
 .workspace-brand-copy { display: grid; gap: 3px; }
 .workspace-brand-copy .brand-wordmark { font-size: 21px; }

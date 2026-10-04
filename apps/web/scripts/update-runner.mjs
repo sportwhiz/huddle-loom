@@ -581,9 +581,12 @@ export async function registerRunner(configPath, installed) {
     });
     if (!inventory.ok) throw new Error();
     const hooks = await inventory.json();
+    // Installations created before the rename have a hook with the old name.
     let hook = hooks.result?.find(
       (h) =>
-        h.deploy_hook_name === "Huddle Loom updates" && h.branch === branch,
+        ["Open Whiteboard updates", "Huddle Loom updates"].includes(
+          h.deploy_hook_name,
+        ) && h.branch === branch,
     );
     if (!hook) {
       const response = await fetch(endpoint, {
@@ -591,7 +594,7 @@ export async function registerRunner(configPath, installed) {
         headers,
         body: JSON.stringify({
           branch,
-          deploy_hook_name: "Huddle Loom updates",
+          deploy_hook_name: "Open Whiteboard updates",
         }),
         signal: AbortSignal.timeout(15000),
       });

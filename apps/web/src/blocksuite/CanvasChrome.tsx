@@ -1582,7 +1582,7 @@ export function CanvasChrome({
                 <div className="template-preview demo-pattern-preview"><PatternPreview pattern={pattern} /></div>
                 <strong>{pattern.title}</strong>
                 <p>{pattern.description}</p>
-                <span>{pattern.id === "update-flow" ? "Explore the demo" : "Use pattern"} <Icon name="arrow" /></span>
+                <span>{pattern.id === "update-flow" ? "Explore the demo" : "Use template"} <Icon name="arrow" /></span>
               </button>
             ))}
             {templateCards.map((template) => (

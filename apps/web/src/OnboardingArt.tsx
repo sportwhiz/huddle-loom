@@ -3,7 +3,6 @@ import { ThemedImage } from "./ThemedImage";
 import "./onboarding-art.css";
 
 export type OnboardingArtKind =
-  | "welcome"
   | "notes"
   | "connect"
   | "organize"
@@ -74,47 +73,7 @@ export function OnboardingArt({
           </marker>
         </defs>
         <rect width="480" height="280" fill={`url(#${id}-dots)`} />
-        {kind === "welcome" ? (
-          <>
-            <marker
-              id={`${id}-marker-head`}
-              markerWidth="10"
-              markerHeight="10"
-              refX="7"
-              refY="5"
-              orient="auto"
-              markerUnits="userSpaceOnUse"
-            >
-              <path d="m2 1.5 5 3.5-5 3.5" className="welcome-marker-head" />
-            </marker>
-            <rect className="welcome-whiteboard" x="58" y="26" width="364" height="200" rx="10" />
-            {note(84, 58, "yellow", ["What if…"], -4)}
-            {note(192, 112, "lavender", ["Try it", "together"], 2)}
-            {note(306, 52, "green", ["Next steps"], 4)}
-            <path
-              className="welcome-marker-stroke"
-              d="M181 92C215 94 160 157 187 157"
-              markerEnd={`url(#${id}-marker-head)`}
-            />
-            <path
-              className="welcome-marker-stroke"
-              d="M291 158C331 160 353 177 353 150"
-              markerEnd={`url(#${id}-marker-head)`}
-            />
-            <ellipse
-              className="welcome-marker-circle"
-              cx="354"
-              cy="97"
-              rx="66"
-              ry="59"
-              transform="rotate(-8 354 97)"
-            />
-            <rect className="welcome-tray" x="150" y="226" width="180" height="9" rx="4.5" />
-            <rect className="welcome-pen blue" x="168" y="218" width="30" height="8" rx="4" />
-            <rect className="welcome-pen red" x="206" y="218" width="30" height="8" rx="4" />
-            <rect className="welcome-pen green" x="244" y="218" width="30" height="8" rx="4" />
-          </>
-        ) : kind === "organize" ? (
+        {kind === "organize" ? (
           <>
             <rect
               className="welcome-panel"

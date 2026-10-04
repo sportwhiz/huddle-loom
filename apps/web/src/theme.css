@@ -19,6 +19,13 @@
   --danger-soft: #fff0f2;
   --shadow: 0 2px 8px #17203305, 0 12px 30px #1720330d;
   --grid-dot: #cfd5de;
+  --font-display: "Source Sans 3", ui-sans-serif, system-ui, sans-serif;
+  --font-hand: "Whiteboard Hand", "Segoe Print", "Bradley Hand", cursive;
+  --marker-blue: #2554c7;
+  --marker-red: #d2483c;
+  --marker-green: #2f8a57;
+  --marker-black: #1f2633;
+  --note-yellow: #f5c84c;
 }
 :root[data-theme="dark"] {
   --canvas: #1a1e24;
@@ -38,6 +45,11 @@
   --danger-soft: #432b36;
   --shadow: 0 2px 8px #0002, 0 12px 30px #0003;
   --grid-dot: #343c46;
+  --marker-blue: #8eaaf5;
+  --marker-red: #f09083;
+  --marker-green: #83cfa2;
+  --marker-black: #e8ecf2;
+  --note-yellow: #f2cf6b;
 }
 body {
   color: var(--text);

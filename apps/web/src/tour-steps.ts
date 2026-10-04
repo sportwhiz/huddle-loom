@@ -120,10 +120,10 @@ export function tourSteps(
             '.creation-rail button[aria-label="Shapes"]',
           ),
           step(
-            "Start from a pattern",
-            "Patterns are editable starting points. Try a workshop, a complete update flow, or fifty notes ready for brainstorming.",
-            "Adding a pattern keeps the ideas already on your board.",
-            'button[aria-label="Patterns (templates)"]',
+            "Start from a template",
+            "Templates are editable starting points. Try a workshop, a complete update flow, or fifty notes ready for brainstorming.",
+            "Adding a template keeps the ideas already on your board.",
+            'button[aria-label="Templates"]',
           ),
           step(
             "Make room for the bigger picture",
@@ -142,10 +142,10 @@ export function tourSteps(
                 ),
               ]),
           step(
-            "Run a focused huddle",
-            "Huddle brings together the timer, brainstorming, and voting. A running timer stays visible when the menu closes.",
+            "Run a focused workshop",
+            "Workshop brings together the timer, brainstorming, and voting. A running timer stays visible when the panel closes.",
             "Use frames and Present to lead people through your board.",
-            'button[aria-label="Huddle session tools"]',
+            'button[aria-label="Workshop tools"]',
           ),
           ...(role === "visitor"
             ? []

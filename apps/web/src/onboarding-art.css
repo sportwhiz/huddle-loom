@@ -9,17 +9,11 @@
   width: 100%;
   height: auto;
 }
-/* Welcome: a whiteboard with notes, marker arrows and a marker tray. */
+/* Shared by the history illustration: a board frame and marker strokes. */
 .welcome-whiteboard { fill: var(--surface, #fff); stroke: #c6ccd6; stroke-width: 4; }
 [data-theme="dark"] .welcome-whiteboard { stroke: #4a535f; }
 .welcome-marker-stroke, .welcome-marker-head { fill: none; stroke: var(--marker-blue, #2554c7); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
-.welcome-marker-circle { fill: none; stroke: var(--marker-red, #d2483c); stroke-width: 2.6; opacity: .85; }
-.welcome-tray { fill: #c6ccd6; }
-[data-theme="dark"] .welcome-tray { fill: #4a535f; }
-.welcome-pen.blue { fill: var(--marker-blue, #2554c7); }
-.welcome-pen.red { fill: var(--marker-red, #d2483c); }
-.welcome-pen.green { fill: var(--marker-green, #2f8a57); }
-.welcome-art-huddle { background: #f5f6f8 !important; }
+[data-theme="dark"] .welcome-art-huddle { background: #f5f6f8 !important; }
 .welcome-art-huddle img { display: block; width: 100%; height: 240px; object-fit: contain; }
 [data-theme="dark"] .welcome-art-huddle { background: transparent !important; }
 @media (max-width: 540px) { .welcome-art-huddle img { height: 185px; } }
