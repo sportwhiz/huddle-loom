@@ -88,7 +88,7 @@ await writeFile(
   resolve(output, "validate-package.mjs"),
   `import { access } from 'node:fs/promises';
 for (const path of ['server.mjs', 'client/index.html', 'migrations', 'release.json', 'package-lock.json']) await access(path);
-console.log('Huddle Loom Node package is complete.');
+console.log('Open Whiteboard Node package is complete.');
 `,
 );
 run(

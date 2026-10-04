@@ -3,7 +3,6 @@ import { ThemedImage } from "./ThemedImage";
 import "./onboarding-art.css";
 
 export type OnboardingArtKind =
-  | "loom"
   | "notes"
   | "connect"
   | "organize"
@@ -18,7 +17,6 @@ export function OnboardingArt({
   kind?: OnboardingArtKind;
 }) {
   const id = useId().replaceAll(":", "");
-  if (kind === "loom") return <div className="welcome-art welcome-art-loom" aria-hidden="true"><img src="/brand/loom-welcome.webp" alt="" width="1792" height="896" decoding="async" /></div>;
   if (kind === "collaborate") return <div className="welcome-art welcome-art-huddle" aria-hidden="true"><ThemedImage light="/brand/huddle.webp" dark="/brand/huddle-dark.webp" alt="" width="1254" height="1254" decoding="async" /></div>;
   const note = (
     x: number,
@@ -304,5 +302,33 @@ export function OnboardingArt({
         )}
       </svg>
     </div>
+  );
+}
+
+/** Board snapshots on a timeline, with a marker arrow back to an earlier one. */
+export function HistoryArt() {
+  const id = useId().replaceAll(":", "");
+  const snapshot = (x: number, notes: string[]) => (
+    <g key={x}>
+      <rect className="welcome-whiteboard history-snapshot" x={x} y="22" width="64" height="40" rx="5" />
+      {notes.map((color, index) => (
+        <rect key={color + index} className={`welcome-note ${color}`} x={x + 9 + index * 17} y={33 + (index % 2) * 6} width="12" height="12" rx="1.5" />
+      ))}
+      <circle className="history-tick" cx={x + 32} cy="76" r="3.5" />
+    </g>
+  );
+  return (
+    <svg viewBox="0 0 320 88" fill="none">
+      <defs>
+        <marker id={`${id}-head`} markerWidth="10" markerHeight="10" refX="6" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+          <path d="m2 1.5 5 3.5-5 3.5" className="welcome-marker-head" />
+        </marker>
+      </defs>
+      <path className="history-line" d="M28 76h264" />
+      {snapshot(44, ["yellow"])}
+      {snapshot(128, ["yellow", "green"])}
+      {snapshot(212, ["yellow", "green", "pink"])}
+      <path className="welcome-marker-stroke" d="M246 18C214 4 120 2 88 15" markerEnd={`url(#${id}-head)`} />
+    </svg>
   );
 }

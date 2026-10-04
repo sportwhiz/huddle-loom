@@ -1,16 +1,16 @@
-# Using Huddle Loom
+# Using Open Whiteboard
 
 ## Your Studio
 
 The Studio holds folders, workbooks, and boards. Create a workbook for a project and give its boards names people can find. Favorites and search help you return to active work. Shared with me shows content another person has granted you access to.
 
-Patterns are starting layouts. Open **Patterns** from the board toolbar, then choose a layout. It appears beside existing content and the view fits the new section. Every object remains editable; Undo removes the inserted pattern in one step.
+Templates are starting layouts. Open **Templates** from the board toolbar, then choose a layout. It appears beside existing content and the view fits the new section. Every object remains editable; Undo removes the inserted template in one step.
 
 - **How updates work** maps a published release through owner approval, the installer build, verification, and recovery. It explains how your repository deploys approved upstream code while keeping your Studio's data and settings.
 - **50 ideas** gives you fifty blank sticky notes in a roomy grid. Write on them, move them, and group related thoughts.
 - Brainstorm, Retrospective, Kanban, and Workflow offer smaller starting layouts.
 
-A new assistant-created board starts blank unless a pattern is requested.
+A board an assistant creates starts blank unless you ask for a template.
 
 ## On the board
 
@@ -20,13 +20,13 @@ Use the connected-next-step control to add a note or shape with an arrow. Bound 
 
 Pan with the hand tool, Space and drag, or drag the empty background using the configured pointer behavior. Right-drag the empty background pans as well. Use the zoom controls to fit the board. Selection, tool, and editing shortcuts are listed in board help.
 
-Use Unravel to inspect saved revisions. A native archive includes editable board data and referenced uploads. An image export is useful for reading or presenting elsewhere, but does not preserve editing behavior.
+Use History in the More menu to inspect saved versions. A native archive includes editable board data and referenced uploads. An image export is useful for reading or presenting elsewhere, but does not preserve editing behavior.
 
 ## Work together
 
 Share a workbook or a specific board with a person and choose the role they need. Viewer access is read-only. Editor access permits changes. Private board permissions can override workbook inheritance.
 
-Comments keep discussions on the board. The Huddle menu includes a timer and voting controls. A running timer remains visible after the menu closes. Presentation lets you move through board sections with less interface in the way.
+Comments keep discussions on the board. The Workshop panel has a timer and voting controls. A running timer remains visible after the menu closes. Presentation lets you move through board sections with less interface in the way.
 
 For someone without an account, use [guest sharing](guest-sharing.md). A guest link is a credential: send it only to intended participants and revoke it when the session ends.
 

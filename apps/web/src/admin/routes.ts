@@ -535,7 +535,7 @@ export async function adminRoutes(
         delivery = await queueMail(
           env,
           address,
-          "You are invited to Huddle Loom",
+          "You are invited to Open Whiteboard",
           "Accept your invitation using the address it was sent to.",
           link,
           Date.parse(expires),
@@ -586,7 +586,7 @@ export async function adminRoutes(
       await queueMail(
         env,
         invite.email,
-        "Your Huddle Loom invitation",
+        "Your Open Whiteboard invitation",
         "Use this updated invitation. Previous links no longer work.",
         link,
         Date.parse(expires),
@@ -810,7 +810,7 @@ export async function adminRoutes(
     await queueMail(
       env,
       principal.email,
-      "Huddle Loom delivery test",
+      "Open Whiteboard delivery test",
       "Your installation can queue transactional email. Provider acceptance does not guarantee inbox delivery.",
     );
     await processOutbox(env, 1);
@@ -915,7 +915,7 @@ export async function adminRoutes(
       await queueMail(
         env,
         target.email,
-        "Huddle Loom ownership transfer",
+        "Open Whiteboard ownership transfer",
         "The current owner has asked you to accept responsibility for this installation.",
         link,
         Date.now() + 1800_000,

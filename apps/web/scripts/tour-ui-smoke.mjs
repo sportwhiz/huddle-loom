@@ -21,7 +21,7 @@ const user = {
   color: "#3D4A73",
 };
 const settings = {
-  title: "Huddle Loom",
+  title: "Open Whiteboard",
   registration: "invite",
   approval_required: 1,
   mfa_required: 0,

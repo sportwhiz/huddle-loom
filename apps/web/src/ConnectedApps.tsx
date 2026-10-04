@@ -48,9 +48,9 @@ const GUIDES = {
     url: "https://developers.openai.com/plugins/deploy/connect-chatgpt",
     steps: [
       "Open ChatGPT settings, choose Security and login, and enable Developer mode. Availability depends on your account and workspace policy.",
-      "Open ChatGPT Plugins, select the plus button, and name the connection Huddle Loom. Choose a public endpoint and paste the server URL from step 2.",
-      "Complete sign-in to Huddle Loom and review the permissions requested by ChatGPT.",
-      "Start a new conversation and add the Huddle Loom connection from the tools menu. Try the workflow prompt below.",
+      "Open ChatGPT Plugins, select the plus button, and name the connection Open Whiteboard. Choose a public endpoint and paste the server URL from step 2.",
+      "Complete sign-in to Open Whiteboard and review the permissions requested by ChatGPT.",
+      "Start a new conversation and add the Open Whiteboard connection from the tools menu. Try the workflow prompt below.",
     ],
   },
   claude: {
@@ -58,9 +58,9 @@ const GUIDES = {
     url: "https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp",
     steps: [
       "Open Customize → Connectors in Claude, select +, then Add custom connector. Team and Enterprise owners may need to add it in Organization settings first.",
-      "Name the connector Huddle Loom and paste the server URL from step 2. If your administrator provided a client ID and secret, enter them in the optional client settings. Otherwise, your installation must allow automatic client registration.",
-      "Select Connect, sign in to Huddle Loom, and review the requested permissions.",
-      "In a new conversation, use + → Connectors to enable Huddle Loom, then try the workflow prompt below.",
+      "Name the connector Open Whiteboard and paste the server URL from step 2. If your administrator provided a client ID and secret, enter them in the optional client settings. Otherwise, your installation must allow automatic client registration.",
+      "Select Connect, sign in to Open Whiteboard, and review the requested permissions.",
+      "In a new conversation, use + → Connectors to enable Open Whiteboard, then try the workflow prompt below.",
     ],
   },
   other: {
@@ -69,7 +69,7 @@ const GUIDES = {
     steps: [
       "Add a remote MCP server using the Streamable HTTP transport.",
       "Paste the server URL from step 2. Choose OAuth authorization with automatic discovery and PKCE.",
-      "Sign in to Huddle Loom in the browser and approve the requested permissions. Static API keys are not used.",
+      "Sign in to Open Whiteboard in the browser and approve the requested permissions. Static API keys are not used.",
       "Ask the client to list your boards, then create a test workflow. Use a client that supports both reading and writing tools.",
     ],
   },
@@ -124,7 +124,7 @@ export function ConnectedApps() {
     }
   };
   useEffect(() => {
-    document.title = "Connected apps · Huddle Loom";
+    document.title = "Connected apps · Open Whiteboard";
     void load();
     const refresh = () => {
       if (document.visibilityState === "visible") void load();
@@ -281,7 +281,7 @@ export function ConnectedApps() {
         <a href={back} className="connections-back">
           <UiIcon name="back" /> {back === "/" ? "Back to studio" : "Back to board"}
         </a>
-        <a href="/" className="connections-brand" aria-label="Huddle Loom home"><BrandMark /><span className="brand-wordmark">{PRODUCT_WORDMARK}</span></a>
+        <a href="/" className="connections-brand" aria-label="Open Whiteboard home"><BrandMark /><span className="brand-wordmark">{PRODUCT_WORDMARK}</span></a>
         <button className="connections-tour" type="button" onClick={openTour}><UiIcon name="help" /> Quick tour</button>
         <ThemeMenu />
       </header>
@@ -290,7 +290,7 @@ export function ConnectedApps() {
           <div>
           <span className="settings-eyebrow">YOUR STUDIO, CONNECTED</span>
           <h1>Connected apps</h1>
-          <p>A conversation is a starting thread.<br />Let your assistant turn it into a board you can build on.</p>
+          <p>Describe a process to your assistant.<br />It draws the board, and you can edit every part of it.</p>
           </div>
           <ThemedImage className="connections-illustration" light="/brand/assistant.webp" dark="/brand/assistant-dark.webp" width="1774" height="887" alt="" />
         </div>
@@ -324,7 +324,7 @@ export function ConnectedApps() {
               <div>
                 <h2>Connect your assistant</h2>
                 <p>
-                  MCP lets your assistant work with Huddle Loom tools. Your boards
+                  MCP lets your assistant work with Open Whiteboard tools. Your boards
                   stay editable here.
                 </p>
               </div>
@@ -370,7 +370,7 @@ export function ConnectedApps() {
             </label>
             {local ? (
               <p className="connection-local-note">
-                You’re using a local preview. Connect your deployed Huddle Loom URL
+                You’re using a local preview. Connect your deployed Open Whiteboard URL
                 to a remote assistant.
               </p>
             ) : null}
@@ -426,7 +426,7 @@ export function ConnectedApps() {
                 </div>
               ))}
               <p className="connection-fineprint">
-                Huddle Loom uses browser sign-in and OAuth. Your assistant never
+                Open Whiteboard uses browser sign-in and OAuth. Your assistant never
                 needs your account password.
               </p>
             </section>
@@ -561,7 +561,7 @@ export function ConnectedApps() {
               >
                 the deployment guide
               </a>
-              . Huddle Loom cannot change Cloudflare policies from this page.
+              . Open Whiteboard cannot change Cloudflare policies from this page.
             </p>
             <h3>The app connects but cannot edit</h3>
             <p>

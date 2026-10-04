@@ -142,9 +142,9 @@ export async function mailSetupRoutes(
     try {
       const message = {
         to: recipient,
-        subject: "Confirm email for your Huddle Loom Studio",
-        text: `Your confirmation code is ${code}. Enter it in Huddle Loom within 15 minutes to enable email.`,
-        html: `<p>Your Huddle Loom confirmation code is <strong>${code}</strong>.</p><p>Enter it in your Studio within 15 minutes to enable email.</p>`,
+        subject: "Confirm email for your Open Whiteboard Studio",
+        text: `Your confirmation code is ${code}. Enter it in Open Whiteboard within 15 minutes to enable email.`,
+        html: `<p>Your Open Whiteboard confirmation code is <strong>${code}</strong>.</p><p>Enter it in your Studio within 15 minutes to enable email.</p>`,
       };
       if (env.MANAGED_MAIL) await env.MANAGED_MAIL.send(message);
       else await env.EMAIL!.send({ ...message, from: sender });

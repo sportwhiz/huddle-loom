@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for taking time to improve Huddle Loom. Bug reports, documentation fixes, accessibility improvements, and code changes are welcome.
+Thanks for taking time to improve Open Whiteboard. Bug reports, documentation fixes, accessibility improvements, and code changes are welcome.
 
 Before building a large feature, open an issue describing the problem and how people would use the change. This helps us settle the scope before you spend time on it.
 

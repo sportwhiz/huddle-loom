@@ -94,7 +94,7 @@ export function tourSteps(
               ? "This board has its own invitation"
               : "Find your way home",
             role === "visitor"
-              ? "This invitation opens only this board. The home button takes you to Huddle Loom; it does not grant access to the Studio’s other boards."
+              ? "This invitation opens only this board. The home button takes you to Open Whiteboard. It does not give you access to the Studio’s other boards."
               : "Back to studio returns to the boards shared with you. Your work here stays saved as you move between pages.",
             "Open Quick tour from board help whenever you need a refresher.",
             ".home-link",
@@ -120,10 +120,10 @@ export function tourSteps(
             '.creation-rail button[aria-label="Shapes"]',
           ),
           step(
-            "Start from a pattern",
-            "Patterns are editable starting points. Try a workshop, a complete update flow, or fifty notes ready for brainstorming.",
-            "Adding a pattern keeps the ideas already on your board.",
-            'button[aria-label="Patterns (templates)"]',
+            "Start from a template",
+            "Templates are editable starting points. Try a workshop, a complete update flow, or fifty notes ready for brainstorming.",
+            "Adding a template keeps the ideas already on your board.",
+            'button[aria-label="Templates"]',
           ),
           step(
             "Make room for the bigger picture",
@@ -142,18 +142,18 @@ export function tourSteps(
                 ),
               ]),
           step(
-            "Run a focused huddle",
-            "Huddle brings together the timer, brainstorming, and voting. A running timer stays visible when the menu closes.",
+            "Run a focused workshop",
+            "Workshop brings together the timer, brainstorming, and voting. A running timer stays visible when the panel closes.",
             "Use frames and Present to lead people through your board.",
-            'button[aria-label="Huddle session tools"]',
+            'button[aria-label="Workshop tools"]',
           ),
           ...(role === "visitor"
             ? []
             : [
                 step(
                   "Your work has a history",
-                  "More board options includes Unravel, exports, account settings, and Connected apps. Unravel lets you preview and restore an earlier version.",
-                  "Undo is for recent edits; Unravel is for returning to a saved checkpoint.",
+                  "More board options holds History, exports, account settings and Connected apps. History lets you preview and restore an earlier version.",
+                  "Undo is for recent edits. History takes you back to a saved checkpoint.",
                   'summary[aria-label="More board options"]',
                 ),
               ]),
@@ -169,7 +169,7 @@ export function tourSteps(
       ),
       step(
         "Copy your Studio’s address",
-        "This is the MCP server URL to enter in your assistant. It connects to this installation of Huddle Loom.",
+        "This is the MCP server URL to enter in your assistant. It connects to this installation of Open Whiteboard.",
         "A local preview cannot be reached by a remote assistant. Use your deployed address.",
         ".connection-endpoint",
       ),
@@ -197,7 +197,7 @@ export function tourSteps(
     return [
       step(
         "Make your presence your own",
-        "Your name and thread color identify you in shared boards. Keep them recognizable for the people working with you.",
+        "Your name and marker color identify you in shared boards. Keep them recognizable for the people working with you.",
         "Account settings apply to your sign-in, not anyone else’s.",
         ".identity-content > .identity-section:first-of-type button",
       ),

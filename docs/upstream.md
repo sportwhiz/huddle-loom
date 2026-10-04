@@ -1,6 +1,6 @@
 # Upstream projects
 
-Huddle Loom uses BlockSuite 0.22.4 for its editor and native board model. The complete application includes our own Studio, accounts, collaboration controls, MCP authoring services, and Cloudflare and Node hosting adapters.
+Open Whiteboard uses BlockSuite 0.22.4 for its editor and native board model. The complete application includes our own Studio, accounts, collaboration controls, MCP authoring services, and Cloudflare and Node hosting adapters.
 
 BlockSuite source packages are compiled through Vite and esbuild. Yjs is pinned to one runtime version to avoid mixed constructors in board state. The server authoring path uses the native schema without loading the browser editor.
 
@@ -8,4 +8,4 @@ Local adaptations retain their upstream origin in source headers: `apps/web/src/
 
 Authentication uses Better Auth; protocol handling uses the Model Context Protocol SDK. React, Lit, Yjs, and other packages retain their own licenses. See [Third-party notices](../THIRD_PARTY_NOTICES.md) for exact versions, full license files, corresponding source, and fonts.
 
-Huddle Loom is independently maintained. Upstream names describe the libraries used here and do not imply endorsement.
+Open Whiteboard is independently maintained. Upstream names describe the libraries used here and do not imply endorsement.

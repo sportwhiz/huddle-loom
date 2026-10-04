@@ -66,7 +66,7 @@ export async function publishedRelease(
   if (version && !/^\d{1,5}\.\d{1,5}\.\d{1,5}$/.test(version))
     throw new Error("Invalid release version.");
   const headers = {
-    "User-Agent": "Huddle-Loom-Updater",
+    "User-Agent": "Open-Whiteboard-Updater",
     Accept: "application/vnd.github+json",
   };
   const response = await fetch(

@@ -152,9 +152,9 @@ function registerTools(
   server.registerTool(
     'get_profile',
     {
-      title: 'Get connected Huddle Loom profile',
+      title: 'Get connected Open Whiteboard profile',
       description:
-        'Return the stable identity and display label for this authenticated Huddle Loom connection.',
+        'Return the stable identity and display label for this authenticated Open Whiteboard connection.',
       inputSchema: z.object({}),
       outputSchema: { id: z.string(), name: z.string(), email: z.string() },
       _meta: { securitySchemes: security('boards:read') },
@@ -732,7 +732,7 @@ export async function handleMcpRequest(
   principal: Principal,
 ) {
   const server = new McpServer(
-    { name: 'huddle-loom', version: '0.2.0' },
+    { name: 'open-whiteboard', version: '0.2.0' },
     { instructions: AUTHORING_INSTRUCTIONS },
   );
   registerTools(server, env, principal, new URL(request.url).origin);

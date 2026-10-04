@@ -126,14 +126,14 @@ export function FactorEnrollment({
     const url = URL.createObjectURL(
       new Blob(
         [
-          `Huddle Loom recovery codes\nEach code works once. Store this file privately.\n\n${enrollment.backupCodes.join("\n")}`,
+          `Open Whiteboard recovery codes\nEach code works once. Store this file privately.\n\n${enrollment.backupCodes.join("\n")}`,
         ],
         { type: "text/plain" },
       ),
     );
     const link = document.createElement("a");
     link.href = url;
-    link.download = "huddle-loom-recovery-codes.txt";
+    link.download = "open-whiteboard-recovery-codes.txt";
     link.click();
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     setSaved(true);
@@ -168,8 +168,8 @@ export function FactorEnrollment({
                   required={passwordMethod === true}
                   hint={
                     passwordMethod === true
-                      ? "Confirm your Huddle Loom password to continue."
-                      : "If you sign in with a provider or passkey and have no Huddle Loom password, leave this blank."
+                      ? "Confirm your Open Whiteboard password to continue."
+                      : "If you sign in with a provider or passkey and have no Open Whiteboard password, leave this blank."
                   }
                 />
               )
@@ -232,7 +232,7 @@ export function FactorEnrollment({
                   Confirm it’s connected
                 </h2>
                 <p>
-                  Enter the current code for Huddle Loom from your authenticator
+                  Enter the current code for Open Whiteboard from your authenticator
                   app.
                 </p>
                 <Field

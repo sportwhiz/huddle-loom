@@ -99,7 +99,7 @@ export function UpdatesPanel() {
         <section className="identity-section">
           <h2>Update through your hosting dashboard</h2>
           <p>
-            Upload the new Huddle Loom Node package to the same app. Keep your
+            Upload the new Open Whiteboard Node package to the same app. Keep your
             database and setup settings. Stop the previous server before
             starting its replacement; people on open boards will briefly
             reconnect.
@@ -134,7 +134,7 @@ export function UpdatesPanel() {
             <div className="updates-release-title">
               <UiIcon name="history" />
               <div>
-                <small>YOUR HUDDLE LOOM</small>
+                <small>YOUR OPEN WHITEBOARD</small>
                 <h2>Version {data.current.version}</h2>
                 <p>
                   {data.current.commit === "development"
@@ -484,12 +484,12 @@ export function UpdatesPanel() {
                     New installations try to connect automatically. If your
                     build permissions do not allow this, open your Worker in
                     Cloudflare → Settings → Builds → Deploy Hooks. Create
-                    “Huddle Loom updates” for the production branch, then paste
+                    “Open Whiteboard updates” for the production branch, then paste
                     its URL below.
                   </p>
                   <p>
                     This authorizes builds for this Worker. You do not need to
-                    use GitHub to sign in to Huddle Loom.
+                    use GitHub to sign in to Open Whiteboard.
                   </p>
                   <form
                     onSubmit={(event) => {

@@ -11,7 +11,7 @@ type PanelTab = 'comments' | 'workshop' | 'present' | 'activity' | 'people';
 
 const PANEL_COPY: Record<PanelTab, { title: string; description: string }> = {
   comments: { title: 'Comments', description: 'Discuss ideas and pin feedback to the canvas.' },
-  workshop: { title: 'Huddle', description: 'Session tools for brainstorming, timing, and voting together.' },
+  workshop: { title: 'Workshop', description: 'Run a timer, collect ideas, and vote as a group.' },
   present: { title: 'Present', description: 'Lead everyone through the story on your board.' },
   activity: { title: 'Activity', description: 'Review checkpoints and recent collaboration.' },
   people: { title: 'People', description: 'See who is here and follow their view.' },

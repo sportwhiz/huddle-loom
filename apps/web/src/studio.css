@@ -1,20 +1,18 @@
-/* Textile studio: quiet paper surfaces, readable controls and editorial headings. */
-:root { font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif; --studio-paper: #f7f3ea; --studio-cloth: #f0eadb; }
-[data-theme="dark"] { --studio-paper: #20242b; --studio-cloth: #2b313b; }
-.workspace-shell { grid-template-columns: 256px minmax(0, 1fr); background: linear-gradient(#f7f3ea88, #f7f3ea88), url('/brand/linen.webp') 0 0 / 640px; }
-[data-theme="dark"] .workspace-shell { background-image: linear-gradient(#252a31c9, #252a31c9), url('/brand/linen-dark.webp'); }
-.workspace-shell .workspace-sidebar { top: 16px; margin: 16px 0 16px 16px; height: calc(100dvh - 32px); padding: 28px 18px 16px; border: 1px solid #cbbf9c70; border-radius: 10px; background-color: #eee4ce; background-image: url('/brand/linen.webp'); background-blend-mode: multiply; background-size: 640px; box-shadow: 0 3px 18px #35332b0d; }
-[data-theme="dark"] .workspace-shell .workspace-sidebar { border-color: #59616b88; background-color: #2b313b; background-image: linear-gradient(#353b454d, #353b454d), url('/brand/linen-dark.webp'); background-blend-mode: normal; box-shadow: 0 3px 18px #0002; }
-.workspace-shell .workspace-logo { width: 100%; flex-direction: column; align-items: center; gap: 10px; margin: 0 0 28px; text-align: center; }
-.workspace-shell .workspace-logo .brand-mark { width: 34px; height: 40px; }
-.workspace-shell .workspace-logo .brand-wordmark { font: 400 27px/1.1 "Whiteboard Editorial", Georgia, serif; letter-spacing: -.7px; white-space: nowrap; }
+/* Studio: a clean board surface, readable controls and plain, confident headings. */
+:root { font-family: "Source Sans 3", ui-sans-serif, system-ui, sans-serif; --studio-paper: var(--canvas); }
+.workspace-shell { grid-template-columns: 256px minmax(0, 1fr); background: radial-gradient(var(--grid-dot) 1px, transparent 1.3px) 0 0 / 24px 24px, var(--canvas); }
+.workspace-shell .workspace-sidebar { top: 16px; margin: 16px 0 16px 16px; height: calc(100dvh - 32px); padding: 24px 18px 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); box-shadow: 0 1px 2px #1f26330a, 0 10px 28px #1f26330d; }
+[data-theme="dark"] .workspace-shell .workspace-sidebar { box-shadow: 0 3px 18px #0003; }
+.workspace-shell .workspace-logo { width: 100%; flex-direction: row; align-items: center; gap: 10px; margin: 0 0 26px; padding-left: 6px; text-align: left; color: var(--text); }
+.workspace-shell .workspace-logo .brand-mark { width: 30px; height: 30px; }
+.workspace-shell .workspace-logo .brand-wordmark { font: 700 21px/1.1 var(--font-display); letter-spacing: -.02em; white-space: nowrap; }
 .studio-navigation { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 .studio-menu-toggle { display: none; }
 .workspace-shell .new-board-button { min-height: 42px; margin-bottom: 24px; border-radius: 7px; font-size: 14px; font-weight: 600; box-shadow: none; }
 .workspace-shell .sidebar-nav { gap: 4px; }
 .workspace-shell .sidebar-nav button, .workspace-shell .workbook-list button { min-height: 42px; padding: 9px 12px; border-radius: 5px; font-size: 15px; font-weight: 400; }
-.workspace-shell .sidebar-nav button.active, .workspace-shell .workbook-list button.active { box-shadow: none; background: #dac498b8; color: #342b1f; font-weight: 600; }
-[data-theme="dark"] .workspace-shell .sidebar-nav button.active, [data-theme="dark"] .workspace-shell .workbook-list button.active { background: #6c583d; color: #fff2d7; }
+.workspace-shell .sidebar-nav button.active, .workspace-shell .workbook-list button.active { box-shadow: none; background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+[data-theme="dark"] .workspace-shell .sidebar-nav button.active, [data-theme="dark"] .workspace-shell .workbook-list button.active { color: var(--text); }
 .workspace-shell .sidebar-nav .active .ui-icon { color: currentColor; }
 .workspace-shell .sidebar-nav b, .workspace-shell .workbook-list b { font-size: 12px; font-weight: 400; opacity: .8; }
 .workspace-shell .sidebar-nav .ui-icon { width: 18px; height: 18px; }
@@ -26,8 +24,7 @@
 .studio-footer-link, .workspace-shell .sidebar-footer button { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-secondary); text-decoration: none; }
 .studio-footer-link:hover { color: var(--text); }
 .studio-footer-link .ui-icon, .workspace-shell .sidebar-footer button .ui-icon { width: 17px; height: 17px; }
-.studio-signature { margin: 20px -28px -8px; padding: 6px 0 0; }
-.studio-signature .woven-tagline { width: 100%; }
+.studio-signature { margin: 22px 0 0; padding: 0 10px; }
 @media (min-width: 721px) {
   .workspace-shell .workspace-sidebar { overflow: hidden; }
   .workspace-shell .sidebar-nav, .workspace-shell .sidebar-footer { flex-shrink: 0; }
@@ -51,28 +48,28 @@
 .workspace-shell .workspace-content { max-width: 1350px; padding: 35px 42px 64px; }
 .studio-eyebrow { display: block; margin-bottom: 12px; font-size: 10px; font-weight: 600; letter-spacing: .19em; text-transform: uppercase; color: var(--text-secondary); }
 .workspace-shell .workspace-heading { margin-bottom: 36px; align-items: center; }
-.workspace-shell .workspace-heading h1 { font: 400 clamp(40px, 4.4vw, 58px)/1.08 "Whiteboard Editorial", Georgia, serif; letter-spacing: -1.25px; }
-.workspace-shell .workspace-heading p { margin-top: 12px; font: 400 21px/1.4 "Whiteboard Editorial", Georgia, serif; }
+.workspace-shell .workspace-heading h1 { font: 700 clamp(38px, 4.2vw, 54px)/1.06 var(--font-display); letter-spacing: -.028em; }
+.workspace-shell .workspace-heading p { margin-top: 12px; font: 400 19px/1.45 var(--font-display); color: var(--text-secondary); }
 .workspace-shell .heading-create-button { display: none; }
 .workspace-shell .board-grid { grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: 25px; }
-.workspace-shell .board-card { padding: 10px 10px 0; border: 1px solid var(--border); border-radius: 9px; background: color-mix(in srgb, var(--surface) 65%, transparent); }
+.workspace-shell .board-card { padding: 10px 10px 0; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); }
 .workspace-shell .board-card-link { border-radius: 4px; overflow: hidden; }
 .workspace-shell .board-card-details { padding: 17px 8px 18px; }
-.workspace-shell .board-card-details strong { font: 400 23px/1.2 "Whiteboard Editorial", Georgia, serif; letter-spacing: -.3px; }
+.workspace-shell .board-card-details strong { font: 650 19px/1.25 var(--font-display); letter-spacing: -.01em; }
 .workspace-shell .board-card-details span { margin-top: 8px; font-size: 12px; }
-.workspace-shell .board-card:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); box-shadow: 0 6px 16px #302d2509; }
+.workspace-shell .board-card:hover { border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); box-shadow: 0 8px 20px #1f26330f; }
 .workspace-shell .workspace-empty { display: grid; grid-template-columns: minmax(190px, 1fr) minmax(200px, 1fr); gap: 38px; align-items: center; max-width: 820px; min-height: 360px; margin: 35px auto 60px; padding: 0; text-align: left; border: 0; background: transparent; }
-.studio-empty-art { aspect-ratio: 1; min-width: 0; border-radius: 14px; overflow: hidden; background: #f7f3ea; }
+.studio-empty-art { aspect-ratio: 1; min-width: 0; border-radius: 14px; overflow: hidden; background: var(--surface-muted); border: 1px solid var(--border); }
 .studio-empty-art img { display: block; width: 100%; height: 100%; object-fit: cover; }
 [data-theme="dark"] .studio-empty-art { background: transparent; }
-.workspace-shell .studio-empty-copy h2 { margin: 0 0 14px; font: 400 34px/1.14 "Whiteboard Editorial", Georgia, serif; letter-spacing: -.6px; color: var(--text); }
+.workspace-shell .studio-empty-copy h2 { margin: 0 0 14px; font: 700 32px/1.14 var(--font-display); letter-spacing: -.02em; color: var(--text); }
 .workspace-shell .studio-empty-copy p { max-width: 310px; margin: 0 0 24px; font-size: 15px; line-height: 1.65; color: var(--text-secondary); }
 .studio-empty-copy button { padding: 11px 18px; border: 0; border-radius: 7px; background: var(--accent); color: var(--on-accent); font-size: 14px; font-weight: 600; cursor: pointer; }
 .studio-empty-copy button:hover { filter: brightness(.94); }
 .workspace-shell .workspace-empty.compact { display: flex; flex-direction: column; justify-content: center; gap: 22px; text-align: center; }
 .studio-empty-symbol { color: var(--text-secondary); }
 .studio-empty-symbol .ui-icon { width: 36px; height: 36px; stroke-width: 1.2; }
-.workspace-shell .workspace-modal h2, .identity-content h1 { font-family: "Whiteboard Editorial", Georgia, serif; font-weight: 500; }
+.workspace-shell .workspace-modal h2, .identity-content h1 { font-family: var(--font-display); font-weight: 700; letter-spacing: -.02em; }
 .workspace-shell .workspace-modal h2 { font-size: 30px; }
 .identity-content h1 { font-size: 36px; }
 @media (max-width: 1040px) {
@@ -89,7 +86,7 @@
   .workspace-shell .workspace-logo { margin: 0; gap: 5px; }
   .workspace-shell .workspace-logo > span:last-child { display: grid; }
   .workspace-shell .workspace-logo .brand-wordmark { font-size: 21px; }
-  .workspace-shell .workspace-logo .brand-mark { width: 24px; height: 28px; }
+  .workspace-shell .workspace-logo .brand-mark { width: 26px; height: 26px; }
   .studio-menu-toggle { display: grid; place-items: center; width: 34px; height: 38px; padding: 7px; border: 0; border-radius: 6px; color: var(--text); background: transparent; }
   .workspace-shell .new-board-button { width: auto; margin: 0; padding: 9px 11px; font-size: 12px; min-height: 38px; }
   .workspace-shell .new-board-button .ui-icon { width: 15px; height: 15px; }

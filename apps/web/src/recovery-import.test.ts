@@ -85,7 +85,7 @@ describe("local draft recovery import", () => {
   });
   it("reports malformed files and preserves ordinary board imports", async () => {
     await expect(prepareImportFiles(new Blob(["not json"]))).rejects.toThrow(
-      "valid Huddle Loom",
+      "valid Open Whiteboard",
     );
     const file = new Blob([
       JSON.stringify({ format: "cloudflare-whiteboard/archive", version: 1 }),

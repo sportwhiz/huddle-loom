@@ -37,6 +37,12 @@ import { clientIp, limit } from "../security/limits";
 import { audit, auditStatement } from "../security/audit";
 import { invalidationStatement, mailReady } from "../mail/outbox";
 import { currentEmailProof } from "./email-proof";
+import {
+  clearTotpFailures,
+  rejectedWrongCode,
+  releaseTotpAttempt,
+  reserveTotpAttempt,
+} from "./totp-lockout";
 import { HttpError } from "../security/errors";
 import { methodChangeGuard } from "./method-change";
 
@@ -322,106 +328,136 @@ async function libraryRoute(request: Request, env: NativeEnv) {
       return Response.json({ status: true });
     }
   }
-  const response = await (await nativeAuth(env)).handler(request);
-  if (response.ok || response.status === 302) {
-    const after = await readNativeSession(
-      cookiesFromResponse(request, response),
-      env,
-    );
-    if (after && path === "/two-factor/verify-totp") {
-      const digest = await sha256(String(body.code));
-      const changed = await env.CATALOG.prepare(
-        "INSERT INTO mfa_replay (user_id, code_hash, expires_at) VALUES (?, ?, ?) ON CONFLICT(user_id, code_hash) DO UPDATE SET expires_at = excluded.expires_at WHERE expires_at < ? RETURNING user_id",
-      )
-        .bind(after.user.id, digest, Date.now() + 90_000, Date.now())
-        .first();
-      if (!changed) {
-        if (!before || after.session.id !== before.session.id)
-          await env.CATALOG.prepare("DELETE FROM auth_sessions WHERE id = ?")
-            .bind(after.session.id)
-            .run();
-        throw new HttpError(
-          400,
-          "This code was already used. Wait for the next code.",
-          "MFA_REPLAY",
-        );
-      }
-      await env.CATALOG.prepare(
-        "UPDATE auth_sessions SET assurance = 'strong', authenticatedAt = ? WHERE id = ?",
-      )
-        .bind(new Date().toISOString(), after.session.id)
-        .run();
+  // Codes checked against an existing session share the sign-in lockout.
+  const lockoutUser =
+    before &&
+    (path === "/two-factor/verify-totp" ||
+      path === "/two-factor/verify-backup-code")
+      ? before.user.id
+      : null;
+  if (lockoutUser) await reserveTotpAttempt(env.CATALOG, lockoutUser);
+  // Set once this attempt is counted, given back or cleared. Anything that
+  // fails before then gives the attempt back.
+  let attemptSettled = !lockoutUser;
+  let response: Response;
+  try {
+    response = await (await nativeAuth(env)).handler(request);
+    // Only a wrong code counts. Rate limits and other rejections give it back.
+    if (lockoutUser && !response.ok) {
+      if (!(await rejectedWrongCode(response)))
+        await releaseTotpAttempt(env.CATALOG, lockoutUser);
+      attemptSettled = true;
     }
-    if (after && path === "/passkey/verify-authentication")
-      await env.CATALOG.prepare(
-        "UPDATE auth_sessions SET assurance = 'strong', authenticatedAt = ? WHERE id = ?",
-      )
-        .bind(new Date().toISOString(), after.session.id)
-        .run();
-    if (after && path === "/two-factor/verify-backup-code")
-      await env.CATALOG.batch([
-        env.CATALOG.prepare(
-          "UPDATE account_security SET recovery_required = 1, recovery_started_at = ? WHERE user_id = ?",
-        ).bind(new Date().toISOString(), after.user.id),
-        env.CATALOG.prepare(
-          "UPDATE auth_sessions SET assurance = 'recovery' WHERE id = ?",
-        ).bind(after.session.id),
-        // A used backup code starts factor replacement. Retire the old factors
-        // immediately so enrollment can create a new authenticator safely.
-        env.CATALOG.prepare("DELETE FROM auth_two_factors WHERE userId=?").bind(
-          after.user.id,
-        ),
-        env.CATALOG.prepare("DELETE FROM auth_passkeys WHERE userId=?").bind(
-          after.user.id,
-        ),
-        env.CATALOG.prepare(
-          "UPDATE auth_users SET twoFactorEnabled=0 WHERE id=?",
-        ).bind(after.user.id),
-        env.CATALOG.prepare(
-          "DELETE FROM auth_sessions WHERE userId = ? AND id <> ?",
-        ).bind(after.user.id, after.session.id),
-        env.CATALOG.prepare(
-          "UPDATE oauth_grants SET revoked_at = ? WHERE user_id = ?",
-        ).bind(new Date().toISOString(), after.user.id),
-        env.CATALOG.prepare(
-          "UPDATE oauth_tokens SET revoked_at = ? WHERE user_id = ?",
-        ).bind(new Date().toISOString(), after.user.id),
-        invalidationStatement(env, after.user.id),
-        auditStatement(
-          env.CATALOG,
-          after.user.id,
-          "account.recovery_code_used",
-          after.user.id,
-        ),
-      ]);
-    const actor = after?.user.id ?? before?.user.id ?? null;
-    if (actor && path === "/two-factor/enable")
-      await env.CATALOG.prepare(
-        "UPDATE auth_two_factors SET enrolled_at = ? WHERE userId = ?",
-      )
-        .bind(new Date().toISOString(), actor)
-        .run();
-    if (
-      after &&
-      callback &&
-      !new URL(
-        response.headers.get("Location") ?? canonicalOrigin(env),
-      ).searchParams.has("error")
-    )
-      await env.CATALOG.prepare(
-        "UPDATE auth_provider_config SET callback_verified_at = ? WHERE id = ?",
-      )
-        .bind(Date.now(), path.split("/").at(-1))
-        .run();
-    if (actor && request.method === "POST")
-      await audit(
-        env.CATALOG,
-        actor,
-        `auth${path.replaceAll("/", ".")}`,
-        actor,
+    if (response.ok || response.status === 302) {
+      const after = await readNativeSession(
+        cookiesFromResponse(request, response),
+        env,
       );
-  } else if (path.startsWith("/sign-in/"))
-    await audit(env.CATALOG, null, "auth.sign_in", null, "failed");
+      if (after && path === "/two-factor/verify-totp") {
+        const digest = await sha256(String(body.code));
+        const changed = await env.CATALOG.prepare(
+          "INSERT INTO mfa_replay (user_id, code_hash, expires_at) VALUES (?, ?, ?) ON CONFLICT(user_id, code_hash) DO UPDATE SET expires_at = excluded.expires_at WHERE expires_at < ? RETURNING user_id",
+        )
+          .bind(after.user.id, digest, Date.now() + 90_000, Date.now())
+          .first();
+        if (!changed) {
+          if (!before || after.session.id !== before.session.id)
+            await env.CATALOG.prepare("DELETE FROM auth_sessions WHERE id = ?")
+              .bind(after.session.id)
+              .run();
+          // A reused code was correct when it was first accepted, so it does
+          // not count as a wrong guess.
+          if (lockoutUser) await releaseTotpAttempt(env.CATALOG, lockoutUser);
+          attemptSettled = true;
+          throw new HttpError(
+            400,
+            "This code was already used. Wait for the next code.",
+            "MFA_REPLAY",
+          );
+        }
+        await env.CATALOG.prepare(
+          "UPDATE auth_sessions SET assurance = 'strong', authenticatedAt = ? WHERE id = ?",
+        )
+          .bind(new Date().toISOString(), after.session.id)
+          .run();
+        await clearTotpFailures(env.CATALOG, after.user.id);
+        attemptSettled = true;
+      }
+      if (after && path === "/passkey/verify-authentication")
+        await env.CATALOG.prepare(
+          "UPDATE auth_sessions SET assurance = 'strong', authenticatedAt = ? WHERE id = ?",
+        )
+          .bind(new Date().toISOString(), after.session.id)
+          .run();
+      if (after && path === "/two-factor/verify-backup-code")
+        await env.CATALOG.batch([
+          env.CATALOG.prepare(
+            "UPDATE account_security SET recovery_required = 1, recovery_started_at = ? WHERE user_id = ?",
+          ).bind(new Date().toISOString(), after.user.id),
+          env.CATALOG.prepare(
+            "UPDATE auth_sessions SET assurance = 'recovery' WHERE id = ?",
+          ).bind(after.session.id),
+          // A used backup code starts factor replacement. Retire the old factors
+          // immediately so enrollment can create a new authenticator safely.
+          env.CATALOG.prepare("DELETE FROM auth_two_factors WHERE userId=?").bind(
+            after.user.id,
+          ),
+          env.CATALOG.prepare("DELETE FROM auth_passkeys WHERE userId=?").bind(
+            after.user.id,
+          ),
+          env.CATALOG.prepare(
+            "UPDATE auth_users SET twoFactorEnabled=0 WHERE id=?",
+          ).bind(after.user.id),
+          env.CATALOG.prepare(
+            "DELETE FROM auth_sessions WHERE userId = ? AND id <> ?",
+          ).bind(after.user.id, after.session.id),
+          env.CATALOG.prepare(
+            "UPDATE oauth_grants SET revoked_at = ? WHERE user_id = ?",
+          ).bind(new Date().toISOString(), after.user.id),
+          env.CATALOG.prepare(
+            "UPDATE oauth_tokens SET revoked_at = ? WHERE user_id = ?",
+          ).bind(new Date().toISOString(), after.user.id),
+          invalidationStatement(env, after.user.id),
+          auditStatement(
+            env.CATALOG,
+            after.user.id,
+            "account.recovery_code_used",
+            after.user.id,
+          ),
+        ]);
+      const actor = after?.user.id ?? before?.user.id ?? null;
+      if (actor && path === "/two-factor/enable")
+        await env.CATALOG.prepare(
+          "UPDATE auth_two_factors SET enrolled_at = ? WHERE userId = ?",
+        )
+          .bind(new Date().toISOString(), actor)
+          .run();
+      if (
+        after &&
+        callback &&
+        !new URL(
+          response.headers.get("Location") ?? canonicalOrigin(env),
+        ).searchParams.has("error")
+      )
+        await env.CATALOG.prepare(
+          "UPDATE auth_provider_config SET callback_verified_at = ? WHERE id = ?",
+        )
+          .bind(Date.now(), path.split("/").at(-1))
+          .run();
+      if (actor && request.method === "POST")
+        await audit(
+          env.CATALOG,
+          actor,
+          `auth${path.replaceAll("/", ".")}`,
+          actor,
+        );
+    } else if (path.startsWith("/sign-in/"))
+      await audit(env.CATALOG, null, "auth.sign_in", null, "failed");
+  } catch (error) {
+    if (lockoutUser && !attemptSettled)
+      await releaseTotpAttempt(env.CATALOG, lockoutUser).catch(() => undefined);
+    throw error;
+  }
   // Provider callbacks may carry a JSON content type on an empty redirect.
   // Preserve Location and cookies instead of trying to decode that empty body.
   if (response.status >= 300 && response.status < 400) return response;
@@ -825,7 +861,7 @@ export async function identityRoutes(
         await queueMail(
           env,
           changedAddress.old,
-          "Your Huddle Loom email changed",
+          "Your Open Whiteboard email changed",
           "Your sign-in address has changed. If you did not request this, contact your installation owner immediately.",
         ).catch(() => undefined);
       }

@@ -1,4 +1,4 @@
-# Huddle Loom on GoDaddy Node.js Hosting
+# Open Whiteboard on GoDaddy Node.js Hosting
 
 This package runs the same editor, accounts, administration, OAuth/MCP and board services as the Cloudflare application. Managed MySQL stores board state, uploads and private installation keys. GoDaddy’s durable private volume stores the SQLite account/catalog database, retaining its security triggers without requiring MySQL trigger privileges. Other Node hosts can use a full MySQL catalog. The Cloudflare build and deployment commands keep their existing behavior.
 

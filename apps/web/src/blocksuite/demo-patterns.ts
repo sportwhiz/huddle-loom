@@ -29,7 +29,7 @@ const step = (id: string, x: number, y: number, text: string, color = blue): Pat
 const edge = (source: string, target: string, sourcePort: [number, number] = [1, .5], targetPort: [number, number] = [0, .5]): PatternEdge =>
   ({ source, target, sourcePort, targetPort });
 const nodes: PatternNode[] = [
-  step("release", 50, 90, "1 · Publish a release\nPublic Huddle Loom repo\nManifest pins the exact commit", indigo),
+  step("release", 50, 90, "1 · Publish a release\nPublic Open Whiteboard repo\nManifest pins the exact commit", indigo),
   step("discover", 410, 90, "2 · Check for updates\nYour Studio reads stable releases\nNo deploy hook needed", indigo),
   step("approve", 770, 90, "3 · Owner approves\nConfirm identity with MFA\nD1 records the selected release", saffron),
   step("hook", 1130, 90, "4 · Trigger deploy hook\nCloudflare rebuilds your copy\nOne active deployment at a time", saffron),

@@ -6,7 +6,7 @@ import {
 } from "./runtime";
 startNodeRuntime()
   .then((runtime) => {
-    console.log(`Huddle Loom is listening on port ${runtime.port}.`);
+    console.log(`Open Whiteboard is listening on port ${runtime.port}.`);
     let stopping = false;
     const stop = (failed = false) => {
       if (stopping) return;

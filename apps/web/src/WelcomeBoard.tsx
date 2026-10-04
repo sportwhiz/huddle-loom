@@ -1,6 +1,6 @@
 import { useId, useRef, useState, type CSSProperties, type PointerEvent } from "react";
 import { UiIcon } from "./UiIcon";
-import { WovenTagline } from "./WovenTagline";
+import { MarkerTagline } from "./MarkerTagline";
 import "./welcome-board.css";
 
 type Note = { id: number; x: number; y: number; color: string; title: string; text: string; rotation: number };
@@ -80,7 +80,7 @@ export function WelcomeBoard() {
   return (
     <aside className="welcome-board" aria-label="Practice whiteboard">
       <div className="welcome-board-surface" ref={surface}>
-        <WovenTagline className="welcome-board-caption" />
+        <MarkerTagline className="welcome-board-caption" />
         <svg className="welcome-board-connections" viewBox={`0 0 ${width} ${height}`} aria-hidden="true">
           <defs><marker id={arrow} markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto" markerUnits="userSpaceOnUse"><path d="m3 2 6 4-6 4" /></marker></defs>
           {[[0, 1], [1, 2]].map(([a, b]) => <path key={a} d={connector(notes[a], notes[b], a === 1)} markerEnd={`url(#${arrow})`} />)}

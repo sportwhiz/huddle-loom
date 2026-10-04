@@ -30,7 +30,7 @@ export async function queueMail(
     to,
     subject,
     text: `${message}${url ? `\n\n${url}` : ""}`,
-    html: `<p>${escapeHtml(message)}</p>${url ? `<p><a href="${escapeHtml(url)}">Continue in Huddle Loom</a></p>` : ""}`,
+    html: `<p>${escapeHtml(message)}</p>${url ? `<p><a href="${escapeHtml(url)}">Continue in Open Whiteboard</a></p>` : ""}`,
   };
   const id = randomToken(18);
   const encrypted = await seal(env, JSON.stringify(payload), `mail:${id}`);

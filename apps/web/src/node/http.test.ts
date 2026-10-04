@@ -4,6 +4,7 @@ import { mkdtemp, writeFile, mkdir, rm } from "node:fs/promises";
 import { resolve } from "node:path";
 import { tmpdir } from "node:os";
 import { request } from "node:http";
+import { connect } from "node:net";
 const dirs: string[] = [];
 afterEach(async () => {
   await Promise.all(
@@ -124,6 +125,59 @@ describe("Node HTTP bridge", () => {
       await runtime.close();
     }
   });
+});
+
+it("survives a client that resets during an upgrade", async () => {
+  let entered!: () => void;
+  let release!: () => void;
+  let upgradeSignal: AbortSignal | undefined;
+  const authorizing = new Promise<void>((resolve) => (entered = resolve));
+  const gate = new Promise<void>((resolve) => (release = resolve));
+  const runtime = createNodeHttpServer(
+    {
+      async fetch(req) {
+        if (new URL(req.url).pathname.endsWith("/ws")) {
+          upgradeSignal = req.signal;
+          entered();
+          await gate;
+          return new Response(null, { status: 401 });
+        }
+        return new Response("ok");
+      },
+    },
+    "https://studio.example",
+  );
+  await new Promise<void>((resolve) =>
+    runtime.server.listen(0, "127.0.0.1", resolve),
+  );
+  const { port } = runtime.server.address() as { port: number };
+  try {
+    const client = connect(port, "127.0.0.1");
+    client.on("error", () => {});
+    client.write(
+      "GET /api/v1/boards/board/ws HTTP/1.1\r\nHost: studio.example\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\nSec-WebSocket-Version: 13\r\n\r\n",
+    );
+    await authorizing;
+    client.resetAndDestroy();
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(upgradeSignal?.aborted).toBe(true);
+    release();
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    const status = await new Promise<number>((resolve, reject) =>
+      request(
+        { host: "127.0.0.1", port, headers: { Host: "studio.example" } },
+        (response) => {
+          response.resume();
+          resolve(response.statusCode!);
+        },
+      )
+        .on("error", reject)
+        .end(),
+    );
+    expect(status).toBe(200);
+  } finally {
+    await runtime.close();
+  }
 });
 
 it("closes safely and idempotently when the listener never started", async () => {

@@ -205,7 +205,7 @@ if (!setup) {
 console.log(
   `Worker password hash and signup: ${Math.round(performance.now() - started)} ms`,
 );
-const token = await latestToken(address, "Verify your Huddle Loom email");
+const token = await latestToken(address, "Verify your Open Whiteboard email");
 assert.ok(token);
 await client.call(
   `/api/auth/verify-email?token=${encodeURIComponent(token)}`,
@@ -458,7 +458,7 @@ await guest.call(
 );
 const guestVerification = await latestToken(
   guestEmail,
-  "Verify your Huddle Loom email",
+  "Verify your Open Whiteboard email",
 );
 await guest.call("/api/v1/auth/verify", {
   token: guestVerification,
@@ -487,7 +487,7 @@ await guest.call("/api/auth/request-password-reset", {
   email: guestEmail,
   redirectTo: `${origin}/recover`,
 });
-const reset = await latestToken(guestEmail, "Reset your Huddle Loom password");
+const reset = await latestToken(guestEmail, "Reset your Open Whiteboard password");
 const resetClient = new Client();
 await resetClient.call("/api/v1/auth/bootstrap");
 await resetClient.call("/api/auth/reset-password", {
@@ -523,7 +523,7 @@ assert.equal(
 );
 const approveAddress = await latestToken(
   guestEmail,
-  "Confirm your Huddle Loom email change",
+  "Confirm your Open Whiteboard email change",
 );
 await guest.call("/api/v1/auth/verify", { token: approveAddress });
 assert.equal(
@@ -536,7 +536,7 @@ assert.equal(
 );
 const confirmAddress = await latestToken(
   newAddress,
-  "Verify your Huddle Loom email",
+  "Verify your Open Whiteboard email",
 );
 await guest.call("/api/v1/auth/verify", { token: confirmAddress });
 assert.equal(
@@ -609,7 +609,7 @@ await magic.call("/api/v1/auth/bootstrap");
 await magic.call("/api/auth/sign-in/magic-link", { email: memberEmail }, 403);
 await client.call("/api/v1/admin/settings", { magic_link: 1 }, 200, "PATCH");
 await magic.call("/api/auth/sign-in/magic-link", { email: memberEmail });
-const magicToken = await latestToken(memberEmail, "Sign in to Huddle Loom");
+const magicToken = await latestToken(memberEmail, "Sign in to Open Whiteboard");
 await magic.call(
   `/api/auth/magic-link/verify?token=${encodeURIComponent(magicToken)}`,
   undefined,
@@ -626,7 +626,7 @@ await magic.call("/api/auth/sign-in/magic-link", { email: address });
 const ownerMagic = new Client();
 await ownerMagic.call("/api/v1/auth/bootstrap");
 await ownerMagic.call("/api/v1/auth/magic", {
-  token: await latestToken(address, "Sign in to Huddle Loom"),
+  token: await latestToken(address, "Sign in to Open Whiteboard"),
 });
 assert.equal(
   (await ownerMagic.call("/api/v1/auth/bootstrap")).account.needsMfa,
@@ -910,7 +910,7 @@ try {
   )!.candidate;
   const factor = await emergencyClient.call("/api/auth/two-factor/enable", {
     password,
-    issuer: "Huddle Loom",
+    issuer: "Open Whiteboard",
   });
   const totpSecret = new URL(factor.totpURI).searchParams.get("secret")!;
   await emergencyClient.call("/api/auth/two-factor/verify-totp", {

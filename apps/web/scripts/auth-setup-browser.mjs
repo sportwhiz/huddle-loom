@@ -184,18 +184,18 @@ try {
   await page.route("https://github.com/login/oauth/authorize**", (route) =>
     route.fulfill({
       contentType: "text/html",
-      body: `<a href="${origin}/api/v1/auth/bootstrap">Return to Huddle Loom</a><form method="post" action="${origin}/api/v1/setup/complete"><button>Cross-site mutation</button></form>`,
+      body: `<a href="${origin}/api/v1/auth/bootstrap">Return to Open Whiteboard</a><form method="post" action="${origin}/api/v1/setup/complete"><button>Cross-site mutation</button></form>`,
     }),
   );
   await page
     .getByRole("button", { name: "Continue with GitHub", exact: true })
     .click();
-  await page.getByRole("link", { name: "Return to Huddle Loom" }).waitFor();
+  await page.getByRole("link", { name: "Return to Open Whiteboard" }).waitFor();
   const providerUrl = page.url();
   const returned = page.waitForResponse(
     (response) => response.url() === `${origin}/api/v1/auth/bootstrap`,
   );
-  await page.getByRole("link", { name: "Return to Huddle Loom" }).click();
+  await page.getByRole("link", { name: "Return to Open Whiteboard" }).click();
   assert.equal(
     (await (await returned).json()).unlocked,
     true,

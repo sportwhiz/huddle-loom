@@ -11,7 +11,7 @@
 .update-notice-symbol { display: grid; place-items: center; width: 54px; height: 54px; margin: 22px 0 18px; border: 1px solid var(--border); border-radius: 16px; color: var(--accent); background: var(--accent-soft); transform: rotate(-4deg); }
 .update-notice-symbol svg { width: 25px; height: 25px; transform: rotate(4deg); }
 .update-notice-kicker { color: var(--accent); font-size: 12px; font-weight: 700; }
-.update-notice-dialog h2 { margin: 8px 0 12px; font-family: "Whiteboard Editorial", Georgia, serif; font-size: clamp(25px, 5vw, 32px); line-height: 1.15; letter-spacing: -.025em; font-weight: 500; }
+.update-notice-dialog h2 { margin: 8px 0 12px; font-family: var(--font-display); font-weight: 700; font-size: clamp(25px, 5vw, 32px); line-height: 1.15; letter-spacing: -.025em; }
 .update-notice-dialog p { line-height: 1.65; font-size: 14px; }
 .update-notice-dialog > p:not(.update-notice-kicker) { color: var(--text-secondary); }
 .update-notice-notes { margin-top: 22px; padding: 16px 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface-muted); }

@@ -1,5 +1,5 @@
 import { existsSync, realpathSync, writeFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import { dirname, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const appRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
@@ -30,14 +30,20 @@ while (queue.length > 0) {
   }
 }
 
+// Paths are relative to the app so the generated file is the same on every
+// machine for a given lockfile, and only changes when these packages do.
+const local = path => {
+  const value = relative(appRoot, path).split(sep).join('/');
+  return value.startsWith(".") ? value : `./${value}`;
+};
 const paths = {};
 for (const [name, packageRoot] of [...packages].sort(([a], [b]) =>
   a.localeCompare(b)
 )) {
   const dist = resolve(packageRoot, 'dist');
   const index = resolve(dist, 'index.d.ts');
-  if (existsSync(index)) paths[name] = [index];
-  paths[`${name}/*`] = [`${dist}/*`];
+  if (existsSync(index)) paths[name] = [local(index)];
+  paths[`${name}/*`] = [`${local(dist)}/*`];
 }
 
 const config = {

@@ -122,7 +122,7 @@ export async function prepareImportFiles(file: Blob): Promise<Blob[]> {
   try {
     value = JSON.parse(await file.text());
   } catch {
-    throw new Error("Choose a valid Huddle Loom board or recovery file.");
+    throw new Error("Choose a valid Open Whiteboard board or recovery file.");
   }
   if (value?.format !== "cloudflare-whiteboard/account-recovery") return [file];
   try {

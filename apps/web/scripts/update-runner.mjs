@@ -332,7 +332,7 @@ export async function managedDeployment(
   try {
     installed = await readLive();
     directory = mkdtempSync(resolve(tmpdir(), "huddle-release-"));
-    console.log(`Preparing Huddle Loom ${target.version}.`);
+    console.log(`Preparing Open Whiteboard ${target.version}.`);
     command("git", ["init", directory]);
     command(
       "git",
@@ -428,7 +428,7 @@ export async function managedDeployment(
       db(
         `UPDATE software_updates SET status='succeeded',message=NULL,updated_at=${Date.now()} WHERE id=${quote(job.id)} AND runner_id=${quote(runner)} AND status IN ('deploying','verifying','uncertain')`,
       );
-    console.log(`Huddle Loom ${target.version} is live and verified.`);
+    console.log(`Open Whiteboard ${target.version} is live and verified.`);
     return true;
   } catch (error) {
     if (job)
@@ -581,9 +581,12 @@ export async function registerRunner(configPath, installed) {
     });
     if (!inventory.ok) throw new Error();
     const hooks = await inventory.json();
+    // Installations created before the rename have a hook with the old name.
     let hook = hooks.result?.find(
       (h) =>
-        h.deploy_hook_name === "Huddle Loom updates" && h.branch === branch,
+        ["Open Whiteboard updates", "Huddle Loom updates"].includes(
+          h.deploy_hook_name,
+        ) && h.branch === branch,
     );
     if (!hook) {
       const response = await fetch(endpoint, {
@@ -591,7 +594,7 @@ export async function registerRunner(configPath, installed) {
         headers,
         body: JSON.stringify({
           branch,
-          deploy_hook_name: "Huddle Loom updates",
+          deploy_hook_name: "Open Whiteboard updates",
         }),
         signal: AbortSignal.timeout(15000),
       });

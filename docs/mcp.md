@@ -1,6 +1,6 @@
 # MCP endpoint
 
-Huddle Loom exposes a Streamable HTTP MCP endpoint at `/mcp` using `@modelcontextprotocol/sdk`. It is an OAuth 2.1 protected resource with dynamic client registration, authorization code flow, PKCE S256, scoped access tokens, rotating refresh tokens, revocation, and protected-resource discovery.
+Open Whiteboard exposes a Streamable HTTP MCP endpoint at `/mcp` using `@modelcontextprotocol/sdk`. It is an OAuth 2.1 protected resource with dynamic client registration, authorization code flow, PKCE S256, scoped access tokens, rotating refresh tokens, revocation, and protected-resource discovery.
 
 ## Connect a client
 
@@ -122,7 +122,7 @@ Setup wording was checked against [OpenAI's connection guide](https://developers
 and [Anthropic's remote connector guide](https://support.claude.com/en/articles/11175166-get-started-with-custom-connectors-using-remote-mcp)
 on October 1, 2026. Account and administrator policy can change availability.
 Test the production OAuth flow in the actual account before calling the
-integration ready. Huddle Loom's local suites verify protocol behavior only.
+integration ready. Open Whiteboard's local suites verify protocol behavior only.
 
 ### Refinement identifiers
 

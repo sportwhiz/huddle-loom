@@ -10,7 +10,7 @@ try {
   for (const [theme, width] of [["light", 1440], ["dark", 390]]) {
     const context = await browser.newContext({ viewport: { width, height: 960 }, colorScheme: theme });
     await context.addInitScript(theme => localStorage.setItem("whiteboard-appearance", theme), theme);
-    const settings = { title: "Huddle Loom", registration: "invite", approval_required: 0, mfa_required: 0, magic_link: 0, dynamic_registration: 0, reauthentication_seconds: 1800, session_idle_seconds: 604800, session_absolute_seconds: 2592000 };
+    const settings = { title: "Open Whiteboard", registration: "invite", approval_required: 0, mfa_required: 0, magic_link: 0, dynamic_registration: 0, reauthentication_seconds: 1800, session_idle_seconds: 604800, session_absolute_seconds: 2592000 };
     const writes = [], failures = [];
     await context.route("**/api/**", async route => {
       const request = route.request(), path = new URL(request.url()).pathname;

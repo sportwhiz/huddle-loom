@@ -47,7 +47,7 @@ The GitHub pre-release flag decides whether a release is offered; a version such
 Maintainer process:
 
 1. Update root/application package versions and release notes; make an existing `vX.Y.Z` tag at the reviewed commit.
-2. Run the **Publish Huddle Loom release** workflow with that tag, notes and the security-fix flag.
+2. Run the **Publish Open Whiteboard release** workflow with that tag, notes and the security-fix flag.
 3. The qualification job runs `pnpm check`, verifies the tag/package/commit relationship, and creates `huddle-loom-release.json` with the commit, schema digest, data format, updater protocol and notes.
 4. The separate publication job requires a public repository and attaches the manifest to the GitHub release. It never changes repository visibility. Use repository protections for release tags and the publishing workflow.
 

@@ -67,7 +67,7 @@ try {
             configured: true,
             setup: false,
             csrf: "fixture",
-            title: "Huddle Loom",
+            title: "Open Whiteboard",
             user: {
               id: "owner",
               name: "Owner",

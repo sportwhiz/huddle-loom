@@ -121,7 +121,7 @@ export function UpdateNoticeHost({ bootstrap }: { bootstrap: AuthBootstrap }) {
         <header><span className="update-notice-eyebrow">CARE FOR YOUR STUDIO</span>
           <button className="update-notice-close" type="button" aria-label="Remind me tomorrow" onClick={postpone}><UiIcon name="close" /></button></header>
         <div className="update-notice-symbol"><UiIcon name={notice.security ? "lock" : "download"} /></div>
-        <p className="update-notice-kicker">Huddle Loom {notice.version}</p>
+        <p className="update-notice-kicker">Open Whiteboard {notice.version}</p>
         <h2 id={titleId}>{notice.inProgress ? "Your Studio is updating" : notice.security ? "A security update is ready" : "An important update is ready"}</h2>
         <p id={descriptionId}>{notice.inProgress ? "Your administrator has started an update. You can keep working while it deploys." :
           administrator ? bootstrap.account?.role === "owner" ? "Review what’s changing and choose when to install it." : "Review what’s changing with your Studio owner, who can install the update." :

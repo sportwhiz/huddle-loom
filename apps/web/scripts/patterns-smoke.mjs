@@ -33,7 +33,7 @@ try {
   await page.goto(new URL(`/boards/${encodeURIComponent(board.id)}`, origin).href);
   await page.locator('.creation-rail').waitFor({ timeout: 120000 });
   const before = await counts();
-  await page.getByRole('button', { name: 'Patterns (templates)', exact: true }).click();
+  await page.getByRole('button', { name: 'Templates', exact: true }).click();
   await page.screenshot({ path: `${screenshots}/picker-light.png` });
   await page.getByRole('button', { name: /^How updates work/ }).click();
   await page.waitForFunction(() => document.querySelector('whiteboard-editor').doc.getModelsByFlavour('affine:frame').some(frame => String(frame.props.title).includes('Release and approval')));
@@ -59,7 +59,7 @@ try {
     const bounds = JSON.parse(shape.get('xywh'));
     bounds[1] += 12; shape.set('xywh', JSON.stringify(bounds));
   });
-  await page.getByRole('button', { name: 'Patterns (templates)', exact: true }).click();
+  await page.getByRole('button', { name: 'Templates', exact: true }).click();
   await page.getByRole('button', { name: /^50 ideas/ }).click();
   await page.waitForFunction(count => document.querySelector('whiteboard-editor').doc.getModelsByFlavour('affine:note').length === count, flow.notes + 50);
   await page.waitForTimeout(1000);
@@ -77,13 +77,13 @@ try {
   await page.locator('.creation-rail').waitFor();
   assert.deepEqual(await counts(), all, 'Pattern must survive a persisted reload');
   await page.evaluate(() => { document.documentElement.dataset.theme = 'dark'; localStorage.setItem('whiteboard-theme', 'dark'); });
-  await page.getByRole('button', { name: 'Patterns (templates)', exact: true }).click();
+  await page.getByRole('button', { name: 'Templates', exact: true }).click();
   await page.screenshot({ path: `${screenshots}/picker-dark.png` });
   await page.getByRole('button', { name: /^How updates work/ }).click();
   await page.waitForTimeout(1000);
   await page.screenshot({ path: `${screenshots}/update-flow-dark.png` });
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.getByRole('button', { name: 'Patterns (templates)', exact: true }).click();
+  await page.getByRole('button', { name: 'Templates', exact: true }).click();
   await page.screenshot({ path: `${screenshots}/picker-mobile-dark.png` });
   assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, 'Mobile pattern picker overflowed');
   assert.deepEqual(errors, [], 'Browser errors while inserting or restoring patterns');

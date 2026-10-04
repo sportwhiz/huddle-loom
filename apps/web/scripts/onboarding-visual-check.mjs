@@ -30,7 +30,7 @@ export async function checkOnboardingScreens(browser, origin, results) {
     unlocked: true,
     setupReserved: true,
     setupState: "claimed",
-    title: "Huddle Loom",
+    title: "Open Whiteboard",
     csrf: "visual-fixture",
     email: false,
     providers: ["github"],
@@ -78,7 +78,7 @@ export async function checkOnboardingScreens(browser, origin, results) {
         if (path === "/api/auth/two-factor/enable")
           return respond({
             totpURI:
-              "otpauth://totp/Huddle Loom:alex@example.invalid?secret=JBSWY3DPEHPK3PXP&issuer=Huddle Loom",
+              "otpauth://totp/Open Whiteboard:alex@example.invalid?secret=JBSWY3DPEHPK3PXP&issuer=Open Whiteboard",
             backupCodes: Array.from(
               { length: 10 },
               (_, i) => `demo${i}-code${i}`,
@@ -204,7 +204,7 @@ export async function checkOnboardingScreens(browser, origin, results) {
         .click();
       assert.equal(
         (await download).suggestedFilename(),
-        "huddle-loom-recovery-codes.txt",
+        "open-whiteboard-recovery-codes.txt",
       );
       await saved.click();
       assert.deepEqual(
@@ -238,7 +238,7 @@ export async function checkOnboardingScreens(browser, origin, results) {
         .click();
       await page
         .getByRole("dialog", {
-          name: "Ideas woven together",
+          name: "Work it out together",
           exact: true,
         })
         .waitFor();

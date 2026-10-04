@@ -276,7 +276,7 @@ export async function acquireNodeOwnership(pool: Pool) {
     >("SELECT GET_LOCK(?, 0) AS acquired", [lockName]);
     if (Number(lockRows[0]?.acquired) !== 1)
       throw new Error(
-        "Another Huddle Loom Node server is active for this database. Stop it before starting this server.",
+        "Another Open Whiteboard Node server is active for this database. Stop it before starting this server.",
       );
   } catch (error) {
     connection.destroy();

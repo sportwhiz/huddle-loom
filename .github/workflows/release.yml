@@ -1,4 +1,4 @@
-name: Publish Huddle Loom release
+name: Publish Open Whiteboard release
 on:
   workflow_dispatch:
     inputs:
@@ -83,4 +83,4 @@ jobs:
           printenv RELEASE_NOTES > release-notes.txt
           preview_args=()
           if [ "$RELEASE_PRERELEASE" = true ]; then preview_args+=(--prerelease); fi
-          gh release create "$RELEASE_TAG" huddle-loom-release.json huddle-loom-node.zip huddle-loom-node.zip.sha256 --repo "$GH_REPO" --verify-tag --title "Huddle Loom $RELEASE_TAG" --notes-file release-notes.txt "${preview_args[@]}"
+          gh release create "$RELEASE_TAG" huddle-loom-release.json huddle-loom-node.zip huddle-loom-node.zip.sha256 --repo "$GH_REPO" --verify-tag --title "Open Whiteboard $RELEASE_TAG" --notes-file release-notes.txt "${preview_args[@]}"

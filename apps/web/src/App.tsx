@@ -1,4 +1,5 @@
 import { BrandMark } from "./BrandMark";
+import { HistoryArt } from "./OnboardingArt";
 import { BoardTimer } from "./BoardTimer";
 import { PRODUCT_NAME } from "./product";
 import { apiFetch } from "./auth-client";
@@ -176,7 +177,7 @@ export function BoardPage({ boardId, guest = false }: { boardId: string; guest?:
     <main className="app-shell" data-board-id={boardId} data-board-role={collaboration?.capabilities.role}>
       <header className="app-header">
         <div className="board-heading">
-          <a className="home-link" href="/" aria-label={guest ? "Huddle Loom home" : "Back to studio"}><BoardIcon name="back" /></a>
+          <a className="home-link" href="/" aria-label={guest ? "Open Whiteboard home" : "Back to studio"}><BoardIcon name="back" /></a>
           <div>
             <p className="eyebrow">{guest ? 'Guest access' : <>Studio <span aria-hidden="true">/</span> {workbookTitle}</>}</p>
             <h1>{title}</h1>
@@ -192,7 +193,7 @@ export function BoardPage({ boardId, guest = false }: { boardId: string; guest?:
           </button>
           <span className="header-divider" aria-hidden="true" />
           <button className={`header-tool ${panel === 'comments' ? 'active' : ''}`} type="button" aria-label="Comments" title="Comments" onClick={() => togglePanel('comments')}><BoardIcon name="comment" />{collaboration?.comments.filter(thread => !thread.resolvedAt).length ? <b className="tool-badge">{collaboration.comments.filter(thread => !thread.resolvedAt).length}</b> : null}</button>
-          <button className={`header-tool ${panel === 'workshop' ? 'active' : ''}`} type="button" aria-label="Huddle session tools" title="Huddle · timer, brainstorming and voting" onClick={() => togglePanel('workshop')}><BoardIcon name="facilitate" /><span>Huddle</span></button>
+          <button className={`header-tool ${panel === 'workshop' ? 'active' : ''}`} type="button" aria-label="Workshop tools" title="Workshop: timer, brainstorming and voting" onClick={() => togglePanel('workshop')}><BoardIcon name="facilitate" /><span>Workshop</span></button>
           <button className={`header-tool present-tool ${panel === 'present' ? 'active' : ''}`} type="button" aria-label="Present" title="Present" onClick={() => togglePanel('present')}><BoardIcon name="present" /><span>Present</span></button>
           {!guest && <button className="share-button" type="button" onClick={() => setSharing(true)}><BoardIcon name="share" /><span>Share</span></button>}
           <ThemeMenu />
@@ -202,7 +203,7 @@ export function BoardPage({ boardId, guest = false }: { boardId: string; guest?:
               <a href="/settings/account"><BoardIcon name="settings"/><span><strong>Account and security</strong><small>Sign-in methods, devices and administration</small></span></a>
               <a href={`/settings/connections?returnTo=${encodeURIComponent(location.pathname)}`}><BoardIcon name="apps" /><span><strong>Connected apps</strong><small>Set up ChatGPT, Claude and MCP clients</small></span></a>
               <button type="button" onClick={event => { togglePanel('activity'); event.currentTarget.closest('details')?.removeAttribute('open'); }}><BoardIcon name="activity" /><span><strong>Activity</strong><small>Checkpoints and recent changes</small></span></button>
-              <button type="button" onClick={event => { void toggleHistory(); event.currentTarget.closest('details')?.removeAttribute('open'); }}><BoardIcon name="history" /><span><strong>{versions ? 'Close Unravel' : 'Unravel'}</strong><small>Version history · preview and restore</small></span></button>
+              <button type="button" onClick={event => { void toggleHistory(); event.currentTarget.closest('details')?.removeAttribute('open'); }}><BoardIcon name="history" /><span><strong>{versions ? 'Close history' : 'History'}</strong><small>Preview and restore earlier versions</small></span></button>
               {collaboration?.capabilities.export ? <a href={`/api/v1/boards/${encodeURIComponent(boardId)}/export`} download><BoardIcon name="download" /><span><strong>Download archive</strong><small>Save an editable backup</small></span></a> : null}
             </div>
           </details>}
@@ -210,8 +211,8 @@ export function BoardPage({ boardId, guest = false }: { boardId: string; guest?:
       </header>
       {(versions || historyError) && (
         <aside className="history-panel" aria-label="Board history">
-          <header className="history-heading"><div><strong>Unravel</strong><span>Version history · Preview a revision before restoring it.</span></div><button className="panel-close" type="button" aria-label="Close version history" onClick={() => { setVersions(null); setVersionPreview(null); setHistoryError(''); }}><UiIcon name="close" /></button></header>
-          {!versionPreview && <div className="history-illustration" aria-hidden="true"><img src="/brand/unravel.webp" alt="" width="1254" height="1254" /></div>}
+          <header className="history-heading"><div><strong>History</strong><span>Preview a version before you restore it.</span></div><button className="panel-close" type="button" aria-label="Close version history" onClick={() => { setVersions(null); setVersionPreview(null); setHistoryError(''); }}><UiIcon name="close" /></button></header>
+          {!versionPreview && <div className="history-illustration" aria-hidden="true"><HistoryArt /></div>}
           {historyError && <p role="alert">{historyError}</p>}
           {versions?.length === 0 && <p>No saved revisions yet.</p>}
           {versionPreview ? <section className="version-preview"><strong>Revision {versionPreview.revision}</strong><p>{versionPreview.noteCount} notes · {versionPreview.frameCount} frames · {versionPreview.connectorCount} connectors</p>{versionPreview.notes.slice(0, 4).map((note, index) => <blockquote key={`${index}:${note}`}>{note}</blockquote>)}<div className="button-row">{canCopy ? <button type="button" onClick={() => void restoreVersion(versionPreview.revision)}>Restore as copy</button> : null}{collaboration?.capabilities.manage ? <button className="danger-button" type="button" onClick={() => void restoreVersionInPlace(versionPreview.revision)}>Restore this board</button> : null}<button type="button" onClick={() => setVersionPreview(null)}>Close preview</button></div></section> : null}
@@ -253,7 +254,7 @@ function InvitationGate() {
       })
       .catch(error => setMessage(error instanceof Error ? error.message : 'Invitation could not be accepted'));
   }, []);
-  return <main className="invitation-page"><div className="invitation-card"><BrandMark /><h1>Huddle Loom invitation</h1><p>{message}</p><a href="/">Go to your boards</a></div></main>;
+  return <main className="invitation-page"><div className="invitation-card"><BrandMark /><h1>Open Whiteboard invitation</h1><p>{message}</p><a href="/">Go to your boards</a></div></main>;
 }
 
 export function App() {

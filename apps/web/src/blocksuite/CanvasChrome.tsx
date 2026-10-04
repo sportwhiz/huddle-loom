@@ -848,7 +848,7 @@ export function CanvasChrome({
         <button
           className="rail-tool rail-divider"
           type="button"
-          aria-label="Patterns (templates)"
+          aria-label="Templates"
           disabled={!editable}
           onClick={() => {
             setPalette(null);
@@ -856,7 +856,7 @@ export function CanvasChrome({
           }}
         >
           <Icon name="templates" />
-          <span className="rail-tooltip">Patterns · templates</span>
+          <span className="rail-tooltip">Templates</span>
         </button>
         <button
           className="rail-tool"
@@ -1489,7 +1489,7 @@ export function CanvasChrome({
             <Icon name="sticky" />
           </span>
           <h2>Start with one idea</h2>
-          <p>Add a sticky note, sketch a flow, or choose a Pattern.</p>
+          <p>Add a sticky note, sketch a flow, or start from a template.</p>
           <div>
             <button
               type="button"
@@ -1500,7 +1500,7 @@ export function CanvasChrome({
               Add a sticky note
             </button>
             <button type="button" onClick={() => setModal("templates")}>
-              Explore Patterns
+              Browse templates
             </button>
           </div>
           <small>Press N for a note · Drag empty canvas to move around</small>
@@ -1570,10 +1570,10 @@ export function CanvasChrome({
         </Modal>
       ) : null}
       {modal === "templates" ? (
-        <Modal title="Patterns" onClose={() => setModal(null)} wide>
+        <Modal title="Templates" onClose={() => setModal(null)} wide>
           <div className="patterns-intro"><p className="modal-description">
-            Ready-made templates for thinking together. Choose a pattern, then
-            make it your own. Everything stays editable.
+            Start from a board that is already laid out, then change anything
+            you like. Every note, shape and arrow stays editable.
           </p><img src="/brand/patterns.webp" alt="" width="1254" height="1254" /></div>
           <div className="canvas-template-grid">
             {DEMO_PATTERNS.map(pattern => (
@@ -1582,7 +1582,7 @@ export function CanvasChrome({
                 <div className="template-preview demo-pattern-preview"><PatternPreview pattern={pattern} /></div>
                 <strong>{pattern.title}</strong>
                 <p>{pattern.description}</p>
-                <span>{pattern.id === "update-flow" ? "Explore the demo" : "Use pattern"} <Icon name="arrow" /></span>
+                <span>{pattern.id === "update-flow" ? "Explore the demo" : "Use template"} <Icon name="arrow" /></span>
               </button>
             ))}
             {templateCards.map((template) => (
@@ -1611,7 +1611,7 @@ export function CanvasChrome({
                 <strong>{template.title}</strong>
                 <p>{template.description}</p>
                 <span>
-                  Use pattern <Icon name="arrow" />
+                  Use template <Icon name="arrow" />
                 </span>
               </button>
             ))}
