@@ -390,12 +390,14 @@ describe("fresh native owner setup with GitHub", () => {
     ).toBe(200);
     await call("/api/auth/sign-out", {});
     expect((await call("/api/auth/sign-in/local", payload)).status).toBe(200);
-    const verify = async (code: string) => {
+    const verify = async (
+      code: string,
+      path = "/api/auth/two-factor/verify-totp",
+    ) => {
       try {
-        return (await call("/api/auth/two-factor/verify-totp", { code }))
-          .status;
+        return (await call(path, { code })).status;
       } catch (error) {
-        return (error as { status: number }).status;
+        return (error as { status?: number }).status;
       }
     };
     const counter = () =>
@@ -438,6 +440,20 @@ describe("fresh native owner setup with GitHub", () => {
       expect(await verify(accepted)).toBe(400);
     }
     expect(counter()).toEqual({ count: 0, until: null });
+
+    // Wrong backup codes from a session count toward the same lockout.
+    const backup = "/api/auth/two-factor/verify-backup-code";
+    db.exec("DELETE FROM request_limits");
+    expect(await verify("not-a-recovery-code", backup)).toBe(401);
+    expect(counter().count).toBe(1);
+
+    // A server failure after a correct code gives the attempt back.
+    db.exec("DELETE FROM request_limits; DROP TABLE mfa_replay");
+    expect(await verify(totp(enrollment.totpURI))).toBeUndefined();
+    expect(counter().count).toBe(1);
+
+    db.exec("DELETE FROM request_limits");
+    expect(await verify(enrollment.backupCodes[0], backup)).toBe(200);
   });
 
   it("creates a local owner without email or OAuth, then requires MFA on every login", async () => {
