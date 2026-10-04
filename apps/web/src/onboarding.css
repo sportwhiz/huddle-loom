@@ -76,12 +76,12 @@
   padding: 28px 28px 16px;
 }
 .onboarding-copy h2 {
-  font-family: "Whiteboard Editorial", Georgia, serif;
+  font-family: var(--font-display);
   margin: 0 0 12px;
-  font-size: 24px;
+  font-size: 23px;
   line-height: 1.25;
-  letter-spacing: -0.7px;
-  font-weight: 500;
+  letter-spacing: -.015em;
+  font-weight: 700;
 }
 .onboarding-copy p {
   margin: 0;
@@ -200,8 +200,7 @@
     padding: 20px;
   }
   .onboarding-copy h2 {
-  font-family: "Whiteboard Editorial", Georgia, serif;
-    font-size: 22px;
+    font-size: 21px;
   }
   .onboarding-footer {
     padding: 12px 18px 20px;

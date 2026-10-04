@@ -88,7 +88,7 @@ describe.skipIf(!process.env.HUDDLE_NAMESPACE_MYSQL_TEST_URL)(
       expect(previewOwner?.healthy).toBe(true);
       expect(liveOwner?.healthy).toBe(true);
       await expect(acquireNodeOwnership(preview)).rejects.toThrow(
-        "Another Huddle Loom",
+        "Another Open Whiteboard",
       );
     });
     it("keeps catalog data, installation keys and uploaded assets separate", async () => {

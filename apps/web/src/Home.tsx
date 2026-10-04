@@ -1,7 +1,7 @@
 import { BrandMark } from "./BrandMark";
-import { WovenTagline } from "./WovenTagline";
+import { MarkerTagline } from "./MarkerTagline";
 import { ThemedImage } from "./ThemedImage";
-import { ThreadColorField } from "./ThreadColorField";
+import { MarkerColorField } from "./MarkerColorField";
 import { PRODUCT_NAME, PRODUCT_WORDMARK } from "./product";
 import { openTour } from './onboarding-events';
 import { api, apiFetch, authSnapshot } from "./auth-client";
@@ -437,7 +437,7 @@ export function Home() {
           <button type="button" onClick={() => importRef.current?.click()} disabled={busy}>
             <UiIcon name="import" /> Import board archive
           </button></> : null}
-          <div className="studio-signature"><WovenTagline signature /></div>
+          <div className="studio-signature"><MarkerTagline signature /></div>
         </div>
         </div>
       </aside>
@@ -488,7 +488,7 @@ export function Home() {
                 }, 'Profile updated');
               }}>
                 <label><span>Display name</span><input value={profileName} maxLength={80} onChange={event => setProfileName(event.target.value)} /></label>
-                <ThreadColorField value={profileColor} onChange={setProfileColor} />
+                <MarkerColorField value={profileColor} onChange={setProfileColor} />
                 <button className="primary-button" type="submit" disabled={busy || !profileName.trim()}>Save profile</button>
               </form>
               {authSnapshot()?.mode === 'native' && <a className="account-connections" href="/settings/account">{['owner','admin'].includes(authSnapshot()?.account?.role ?? '') ? 'Account and administration' : 'Account and security'} <span aria-hidden="true">↗</span></a>}
@@ -501,7 +501,7 @@ export function Home() {
         <div className="workspace-content">
           <div className="workspace-heading">
             <div>
-              <span className="studio-eyebrow">{matches ? 'Search' : activeWorkbook ? 'Workbook' : activeView === 'shared' ? 'Together' : activeView === 'favorites' ? 'Close at hand' : 'Huddle Loom'}</span>
+              <span className="studio-eyebrow">{matches ? 'Search' : activeWorkbook ? 'Workbook' : activeView === 'shared' ? 'Together' : activeView === 'favorites' ? 'Close at hand' : 'Open Whiteboard'}</span>
               <h1>{pageTitle}</h1>
               <p>{pageDescription}</p>
             </div>

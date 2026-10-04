@@ -169,7 +169,7 @@ export function formatNodeStartupError(error: unknown): string {
           "STARTUP_FAILED",
           "Check the documented Node hosting configuration.",
         );
-  return `Huddle Loom startup failed [${safe.phase}/${safe.code}]: ${safe.message}`;
+  return `Open Whiteboard startup failed [${safe.phase}/${safe.code}]: ${safe.message}`;
 }
 const APPLICATION_SETTINGS = [
   "AUTH_SECRET",

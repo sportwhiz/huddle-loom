@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+Huddle Loom is now Open Whiteboard. The app has a new logo, a whiteboard look in light and dark themes, and the tagline "Work it out together." Patterns are now called Templates, Unravel is now History, the Huddle panel is now Workshop, and your thread color is now your marker color. The marker color presets are new; a color you picked before stays selected as a custom color.
+
+Installations keep their Worker, database, storage and release names, so updates and existing data are not affected. New authenticator and passkey enrollments show Open Whiteboard as the account name.
+
 ## 0.1.1
 
 Fixes release checks and deployment-hook requests on Cloudflare Workers. The Updates screen now explains when no stable release is available and distinguishes release checking from the deployment connection needed to install updates.

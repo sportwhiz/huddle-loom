@@ -3,7 +3,7 @@ import { ThemedImage } from "./ThemedImage";
 import "./onboarding-art.css";
 
 export type OnboardingArtKind =
-  | "loom"
+  | "welcome"
   | "notes"
   | "connect"
   | "organize"
@@ -18,7 +18,6 @@ export function OnboardingArt({
   kind?: OnboardingArtKind;
 }) {
   const id = useId().replaceAll(":", "");
-  if (kind === "loom") return <div className="welcome-art welcome-art-loom" aria-hidden="true"><img src="/brand/loom-welcome.webp" alt="" width="1792" height="896" decoding="async" /></div>;
   if (kind === "collaborate") return <div className="welcome-art welcome-art-huddle" aria-hidden="true"><ThemedImage light="/brand/huddle.webp" dark="/brand/huddle-dark.webp" alt="" width="1254" height="1254" decoding="async" /></div>;
   const note = (
     x: number,
@@ -75,7 +74,47 @@ export function OnboardingArt({
           </marker>
         </defs>
         <rect width="480" height="280" fill={`url(#${id}-dots)`} />
-        {kind === "organize" ? (
+        {kind === "welcome" ? (
+          <>
+            <marker
+              id={`${id}-marker-head`}
+              markerWidth="10"
+              markerHeight="10"
+              refX="7"
+              refY="5"
+              orient="auto"
+              markerUnits="userSpaceOnUse"
+            >
+              <path d="m2 1.5 5 3.5-5 3.5" className="welcome-marker-head" />
+            </marker>
+            <rect className="welcome-whiteboard" x="58" y="26" width="364" height="200" rx="10" />
+            {note(84, 58, "yellow", ["What if…"], -4)}
+            {note(192, 112, "lavender", ["Try it", "together"], 2)}
+            {note(306, 52, "green", ["Next steps"], 4)}
+            <path
+              className="welcome-marker-stroke"
+              d="M181 92C215 94 160 157 187 157"
+              markerEnd={`url(#${id}-marker-head)`}
+            />
+            <path
+              className="welcome-marker-stroke"
+              d="M291 158C331 160 353 177 353 150"
+              markerEnd={`url(#${id}-marker-head)`}
+            />
+            <ellipse
+              className="welcome-marker-circle"
+              cx="354"
+              cy="97"
+              rx="66"
+              ry="59"
+              transform="rotate(-8 354 97)"
+            />
+            <rect className="welcome-tray" x="150" y="226" width="180" height="9" rx="4.5" />
+            <rect className="welcome-pen blue" x="168" y="218" width="30" height="8" rx="4" />
+            <rect className="welcome-pen red" x="206" y="218" width="30" height="8" rx="4" />
+            <rect className="welcome-pen green" x="244" y="218" width="30" height="8" rx="4" />
+          </>
+        ) : kind === "organize" ? (
           <>
             <rect
               className="welcome-panel"
@@ -304,5 +343,33 @@ export function OnboardingArt({
         )}
       </svg>
     </div>
+  );
+}
+
+/** Board snapshots on a timeline, with a marker arrow back to an earlier one. */
+export function HistoryArt() {
+  const id = useId().replaceAll(":", "");
+  const snapshot = (x: number, notes: string[]) => (
+    <g key={x}>
+      <rect className="welcome-whiteboard history-snapshot" x={x} y="22" width="64" height="40" rx="5" />
+      {notes.map((color, index) => (
+        <rect key={color + index} className={`welcome-note ${color}`} x={x + 9 + index * 17} y={33 + (index % 2) * 6} width="12" height="12" rx="1.5" />
+      ))}
+      <circle className="history-tick" cx={x + 32} cy="76" r="3.5" />
+    </g>
+  );
+  return (
+    <svg viewBox="0 0 320 88" fill="none">
+      <defs>
+        <marker id={`${id}-head`} markerWidth="10" markerHeight="10" refX="6" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+          <path d="m2 1.5 5 3.5-5 3.5" className="welcome-marker-head" />
+        </marker>
+      </defs>
+      <path className="history-line" d="M28 76h264" />
+      {snapshot(44, ["yellow"])}
+      {snapshot(128, ["yellow", "green"])}
+      {snapshot(212, ["yellow", "green", "pink"])}
+      <path className="welcome-marker-stroke" d="M246 18C214 4 120 2 88 15" markerEnd={`url(#${id}-head)`} />
+    </svg>
   );
 }

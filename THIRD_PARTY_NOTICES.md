@@ -1,6 +1,6 @@
 # Third-party notices
 
-Huddle Loom's original application code is MIT licensed. Dependencies and bundled fonts keep their own licenses. The MIT license at the repository root does not replace those terms.
+Open Whiteboard's original application code is MIT licensed. Dependencies and bundled fonts keep their own licenses. The MIT license at the repository root does not replace those terms.
 
 ## Editor and theme
 
@@ -12,9 +12,9 @@ The browser serves notices at `/licenses/index.html`. That page links the exact 
 
 ## Fonts and artwork
 
-Caveat, Newsreader, and Source Sans 3 are distributed under the SIL Open Font License 1.1. Their full notices are included beside the font files in [brand/fonts](apps/web/public/brand/fonts). Theme font notices are included with the dependency notices.
+Caveat and Source Sans 3 are distributed under the SIL Open Font License 1.1. Their full notices are included beside the font files in [brand/fonts](apps/web/public/brand/fonts). Theme font notices are included with the dependency notices.
 
-Huddle Loom's brand illustrations were created for this project with image generation. They are included under the project's MIT license. They are not photographs of people or borrowed upstream product branding.
+The Open Whiteboard logo, favicon, welcome and history illustrations are SVG drawn for this project. The raster onboarding illustrations were created for this project with image generation. All of them are included under the project's MIT license. They are not photographs of people or borrowed upstream product branding.
 
 ## Dependency inventory
 

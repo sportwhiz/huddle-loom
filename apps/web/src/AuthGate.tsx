@@ -113,7 +113,7 @@ function AuthContent({ children }: { children: ReactNode }) {
   if (!bootstrap)
     return (
       <main className="canvas-loading" role="status">
-        Opening Huddle Loom…
+        Opening Open Whiteboard…
       </main>
     );
   if (bootstrap.mode !== "native") return children;

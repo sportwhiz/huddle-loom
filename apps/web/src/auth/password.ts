@@ -54,7 +54,7 @@ export async function rejectCompromisedPassword(value: string) {
         {
           headers: {
             "Add-Padding": "true",
-            "User-Agent": "Huddle Loom password screening",
+            "User-Agent": "Open Whiteboard password screening",
           },
           redirect: "manual",
           signal: AbortSignal.timeout(5000),

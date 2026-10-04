@@ -1,17 +1,17 @@
-<p align="center"><img src="apps/web/public/brand/loom-mark.webp" alt="Huddle Loom logo" width="100"></p>
-<h1 align="center">Huddle Loom</h1>
-<p align="center">Ideas woven together.</p>
+<p align="center"><img src="apps/web/public/brand/favicon.svg" alt="Open Whiteboard logo" width="88"></p>
+<h1 align="center">Open Whiteboard</h1>
+<p align="center">Work it out together.</p>
 
-A whiteboard you can host yourself. Gather sticky notes, sketch a workflow, and work on the same board with other people. Connect an assistant through MCP to turn a written description into editable notes, shapes, and arrows.
+Open Whiteboard is a whiteboard you host yourself. Put sticky notes and sketches on a shared board, draw the arrows between them, and work through the problem with your team as it happens. You can also connect an AI assistant over MCP and have it turn a written description into notes, shapes and arrows that you keep editing by hand.
 
-![A workflow on a Huddle Loom board](docs/images/board-light.jpg)
+![A workflow on an Open Whiteboard board](docs/images/board-light.jpg)
 
 ## What's inside
 
 - An infinite canvas with sticky notes, shapes, drawing, text, frames, documents, tables, and images.
 - Bound arrows that follow objects when you move them. Drag tools onto the board or add a connected next step.
 - Live collaboration, comments, guest links, presentation, timers, and voting.
-- A Studio to organize boards into folders and workbooks. Start from Patterns and revisit revisions with Unravel.
+- A Studio that organizes boards into folders and workbooks. Start a board from a template, and restore an earlier version from its history.
 - Light and dark themes, a skippable first-use tour, and keyboard shortcuts.
 - Local accounts, passkeys or authenticator verification, invitations, recovery, and administration. Email and external sign-in providers are optional.
 - An OAuth-protected MCP server with 21 tools for workflows, workshops, diagrams, search, images, and board editing.
@@ -25,7 +25,7 @@ This is the first public release. Cloudflare is the primary hosting path. The No
 
 Choose a private setup password in the deployment form. The deployment creates the storage and installation keys. Open the app, enter that password, and create your administrator account. You can invite people before setting up email.
 
-You need a Cloudflare account with Workers Paid and R2 enabled. Cloudflare Access is optional. Users sign in to Huddle Loom with their own accounts; a GitHub sign-in provider is not required.
+You need a Cloudflare account with Workers Paid and R2 enabled. Cloudflare Access is optional. Users sign in to Open Whiteboard with their own accounts; a GitHub sign-in provider is not required.
 
 [Cloudflare installation guide](docs/cloudflare-git-deploy.md) covers the deploy form, existing Workers Builds connections, previews, email, and custom domains.
 
@@ -63,7 +63,7 @@ After connecting `https://YOUR_APP/mcp` in a remote MCP client:
 <details>
 <summary>More screenshots</summary>
 
-![The Textile Studio home](docs/images/studio-light.jpg)
+![The Studio home](docs/images/studio-light.jpg)
 ![A workflow in dark mode](docs/images/board-dark.jpg)
 ![The Studio in dark mode](docs/images/studio-dark.jpg)
 ![Connected apps guide](docs/images/connected-apps.jpg)
@@ -75,7 +75,7 @@ Screenshots use sample boards. They contain no production accounts or credential
 
 | Guide | What it covers |
 | --- | --- |
-| [Using Huddle Loom](docs/using-huddle-loom.md) | Boards, sharing, Patterns, and collaboration |
+| [Using Open Whiteboard](docs/using-open-whiteboard.md) | Boards, sharing, templates, and collaboration |
 | [Cloudflare](docs/cloudflare-git-deploy.md) | Deployment and first owner setup |
 | [GoDaddy / Node.js](docs/godaddy-nodejs-installation.md) | ZIP upload, storage, and process replacement |
 | [MCP](docs/mcp.md) | Connecting assistants and creating editable diagrams |
@@ -88,4 +88,4 @@ Screenshots use sample boards. They contain no production accounts or credential
 
 Open a [bug report or feature request](https://github.com/sportwhiz/huddle-loom/issues). For code changes, see [Contributing](CONTRIBUTING.md). Report security problems privately using the process in [SECURITY.md](SECURITY.md).
 
-Huddle Loom's own code is [MIT licensed](LICENSE). Libraries and fonts keep their licenses, including MPL-2.0 components and OFL fonts. See [Third-party notices](THIRD_PARTY_NOTICES.md) and [Upstream](docs/upstream.md). Huddle Loom is an independent project; upstream maintainers do not endorse it.
+Open Whiteboard's own code is [MIT licensed](LICENSE). Libraries and fonts keep their licenses, including MPL-2.0 components and OFL fonts. See [Third-party notices](THIRD_PARTY_NOTICES.md) and [Upstream](docs/upstream.md). Open Whiteboard is an independent project; upstream maintainers do not endorse it.

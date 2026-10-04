@@ -189,7 +189,7 @@ export function registerAuthoringTools(
   server.registerTool(
     'get_authoring_guide',
     {
-      title: 'Huddle Loom authoring guide',
+      title: 'Open Whiteboard authoring guide',
       description:
         'Start here: installed capabilities, recipes for complete boards, native editing semantics, tool limits, and exact collaboration value fields.',
       inputSchema: z.object({}),
@@ -495,7 +495,7 @@ export function registerAuthoringTools(
           role: 'user',
           content: {
             type: 'text',
-            text: `Map this workflow${boardId ? ` on board ${boardId}` : ' on a new board'}: ${description}\nRead the Huddle Loom authoring guide. Include branches, outcomes, responsibility lanes and retries present in the description. Create native sticky notes and bound labeled arrows. Inspect the board, fix material layout issues, and return its link. Label assumptions.`,
+            text: `Map this workflow${boardId ? ` on board ${boardId}` : ' on a new board'}: ${description}\nRead the Open Whiteboard authoring guide. Include branches, outcomes, responsibility lanes and retries present in the description. Create native sticky notes and bound labeled arrows. Inspect the board, fix material layout issues, and return its link. Label assumptions.`,
           },
         },
       ],

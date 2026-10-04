@@ -20,28 +20,28 @@
   align-items: center;
   text-decoration: none;
   color: inherit;
-  font-size: 28px;
-  letter-spacing: -.9px;
-  font-family: "Whiteboard Editorial", Georgia, serif;
+  font-size: 24px;
+  letter-spacing: -.02em;
+  font-family: var(--font-display);
 }
 .identity-brand strong { font-weight: 700; }
 .identity-page {
-  --page-background: #faf9f5;
-  --board-paper: #f5f4ee;
-  --board-dot: #d5dbcf;
-  --board-ink: #345446;
-  --surface: #fffefa;
-  --surface-hover: #eeeee5;
-  --line: #d9dcd2;
-  --border: #d9dcd2;
-  --text: #303748;
-  --text-primary: #303748;
-  --text-secondary: #6e726f;
-  --accent: #3e4f72;
-  --accent-ink: #fffefa;
-  --on-accent: #fffefa;
-  --accent-soft: #e9edf3;
-  --brand-detail: #aa5d46;
+  --page-background: #f8f9fb;
+  --board-paper: #ffffff;
+  --board-dot: #d3d9e1;
+  --board-ink: #1f2633;
+  --surface: #ffffff;
+  --surface-hover: #eef1f5;
+  --line: #dce1e8;
+  --border: #dce1e8;
+  --text: #1f2633;
+  --text-primary: #1f2633;
+  --text-secondary: #5b6474;
+  --accent: #2554c7;
+  --accent-ink: #ffffff;
+  --on-accent: #ffffff;
+  --accent-soft: #e7eefc;
+  --brand-detail: #d2483c;
   display: grid;
   grid-template-columns: minmax(390px, 36%) minmax(0, 1fr);
 }
@@ -59,10 +59,10 @@
 .identity-form-column { min-width: 0; display: flex; flex-direction: column; flex: 1; justify-content: center; }
 .identity-card { width: 100%; margin: 0; padding: 0; }
 .identity-card h1 {
-  font-family: "Whiteboard Editorial", Georgia, serif;
-  font-size: clamp(34px, 3.3vw, 48px);
-  font-weight: 500;
-  letter-spacing: -1.3px;
+  font-family: var(--font-display);
+  font-size: clamp(32px, 3.2vw, 46px);
+  font-weight: 700;
+  letter-spacing: -.028em;
   line-height: 1.04;
   margin: 0 0 18px;
   text-wrap: balance;
@@ -702,22 +702,22 @@
   margin-top: 3px;
 }
 [data-theme="dark"] .identity-page {
-  --page-background: #20242b;
-  --board-paper: #282d33;
-  --board-dot: #434952;
-  --board-ink: #aebcd1;
-  --surface: #2b313b;
-  --surface-hover: #343c46;
-  --line: #434952;
-  --border: #434952;
-  --text: #f0eee5;
-  --text-primary: #f0eee5;
-  --text-secondary: #b9bebf;
-  --accent: #b6c6e7;
-  --accent-ink: #25314a;
-  --on-accent: #25314a;
-  --accent-soft: #354158;
-  --brand-detail: #eaa282;
+  --page-background: #1a1e24;
+  --board-paper: #20252c;
+  --board-dot: #38404b;
+  --board-ink: #c3cede;
+  --surface: #242a32;
+  --surface-hover: #2e353f;
+  --line: #3b434e;
+  --border: #3b434e;
+  --text: #eef1f5;
+  --text-primary: #eef1f5;
+  --text-secondary: #b3bbc7;
+  --accent: #8eaaf5;
+  --accent-ink: #15203d;
+  --on-accent: #15203d;
+  --accent-soft: #2a3756;
+  --brand-detail: #f09083;
 }
 @media (min-width: 1600px) { .identity-page { grid-template-columns: minmax(480px, 30%) minmax(0, 1fr); } }
 @media (min-width: 901px) and (max-height: 800px) {

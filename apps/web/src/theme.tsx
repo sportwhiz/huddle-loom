@@ -32,7 +32,7 @@ function apply() {
     .querySelector('meta[name="theme-color"]')
     ?.setAttribute(
       "content",
-      resolvedTheme() === "dark" ? "#20242b" : "#f5f4ef",
+      resolvedTheme() === "dark" ? "#1a1e24" : "#f5f6f8",
     );
   listeners.forEach((listener) => listener());
 }

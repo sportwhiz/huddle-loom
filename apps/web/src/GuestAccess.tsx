@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { BoardPage } from "./App";
 import { BrandMark } from "./BrandMark";
+import { PRODUCT_NAME, PRODUCT_TAGLINE } from "./product";
 import { ThemeMenu } from "./theme";
 import { guestAccessEnded, setGuestSession, type GuestSession } from "./guest-client";
 import "./auth.css";
@@ -167,7 +168,7 @@ export function GuestAccess() {
       <section className="guest-entry-card">
         <a className="guest-entry-brand" href="/">
           <BrandMark />
-          <span>Huddle Loom</span>
+          <span>{PRODUCT_NAME}</span>
         </a>
         <p className="eyebrow">A place for your next idea</p>
         <h1>
@@ -234,7 +235,7 @@ export function GuestAccess() {
             </small>
           </form>
         )}
-        <p className="guest-entry-footer">Ideas woven together.</p>
+        <p className="guest-entry-footer">{PRODUCT_TAGLINE}.</p>
       </section>
       <div className="guest-entry-art" aria-hidden="true">
         <img src="/brand/huddle.webp" alt="" />

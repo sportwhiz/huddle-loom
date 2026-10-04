@@ -121,7 +121,7 @@ describe("MySQL room storage", () => {
     };
     const pool = { getConnection: async () => connection } as unknown as Pool;
     await expect(createNodeRooms(pool, {} as D1Database)).rejects.toThrow(
-      "Another Huddle Loom Node server",
+      "Another Open Whiteboard Node server",
     );
     expect(connection.destroy).toHaveBeenCalledOnce();
   });
@@ -170,7 +170,7 @@ describe.skipIf(!process.env.NODE_ADAPTER_MYSQL_TEST_URL)(
       try {
         runtime = await createNodeRooms(pool, {} as D1Database);
         await expect(createNodeRooms(pool, {} as D1Database)).rejects.toThrow(
-          "Another Huddle Loom Node server",
+          "Another Open Whiteboard Node server",
         );
         storageConnection = await pool.getConnection();
         const storage = createRoomStorage(storageConnection, roomId);

@@ -826,7 +826,7 @@ export async function identityRoutes(
         await queueMail(
           env,
           changedAddress.old,
-          "Your Huddle Loom email changed",
+          "Your Open Whiteboard email changed",
           "Your sign-in address has changed. If you did not request this, contact your installation owner immediately.",
         ).catch(() => undefined);
       }

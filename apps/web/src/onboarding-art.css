@@ -1,7 +1,7 @@
 .welcome-art {
   overflow: hidden;
   color: var(--text-primary, #252b35);
-  background: var(--welcome-art-background, #f3f2ec);
+  background: var(--welcome-art-background, #f1f3f6);
   border-radius: 16px;
 }
 .welcome-art svg {
@@ -9,7 +9,16 @@
   width: 100%;
   height: auto;
 }
-.welcome-art-loom img { display: block; width: 100%; height: auto; }
+/* Welcome: a whiteboard with notes, marker arrows and a marker tray. */
+.welcome-whiteboard { fill: var(--surface, #fff); stroke: #c6ccd6; stroke-width: 4; }
+[data-theme="dark"] .welcome-whiteboard { stroke: #4a535f; }
+.welcome-marker-stroke, .welcome-marker-head { fill: none; stroke: var(--marker-blue, #2554c7); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.welcome-marker-circle { fill: none; stroke: var(--marker-red, #d2483c); stroke-width: 2.6; opacity: .85; }
+.welcome-tray { fill: #c6ccd6; }
+[data-theme="dark"] .welcome-tray { fill: #4a535f; }
+.welcome-pen.blue { fill: var(--marker-blue, #2554c7); }
+.welcome-pen.red { fill: var(--marker-red, #d2483c); }
+.welcome-pen.green { fill: var(--marker-green, #2f8a57); }
 .welcome-art-huddle { background: #f7f3ea !important; }
 .welcome-art-huddle img { display: block; width: 100%; height: 240px; object-fit: contain; }
 [data-theme="dark"] .welcome-art-huddle { background: transparent !important; }
@@ -100,5 +109,8 @@
   stroke: var(--line, var(--border, #e3e5eb));
 }
 [data-theme="dark"] .welcome-art {
-  --welcome-art-background: #282d33;
+  --welcome-art-background: #20252c;
 }
+.history-snapshot { stroke-width: 2; }
+.history-line { stroke: var(--border, #dce1e8); stroke-width: 2; stroke-linecap: round; }
+.history-tick { fill: var(--surface, #fff); stroke: var(--text-secondary, #5b6474); stroke-width: 1.6; }

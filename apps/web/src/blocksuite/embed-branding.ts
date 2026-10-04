@@ -1,6 +1,6 @@
 // Adaptations to BlockSuite 0.22.4's embed provider registry and idle card.
 // Upstream source and notices: https://github.com/toeverything/blocksuite/tree/v0.22.4
-// The transformations below are distributed with Huddle Loom's corresponding source.
+// The transformations below are distributed with Open Whiteboard's corresponding source.
 export function isEmbedAdaptation(sourceId: string): boolean {
   return sourceId.endsWith('/embed-iframe-block/configs/providers/index.ts') ||
     sourceId.endsWith('/embed-iframe-block/components/embed-iframe-idle-card.ts');

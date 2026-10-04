@@ -127,10 +127,10 @@ try {
     const state = randomBytes(18).toString("base64url");
     const url = new URL(`${origin}/oauth/authorize`);
     url.search = new URLSearchParams({ client_id: registration.client_id, redirect_uri: callback, response_type: "code", scope: "boards:read boards:write collaboration:write boards:export", resource: `${origin}/mcp`, state, code_challenge: createHash("sha256").update(verifier).digest("base64url"), code_challenge_method: "S256" });
-    await page.route("https://assistant.example/start", route => route.fulfill({ contentType: "text/html", body: `<a href="${url.toString()}">Connect Huddle Loom</a>` }));
+    await page.route("https://assistant.example/start", route => route.fulfill({ contentType: "text/html", body: `<a href="${url.toString()}">Connect Open Whiteboard</a>` }));
     await page.goto("https://assistant.example/start");
     const consentResponse = page.waitForResponse(response => response.url() === url.toString() && response.request().method() === "GET");
-    await page.getByRole("link", { name: "Connect Huddle Loom" }).click();
+    await page.getByRole("link", { name: "Connect Open Whiteboard" }).click();
     const response = await consentResponse;
     assert.equal(response.status(), 200);
     assert.equal(response.headers()["referrer-policy"], "same-origin");

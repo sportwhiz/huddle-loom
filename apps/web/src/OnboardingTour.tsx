@@ -5,7 +5,7 @@ import { useDialogFocus } from "./useDialogFocus";
 import { UiIcon } from "./UiIcon";
 import { OnboardingArt } from "./OnboardingArt";
 import { PRODUCT_TAGLINE } from "./product";
-import { WovenTagline } from "./WovenTagline";
+import { MarkerTagline } from "./MarkerTagline";
 import "./onboarding.css";
 
 type Journey = "home" | "board" | "admin";
@@ -14,7 +14,7 @@ type Step = {
   text: string;
   hint: string;
   picture:
-    | "loom"
+    | "welcome"
     | "organize"
     | "notes"
     | "connect"
@@ -27,9 +27,9 @@ const bits: Record<Journey, number> = { home: 1, board: 2, admin: 4 };
 const homeSteps: Step[] = [
   {
     title: PRODUCT_TAGLINE,
-    text: "Bring your notes, sketches, and people onto one board. Start with a single idea, then connect the next.",
+    text: "Put your notes and sketches on one board and bring your team in. Start with one idea, then connect the next.",
     hint: "Your personal workbook starts private. You choose what to share.",
-    picture: "loom",
+    picture: "welcome",
     target: '[data-onboarding="new-board"]',
   },
   {
@@ -42,7 +42,7 @@ const homeSteps: Step[] = [
   {
     title: "Build together",
     text: "Use Share on a board or workbook to invite people. Choose whether they can view, comment, edit, or manage it.",
-    hint: "Choose your thread color in account settings. It identifies your avatar and live cursor.",
+    hint: "Pick your marker color in account settings. Your avatar and live cursor use it.",
     picture: "collaborate",
   },
   {
@@ -57,7 +57,7 @@ const boardSteps: Step[] = [
   {
     title: "Start with a sticky",
     text: "Drag the sticky icon onto the canvas, or select it and click to place a note. Your last color is remembered. Double-click a note to write.",
-    hint: "Patterns are ready-made templates. Open them from the toolbar, or press N to start with a sticky note.",
+    hint: "Templates give you a board that is already laid out. Open them from the toolbar, or press N to start with a sticky note.",
     picture: "notes",
     target: ".canvas-tool-rail",
   },
@@ -77,8 +77,8 @@ const boardSteps: Step[] = [
   },
   {
     title: "Bring people into the conversation",
-    text: "Share the board, leave a comment, or open Huddle for a timer, brainstorming, and voting. Present walks through your frames.",
-    hint: "Find Unravel in the More menu to preview version history and restore earlier work.",
+    text: "Share the board, leave a comment, or open Workshop for a timer, brainstorming, and voting. Present walks through your frames.",
+    hint: "History is in the More menu. Preview an earlier version there before you restore it.",
     picture: "collaborate",
     target: ".header-actions",
   },
@@ -331,7 +331,7 @@ export function OnboardingHost({
           aria-atomic="true"
           key={`${journey}:${step}`}
         >
-          <h2 id="tour-title">{current.title === PRODUCT_TAGLINE ? <WovenTagline /> : current.title}</h2>
+          <h2 id="tour-title">{current.title === PRODUCT_TAGLINE ? <MarkerTagline /> : current.title}</h2>
           <p id="tour-text">{current.text}</p>
           <div className="onboarding-tip">
             <UiIcon name={current.picture === "security" ? "lock" : "help"} />

@@ -139,7 +139,7 @@ export function EmailSetup({ onReady }: { onReady?: () => void }) {
           )}
           {!available ? (
             <p>
-              Update Huddle Loom to include its email connection before
+              Update Open Whiteboard to include its email connection before
               continuing.
             </p>
           ) : (
@@ -162,7 +162,7 @@ export function EmailSetup({ onReady }: { onReady?: () => void }) {
                       type="email"
                       value={sender}
                       onChange={setSender}
-                      hint="For example, huddle@yourdomain.com"
+                      hint="For example, whiteboard@yourdomain.com"
                     />
                   )}
                   <Field

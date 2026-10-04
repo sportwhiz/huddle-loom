@@ -1,5 +1,5 @@
 import { UpdatesPanel } from "./admin/UpdatesPanel";
-import { ThreadColorField } from "./ThreadColorField";
+import { MarkerColorField } from "./MarkerColorField";
 import { securityEventLabel } from "./security-event-label";
 import { openTour } from "./onboarding-events";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
@@ -512,7 +512,7 @@ function AccountPanel() {
                     value={name}
                     onChange={setName}
                   />
-                  <ThreadColorField value={color} onChange={setColor} />
+                  <MarkerColorField value={color} onChange={setColor} />
                 </>
               )}
               {edit === "email" && (
@@ -577,7 +577,7 @@ function AccountPanel() {
                     type="button"
                     onClick={() =>
                       download(
-                        "huddle-loom-recovery-codes.txt",
+                        "open-whiteboard-recovery-codes.txt",
                         codes.join("\n"),
                         "text/plain",
                       )

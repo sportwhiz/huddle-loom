@@ -332,7 +332,7 @@ export async function managedDeployment(
   try {
     installed = await readLive();
     directory = mkdtempSync(resolve(tmpdir(), "huddle-release-"));
-    console.log(`Preparing Huddle Loom ${target.version}.`);
+    console.log(`Preparing Open Whiteboard ${target.version}.`);
     command("git", ["init", directory]);
     command(
       "git",
@@ -428,7 +428,7 @@ export async function managedDeployment(
       db(
         `UPDATE software_updates SET status='succeeded',message=NULL,updated_at=${Date.now()} WHERE id=${quote(job.id)} AND runner_id=${quote(runner)} AND status IN ('deploying','verifying','uncertain')`,
       );
-    console.log(`Huddle Loom ${target.version} is live and verified.`);
+    console.log(`Open Whiteboard ${target.version} is live and verified.`);
     return true;
   } catch (error) {
     if (job)

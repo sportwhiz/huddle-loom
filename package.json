@@ -47,7 +47,7 @@
         "description": "Keeps automatically generated sign-in and encryption keys private and stable across updates. Provisioned automatically."
       },
       "EMAIL": {
-        "description": "Native Cloudflare email connection. Approve your sending domain and confirm a test email in Huddle Loom when you are ready. Accounts and private invitations work before email is enabled."
+        "description": "Native Cloudflare email connection. Approve your sending domain and confirm a test email in Open Whiteboard when you are ready. Accounts and private invitations work before email is enabled."
       }
     }
   },

@@ -158,20 +158,22 @@
   gap: 12px;
   color: var(--text);
   text-decoration: none;
-  font-family: "Whiteboard Editorial", Georgia, serif;
-  font-size: 25px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: -.02em;
   margin-bottom: 64px;
 }
 .guest-entry-brand .brand-mark {
-  width: 42px;
-  height: 48px;
+  width: 34px;
+  height: 34px;
 }
 .guest-entry-card h1 {
-  font-family: "Whiteboard Editorial", Georgia, serif;
-  font-size: clamp(30px, 4vw, 48px);
+  font-family: var(--font-display);
+  font-size: clamp(30px, 4vw, 46px);
   line-height: 1.08;
-  font-weight: 500;
-  letter-spacing: -1.2px;
+  font-weight: 700;
+  letter-spacing: -.028em;
   margin: 12px 0 18px;
   overflow-wrap: anywhere;
 }
@@ -225,11 +227,11 @@
   line-height: 1.6;
 }
 .guest-entry-footer {
-  font-family: "Whiteboard Editorial", Georgia, serif;
-  font-style: italic;
-  font-size: 20px;
+  font-family: var(--font-hand);
+  font-weight: 600;
+  font-size: 26px;
   margin-top: 44px;
-  color: var(--text-secondary);
+  color: var(--text);
 }
 .guest-entry-art {
   display: flex;
@@ -246,9 +248,11 @@
   border-radius: 24px;
 }
 .guest-entry-art p {
-  font-family: "Whiteboard Editorial", Georgia, serif;
-  font-size: 36px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 30px;
   line-height: 1.2;
+  letter-spacing: -.02em;
   text-align: center;
 }
 .guest-entry-art em {

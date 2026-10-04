@@ -110,7 +110,7 @@ export function libraryOptions(
             env,
             user,
             token,
-            "Confirm your Huddle Loom email change",
+            "Confirm your Open Whiteboard email change",
             "Confirm this request from your current address. A second message will verify the new address.",
           );
         },
@@ -200,7 +200,7 @@ export function libraryOptions(
         await queueMail(
           env,
           user.email,
-          "Reset your Huddle Loom password",
+          "Reset your Open Whiteboard password",
           "Use this link to choose a new password. Your other sessions and connected apps will be signed out.",
           link,
           Date.now() + 1800_000,
@@ -219,8 +219,8 @@ export function libraryOptions(
           env,
           user,
           source.searchParams.get("token")!,
-          "Verify your Huddle Loom email",
-          "Confirm this email address to continue to Huddle Loom.",
+          "Verify your Open Whiteboard email",
+          "Confirm this email address to continue to Open Whiteboard.",
         );
       },
       afterEmailVerification: async (user) => {
@@ -303,8 +303,8 @@ export function libraryOptions(
           await queueMail(
             env,
             email,
-            "Sign in to Huddle Loom",
-            "Confirm this sign-in request in Huddle Loom.",
+            "Sign in to Open Whiteboard",
+            "Confirm this sign-in request in Open Whiteboard.",
             `${origin}/magic#token=${encodeURIComponent(source.searchParams.get("token")!)}`,
             Date.now() + 600_000,
           );
