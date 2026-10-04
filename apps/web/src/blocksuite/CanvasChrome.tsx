@@ -1,3 +1,5 @@
+import { DEMO_PATTERNS } from "./demo-patterns";
+import { PatternPreview } from "./PatternPreview";
 import { openTour } from "../onboarding-events";
 import { UiIcon } from "../UiIcon";
 import { canvasPointAt } from "./canvas-hit-test";
@@ -1574,6 +1576,15 @@ export function CanvasChrome({
             make it your own. Everything stays editable.
           </p><img src="/brand/patterns.webp" alt="" width="1254" height="1254" /></div>
           <div className="canvas-template-grid">
+            {DEMO_PATTERNS.map(pattern => (
+              <button type="button" key={pattern.id} className="canvas-template-card"
+                onClick={() => { controller.insertTemplate(pattern.id); setModal(null); }}>
+                <div className="template-preview demo-pattern-preview"><PatternPreview pattern={pattern} /></div>
+                <strong>{pattern.title}</strong>
+                <p>{pattern.description}</p>
+                <span>{pattern.id === "update-flow" ? "Explore the demo" : "Use pattern"} <Icon name="arrow" /></span>
+              </button>
+            ))}
             {templateCards.map((template) => (
               <button
                 type="button"

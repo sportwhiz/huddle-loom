@@ -4,7 +4,13 @@
 
 The Studio holds folders, workbooks, and boards. Create a workbook for a project and give its boards names people can find. Favorites and search help you return to active work. Shared with me shows content another person has granted you access to.
 
-Patterns are starting layouts. A new assistant-created board starts blank unless a pattern is requested.
+Patterns are starting layouts. Open **Patterns** from the board toolbar, then choose a layout. It appears beside existing content and the view fits the new section. Every object remains editable; Undo removes the inserted pattern in one step.
+
+- **How updates work** maps a published release through owner approval, the installer build, verification, and recovery. It explains how your repository deploys approved upstream code while keeping your Studio's data and settings.
+- **50 ideas** gives you fifty blank sticky notes in a roomy grid. Write on them, move them, and group related thoughts.
+- Brainstorm, Retrospective, Kanban, and Workflow offer smaller starting layouts.
+
+A new assistant-created board starts blank unless a pattern is requested.
 
 ## On the board
 
