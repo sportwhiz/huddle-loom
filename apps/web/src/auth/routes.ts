@@ -37,6 +37,7 @@ import { clientIp, limit } from "../security/limits";
 import { audit, auditStatement } from "../security/audit";
 import { invalidationStatement, mailReady } from "../mail/outbox";
 import { currentEmailProof } from "./email-proof";
+import { clearTotpFailures, reserveTotpAttempt } from "./totp-lockout";
 import { HttpError } from "../security/errors";
 import { methodChangeGuard } from "./method-change";
 
@@ -322,6 +323,8 @@ async function libraryRoute(request: Request, env: NativeEnv) {
       return Response.json({ status: true });
     }
   }
+  if (before && path === "/two-factor/verify-totp")
+    await reserveTotpAttempt(env.CATALOG, before.user.id);
   const response = await (await nativeAuth(env)).handler(request);
   if (response.ok || response.status === 302) {
     const after = await readNativeSession(
@@ -351,6 +354,7 @@ async function libraryRoute(request: Request, env: NativeEnv) {
       )
         .bind(new Date().toISOString(), after.session.id)
         .run();
+      await clearTotpFailures(env.CATALOG, after.user.id);
     }
     if (after && path === "/passkey/verify-authentication")
       await env.CATALOG.prepare(
