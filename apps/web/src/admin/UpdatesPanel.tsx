@@ -147,7 +147,7 @@ export function UpdatesPanel() {
               <span className="identity-tag">
                 {data.connected && data.runnerReady
                   ? "Updates connected"
-                  : "Connection needed"}
+                  : "Deployment connection needed"}
               </span>
               {owner && (
                 <button
@@ -353,9 +353,8 @@ export function UpdatesPanel() {
                 </button>
               )}
             </section>
-          ) : (
-            data.available &&
-            !data.checkError && (
+          ) : !data.checkError && data.checkedAt ? (
+            data.available ? (
               <section className="identity-section">
                 <h2>You’re up to date</h2>
                 <p>
@@ -363,8 +362,24 @@ export function UpdatesPanel() {
                   development build.
                 </p>
               </section>
+            ) : (
+              <section className="identity-section" role="status">
+                <h2>No stable release yet</h2>
+                <p>
+                  Release checking is working. Published previews are kept
+                  separate from stable updates; your Studio stays on its current
+                  version.
+                </p>
+                <a
+                  href="https://github.com/sportwhiz/huddle-loom/releases"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View published releases
+                </a>
+              </section>
             )
-          )}
+          ) : null}
           {confirmation && (
             <section
               className="identity-section updates-confirm"
@@ -442,7 +457,7 @@ export function UpdatesPanel() {
                   <p>
                     {data.connected
                       ? "Cloudflare builds updates in your hosting account."
-                      : "Connect once. Future updates start here."}
+                      : "Checking releases works without a deployment connection. Connect once to install future updates here."}
                   </p>
                 </div>
                 <button
