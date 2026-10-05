@@ -79,7 +79,7 @@ export function tourSteps(
       ? [
           step(
             "See the whole story",
-            "Use Fit board to see everything, then zoom into a detail. Drag blank canvas to move around.",
+            "Use Fit board to see everything, then zoom into a detail. Scroll or right-drag to move around.",
             "Your board role controls which editing and commenting tools are available.",
             'button[aria-label="Fit board"]',
           ),
@@ -127,7 +127,7 @@ export function tourSteps(
           ),
           step(
             "Make room for the bigger picture",
-            "Fit board brings every idea into view. Drag blank canvas to pan; hold Shift while dragging to select an area instead.",
+            "Fit board brings every idea into view. Scroll or right-drag to move around, and drag blank canvas to select an area.",
             "The zoom buttons help you move between the whole story and its details.",
             'button[aria-label="Fit board"]',
           ),
