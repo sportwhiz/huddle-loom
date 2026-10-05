@@ -621,9 +621,21 @@ export function CanvasChrome({
           null,
         )
     : null;
+  // Above the notes when there is room; Arrange occupies the top of the
+  // canvas during a multi-selection, so otherwise go below them.
+  const stickyBarTopLimit = state.selection.length > 1 ? 68 : 16;
   const stickyBarStyle = stickyBounds
     ? {
-        top: Math.max(16, stickyBounds.y - 64),
+        top:
+          stickyBounds.y - 64 >= stickyBarTopLimit
+            ? stickyBounds.y - 64
+            : Math.max(
+                stickyBarTopLimit,
+                Math.min(
+                  stickyBounds.y + stickyBounds.h + 12,
+                  host.clientHeight - 64,
+                ),
+              ),
         left: Math.max(
           88,
           Math.min(
