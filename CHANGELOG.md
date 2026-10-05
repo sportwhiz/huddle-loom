@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.3.2
+
+Node downloads now use `open-whiteboard-node.zip`, with an identical `huddle-loom-node.zip` compatibility copy to preserve existing links.
+
+Email setup now explains that GoDaddy includes a sender and email delivery without extra credentials or a custom domain; its delivery test is optional. Cloudflare setup gives the sender, test-inbox and confirmation steps. Invitation screens explain how to send a private link from your own email account while the Studio's email is unavailable. Confirming email setup refreshes the available invitation actions immediately.
+
+The Node update guide explains the difference between GoDaddy's GitHub redeployments and automatic installation of Open Whiteboard releases. This release does not add automatic installation on GoDaddy. Existing storage, keys, update manifests, database schema and board format remain compatible.
+
 ## 0.3.1
 
 The official GitHub repository is moving to `sportwhiz/open-whiteboard`. Release checks now use its permanent GitHub repository identity, so renaming it does not interrupt update discovery. The deployment runner and installation links use the new source URL.

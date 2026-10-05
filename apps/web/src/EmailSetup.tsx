@@ -1,5 +1,5 @@
 import { useEffect, useState, type FormEvent } from "react";
-import { api } from "./auth-client";
+import { api, bootstrapAuth } from "./auth-client";
 import { Field, Feedback, Submit, StepUp } from "./auth-ui";
 
 export function EmailSetup({ onReady }: { onReady?: () => void }) {
@@ -52,6 +52,7 @@ export function EmailSetup({ onReady }: { onReady?: () => void }) {
     try {
       if (attempt) {
         await api("/api/v1/installation/email/confirm", { attempt, code });
+        await bootstrapAuth(true);
         setReady(true);
         onReady?.();
       } else {
@@ -76,7 +77,11 @@ export function EmailSetup({ onReady }: { onReady?: () => void }) {
   return (
     <section className="identity-email-setup" aria-label="Studio email">
       <h2>
-        {ready ? "Your Studio can send email" : "Connect your Studio’s email"}
+        {automaticSender
+          ? "Email is included with GoDaddy"
+          : ready
+            ? "Your Studio can send email"
+            : "Set up email invitations"}
       </h2>
       {ready ? (
         <>
@@ -113,12 +118,16 @@ export function EmailSetup({ onReady }: { onReady?: () => void }) {
         <>
           <p>
             {automaticSender
-              ? "Your hosting includes email sending. Send a test to your inbox to make sure invitations and account emails arrive."
-              : "Send invitations and help people recover their accounts. Use a sender on a domain you own."}{" "}
-            You can finish this later and invite people with private links in
-            the meantime.
+              ? "GoDaddy already handles email sending and chooses the sender address. You can email invitations now; no email password, API key, or custom domain is needed. The test below is optional and checks delivery to your inbox."
+              : "Email invitations are available after you finish sender setup and confirm a test email. Use an address on a domain you control, such as whiteboard@yourdomain.com, not a Gmail or Outlook address."}
           </p>
           {!automaticSender && (
+            <p>
+              You can invite people now with a private link under Administration
+              → Invitations. Copy the link and send it yourself by email or chat.
+            </p>
+          )}
+          {!automaticSender && available && (
             <ol>
               <li>
                 <a
@@ -135,12 +144,17 @@ export function EmailSetup({ onReady }: { onReady?: () => void }) {
                 Enter your sender and your own inbox below. We’ll send a code to
                 check delivery.
               </li>
+              <li>
+                Enter that code here to enable email invitations and account
+                messages.
+              </li>
             </ol>
           )}
           {!available ? (
             <p>
-              Update Open Whiteboard to include its email connection before
-              continuing.
+              This installation’s email connection is unavailable. Check its
+              hosting configuration or update the installation before sending a
+              test. Private invitation links are available now.
             </p>
           ) : (
             <form onSubmit={submit}>
@@ -175,8 +189,20 @@ export function EmailSetup({ onReady }: { onReady?: () => void }) {
                 </>
               )}
               <Submit busy={busy}>
-                {attempt ? "Confirm email works" : "Send test email"}
+                {attempt
+                  ? automaticSender
+                    ? "Confirm test delivery"
+                    : "Confirm and enable email"
+                  : automaticSender
+                    ? "Send optional test email"
+                    : "Send test email"}
               </Submit>
+              {attempt && (
+                <p>
+                  Check your inbox and spam folder for the six-digit code. It
+                  expires after 15 minutes.
+                </p>
+              )}
               {attempt && (
                 <button
                   type="button"

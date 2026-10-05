@@ -44,9 +44,16 @@ After an installation has users, changing the canonical address requires a plann
 
 ## Email
 
-You can create accounts and copy private invitation links without a sender. To send invitations and account messages, open the email setup in Administration and follow the installed provider's instructions.
+You can invite people immediately without setting up email: open **Administration → Invitations**, choose **Create private invitation**, copy the link and send it from your own email account or chat. The app does not send that link for you.
 
-The Cloudflare template includes the `EMAIL` binding. Cloudflare still requires account eligibility and an authorized sending domain. Those approvals cannot be created by application code. Send a test and confirm receipt in the app before enabling email-dependent registration.
+To have the app send invitations and account messages:
+
+1. In Cloudflare, open **Compute → Email Service → Email Sending → Onboard Domain**. Choose a domain you control in that Cloudflare account and approve its DNS setup. General sending to invitees requires Workers Paid. Wait for the domain to become ready.
+2. In Open Whiteboard, open **Administration → System → Email**. Enter a sender on that domain, such as `whiteboard@yourdomain.com`. Your personal Gmail or Outlook address can be the **test inbox**, but is not the sender.
+3. Choose **Send test email**, check that inbox and its spam folder, then enter the six-digit code and choose **Confirm and enable email**. The code expires after 15 minutes.
+4. Open **Administration → Invitations → Invite by email**. Email invitations are available after sender setup is confirmed.
+
+The template already includes the `EMAIL` connection. You do not need to add SMTP settings or an email API key for this Cloudflare path. Domain authorization and account eligibility are still handled by Cloudflare. See [Cloudflare's sending setup](https://developers.cloudflare.com/email-service/get-started/send-emails/).
 
 Resend is also supported. Configure its verified sender and API key privately. See [Administration](security-operations.md#email-and-sign-in-providers).
 

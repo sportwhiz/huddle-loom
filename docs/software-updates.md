@@ -42,7 +42,7 @@ Release discovery works without a deployment hook. Cloudflare checks daily; sign
 
 Official releases come from [sportwhiz/open-whiteboard](https://github.com/sportwhiz/open-whiteboard/releases). Stable releases include a manifest that pins the reviewed source commit, package version, schema digest, board format, and updater protocol. Preview releases are not offered as stable updates.
 
-Release discovery pins the official repository's permanent GitHub ID (`1404455583`), so changing its name does not change the update channel. The deployment runner fetches reviewed source from `sportwhiz/open-whiteboard`. Installer repositories created before the rename should refresh that runner URL; GitHub's old Git URL continues to redirect while the old repository name remains unused. Releases retain `huddle-loom-release.json` and the existing Node archive filenames for compatibility. Installations older than 0.3.1 need an installer-assisted upgrade if their release checks fail after the rename.
+Release discovery pins the official repository's permanent GitHub ID (`1404455583`), so changing its name does not change the update channel. The deployment runner fetches reviewed source from `sportwhiz/open-whiteboard`. Installer repositories created before the rename should refresh that runner URL; GitHub's old Git URL continues to redirect while the old repository name remains unused. Releases retain `huddle-loom-release.json` for updater compatibility. The Node download is `open-whiteboard-node.zip`, with an identical `huddle-loom-node.zip` copy for existing download links. Installations older than 0.3.1 need an installer-assisted upgrade if their release checks fail after the rename.
 
 The GitHub pre-release flag decides whether a release is offered; a version such as `0.1.0` can be stable. If a readable repository has no stable release, Updates shows **No stable release yet**. A missing deployment connection does not prevent checking releases; it prevents installation until the deploy hook is connected.
 
@@ -73,7 +73,9 @@ Live data-format changes need their own migration/backup design and increase the
 
 ## Node.js / GoDaddy
 
-The manifest, version model, owner permissions, update history and UI are reusable. Cloudflare deployment hooks and D1 Time Travel are provider-specific. The Node package already includes its catalog adapters. Automatic GoDaddy updates still need a provider deployment and backup adapter. Use the dashboard ZIP replacement procedure for now. Do not store a GoDaddy account-wide deployment token in the Node runtime to shortcut this boundary.
+Node installations check release availability and show update notices, but they do not automatically install Open Whiteboard releases. Use [GoDaddy's dashboard ZIP replacement procedure](godaddy-nodejs-installation.md#update-an-existing-app) for now. GoDaddy's GitHub connection can redeploy a connected branch when it changes; it does not automatically select our stable release ZIP or keep a private installer repository synced with upstream.
+
+The manifest, version model, owner permissions, update history and UI are reusable. Cloudflare deployment hooks and D1 Time Travel are provider-specific. The Node package already includes its catalog adapters. Automatic GoDaddy updates still need a provider deployment and backup adapter. Do not store a GoDaddy account-wide deployment token in the Node runtime to shortcut this boundary.
 
 ## Local verification
 

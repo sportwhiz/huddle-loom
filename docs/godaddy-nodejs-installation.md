@@ -35,11 +35,27 @@ For a **new** published Studio, also set `HUDDLE_DATABASE_NAMESPACE=live` in Pub
 
 Select your hosting plan and publish through GoDaddy. Open the published address to finish its administrator setup. Check [GoDaddy's upload instructions](https://www.godaddy.com/en-ca/help/upload-my-ai-generated-app-to-godaddy-nodejs-hosting-42987) for the hosting screens.
 
+## Invite people and send email
+
+GoDaddy includes email sending for the app and chooses its sender address automatically. You do not need an email password, SMTP server, API key or custom domain.
+
+- To have the app send an invitation, open **Administration → Invitations → Invite by email**, enter the person's email address and create the invitation.
+- To check delivery, open **Administration → System → Email**. Send the optional test to your own inbox, then enter its six-digit code. Check your spam folder if it does not arrive. This test confirms delivery; it is not required to enable GoDaddy email.
+- To share an invitation yourself, choose **Create private invitation** under **Administration → Invitations**. Copy the link and send it through your own email or chat. This works even when the app cannot send email.
+
+GoDaddy's gateway selects a sender on the app's hosting domain, or an attached verified custom domain. See [GoDaddy's email gateway documentation](https://github.com/godaddy/nodejs-hosting-agent-skill/blob/main/skills/godaddy-nodejs-hosting/email.md).
+
 ## Update an existing app
 
 Download the new release ZIP and upload it to the **same GoDaddy app**. Keep its address, secrets, database and namespace settings. Use GoDaddy's Preview or Publish action for the variant you are updating. After it starts, check your version under **Administration → Updates** and open an existing board.
 
 Open Whiteboard can check for new releases on Node.js Hosting. You install them through GoDaddy's dashboard; the app does not deploy the ZIP for you. Before replacing a Studio you rely on, follow the backup and process-replacement notes below.
+
+### Automatic updates
+
+The ZIP installation does not have automatic installation of Open Whiteboard releases. GoDaddy can automatically redeploy an app connected to a GitHub branch when that branch changes, but that connection does not automatically download our release ZIPs or sync a private installer repository with this public repository.
+
+Open Whiteboard's source repository is a development workspace; the prebuilt Node ZIP is the GoDaddy deployment package. Keep using ZIP replacement for this installation. Release-driven automatic updates would need a GoDaddy deployment integration that installs a qualified package and preserves the existing app, settings and databases. See [GoDaddy's GitHub deployment overview](https://www.godaddy.com/resources/news/godaddy-nodejs-hosting-launch).
 
 ## Hosting reference
 
