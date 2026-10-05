@@ -43,7 +43,7 @@ To test native owner onboarding locally, use the fixtures and `scripts/run-auth-
 pnpm package:node
 ```
 
-The ZIP appears at `apps/web/huddle-loom-node.zip`. It contains the prebuilt editor and server, migrations, pinned production dependency lockfile, release identity, installation guide, and license notices. Credentials and `node_modules` are excluded. The public GitHub release attaches this ZIP and its SHA-256 checksum.
+The ZIP appears at `apps/web/open-whiteboard-node.zip`. It contains the prebuilt editor and server, migrations, pinned production dependency lockfile, release identity, installation guide, and license notices. Credentials and `node_modules` are excluded. The public GitHub release attaches this ZIP and its SHA-256 checksum, plus an identical `huddle-loom-node.zip` compatibility copy with its own checksum file to preserve existing download links.
 
 ## Licenses and releases
 

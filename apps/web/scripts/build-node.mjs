@@ -101,7 +101,9 @@ await writeFile(
   resolve(output, "DEPLOYMENT-STATUS.txt"),
   "Locally qualified Node package. Live GoDaddy qualification is still required.\nGoDaddy uses its durable private catalog plus managed MySQL; other Node hosts may select a full MySQL catalog. Verify TLS, private-volume persistence, isolated Publish settings, canonical app origin/private owner setup, email delivery, backup/restore and process replacement before production use.\n",
 );
-const archive = resolve(root, "huddle-loom-node.zip");
+const archiveName = "open-whiteboard-node.zip";
+const legacyArchiveName = "huddle-loom-node.zip";
+const archive = resolve(root, archiveName);
 await rm(archive, { force: true });
 run(
   "zip",
@@ -113,5 +115,9 @@ if ((await stat(archive)).size >= 100_000_000)
 const checksum = createHash("sha256")
   .update(await readFile(archive))
   .digest("hex");
-await writeFile(`${archive}.sha256`, `${checksum}  huddle-loom-node.zip\n`);
+await writeFile(`${archive}.sha256`, `${checksum}  ${archiveName}\n`);
+// Preserve existing release download links with an identical compatibility copy.
+const legacyArchive = resolve(root, legacyArchiveName);
+await cp(archive, legacyArchive);
+await writeFile(`${legacyArchive}.sha256`, `${checksum}  ${legacyArchiveName}\n`);
 console.log(`Node package: ${archive}`);

@@ -80,7 +80,8 @@ jobs:
           RELEASE_PRERELEASE: ${{ inputs.prerelease }}
         run: |
           test "$(gh repo view "$GH_REPO" --json isPrivate --jq .isPrivate)" = false || { echo 'Public updates require a public source repository. Nothing was published.'; exit 1; }
-          printenv RELEASE_NOTES > release-notes.txt
+          printf 'Node.js download: [open-whiteboard-node.zip](https://github.com/%s/releases/download/%s/open-whiteboard-node.zip)\n\n' "$GH_REPO" "$RELEASE_TAG" > release-notes.txt
+          printenv RELEASE_NOTES >> release-notes.txt
           preview_args=()
           if [ "$RELEASE_PRERELEASE" = true ]; then preview_args+=(--prerelease); fi
-          gh release create "$RELEASE_TAG" huddle-loom-release.json huddle-loom-node.zip huddle-loom-node.zip.sha256 --repo "$GH_REPO" --verify-tag --title "Open Whiteboard $RELEASE_TAG" --notes-file release-notes.txt "${preview_args[@]}"
+          gh release create "$RELEASE_TAG" huddle-loom-release.json open-whiteboard-node.zip open-whiteboard-node.zip.sha256 huddle-loom-node.zip huddle-loom-node.zip.sha256 --repo "$GH_REPO" --verify-tag --title "Open Whiteboard $RELEASE_TAG" --notes-file release-notes.txt "${preview_args[@]}"

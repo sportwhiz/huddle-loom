@@ -14,6 +14,8 @@ test-results/
 apps/web/public/docs/security-operations.html
 
 apps/web/dist-node/
+apps/web/open-whiteboard-node.zip
+apps/web/open-whiteboard-node.zip.sha256
 apps/web/huddle-loom-node.zip
 apps/web/huddle-loom-node.zip.sha256
 

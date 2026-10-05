@@ -6,7 +6,7 @@ You can start with GoDaddy's Preview address. Choose a custom domain when you ar
 
 ## Create your app
 
-1. Download `huddle-loom-node.zip` from [Open Whiteboard releases](https://github.com/sportwhiz/open-whiteboard/releases).
+1. Download [open-whiteboard-node.zip](https://github.com/sportwhiz/open-whiteboard/releases/latest/download/open-whiteboard-node.zip) from the latest stable Open Whiteboard release.
 2. In **GoDaddy Node.js Hosting**, create an app and upload the ZIP. Use GoDaddy's managed MySQL database and Node 22.16 or newer within Node 22.
 3. On **Add secrets**, add `SETUP_PASSWORD` with a private passphrase of at least 16 characters. If GoDaddy has not shown you an app address yet, leave `AUTH_ORIGIN` out for now. You can add it after GoDaddy creates the app.
 4. Open the app's **Preview** link. Open Whiteboard shows a setup guide with that app's address. Copy the displayed address, then add it as `AUTH_ORIGIN` in the app's **Preview** secrets/settings.
