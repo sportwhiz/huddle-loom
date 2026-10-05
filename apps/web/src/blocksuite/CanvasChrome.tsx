@@ -595,13 +595,47 @@ export function CanvasChrome({
     : [];
   const frames = state.items.filter((item) => item.kind === "frame");
   const stickySelection = state.selection.filter((item) => item.simpleSticky);
-  const stickyBounds =
-    state.selection.length === 1
-      ? controller.viewBounds(state.selection[0].id)
-      : null;
+  // A box selection also picks up the arrows between notes, so notes plus
+  // connectors still get the note toolbar. Its actions apply to the notes.
+  const noteSelection =
+    stickySelection.length > 0 &&
+    state.selection.every(
+      (item) => item.simpleSticky || item.kind === "connector",
+    );
+  const stickyBounds = noteSelection
+    ? stickySelection
+        .map((note) => controller.viewBounds(note.id))
+        .reduce<{ x: number; y: number; w: number; h: number } | null>(
+          (union, next) => {
+            if (!next) return union;
+            if (!union) return next;
+            const x = Math.min(union.x, next.x);
+            const y = Math.min(union.y, next.y);
+            return {
+              x,
+              y,
+              w: Math.max(union.x + union.w, next.x + next.w) - x,
+              h: Math.max(union.y + union.h, next.y + next.h) - y,
+            };
+          },
+          null,
+        )
+    : null;
+  // Above the notes when there is room; Arrange occupies the top of the
+  // canvas during a multi-selection, so otherwise go below them.
+  const stickyBarTopLimit = state.selection.length > 1 ? 68 : 16;
   const stickyBarStyle = stickyBounds
     ? {
-        top: Math.max(16, stickyBounds.y - 64),
+        top:
+          stickyBounds.y - 64 >= stickyBarTopLimit
+            ? stickyBounds.y - 64
+            : Math.max(
+                stickyBarTopLimit,
+                Math.min(
+                  stickyBounds.y + stickyBounds.h + 12,
+                  host.clientHeight - 64,
+                ),
+              ),
         left: Math.max(
           88,
           Math.min(
@@ -614,13 +648,9 @@ export function CanvasChrome({
       }
     : undefined;
   useEffect(() => {
-    host.classList.toggle(
-      "whiteboard-note-selection",
-      Boolean(stickySelection.length) &&
-        stickySelection.length === state.selection.length,
-    );
+    host.classList.toggle("whiteboard-note-selection", noteSelection);
     return () => host.classList.remove("whiteboard-note-selection");
-  }, [host, stickySelection.length, state.selection.length]);
+  }, [host, noteSelection]);
   const templateCards = [
     {
       id: "brainstorm" as const,
@@ -1236,9 +1266,7 @@ export function CanvasChrome({
           ) : null}
         </div>
       ) : null}
-      {stickySelection.length > 0 &&
-      stickySelection.length === state.selection.length &&
-      editable ? (
+      {noteSelection && editable ? (
         <div
           className="sticky-selection-actions"
           style={stickyBarStyle}
