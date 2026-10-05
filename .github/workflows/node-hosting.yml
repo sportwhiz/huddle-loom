@@ -73,6 +73,11 @@ jobs:
       - run: pnpm typecheck:node
       - run: pnpm test:node
       - run: pnpm build:node
+      - name: Verify release download copies
+        working-directory: apps/web
+        run: |
+          cmp open-whiteboard-node.zip huddle-loom-node.zip
+          sha256sum --check open-whiteboard-node.zip.sha256 huddle-loom-node.zip.sha256
       - name: Source runtime setup and durable restart
         run: HUDDLE_NODE_TEST_DATABASE=huddle_source_test pnpm --filter @whiteboard/web run test:node
       - name: Install only packaged production dependencies
@@ -86,6 +91,8 @@ jobs:
         with:
           name: huddle-loom-node
           path: |
+            apps/web/open-whiteboard-node.zip
+            apps/web/open-whiteboard-node.zip.sha256
             apps/web/huddle-loom-node.zip
             apps/web/huddle-loom-node.zip.sha256
           if-no-files-found: error
