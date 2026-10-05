@@ -143,6 +143,26 @@ describe("software release control", () => {
       expect.objectContaining({ redirect: "manual" }),
     );
   });
+  it("keeps latest and versioned release checks pinned to the official repository identity", async () => {
+    expect(await publishedRelease()).toEqual(release);
+    expect(await publishedRelease("1.2.1")).toEqual(release);
+    expect(vi.mocked(fetch).mock.calls.map(([url]) => String(url))).toEqual([
+      "https://api.github.com/repositories/1404455583/releases/latest",
+      "https://api.github.com/repositories/1404455583/releases/assets/123",
+      "https://api.github.com/repositories/1404455583/releases/tags/v1.2.1",
+      "https://api.github.com/repositories/1404455583/releases/assets/123",
+    ]);
+  });
+  it("uses the same repository identity when checking an empty stable channel", async () => {
+    vi.mocked(fetch)
+      .mockResolvedValueOnce(new Response("", { status: 404 }))
+      .mockResolvedValueOnce(Response.json([]));
+    expect(await publishedRelease()).toBeNull();
+    expect(vi.mocked(fetch).mock.calls.map(([url]) => String(url))).toEqual([
+      "https://api.github.com/repositories/1404455583/releases/latest",
+      "https://api.github.com/repositories/1404455583/releases?per_page=100",
+    ]);
+  });
   it("discovers important releases without a deploy hook and exposes only public notice data", async () => {
     const local = { ...env, SOFTWARE_UPDATE_HOOK: undefined };
     db.exec("UPDATE software_update_settings SET runner_seen_at=NULL,runner_origin=NULL");

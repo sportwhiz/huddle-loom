@@ -21,7 +21,7 @@ This is the first public release. Cloudflare is the primary hosting path. The No
 
 ## Host on Cloudflare
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/sportwhiz/huddle-loom)
+[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/sportwhiz/open-whiteboard)
 
 Choose a private setup password in the deployment form. The deployment creates the storage and installation keys. Open the app, enter that password, and create your administrator account. You can invite people before setting up email.
 
@@ -31,7 +31,7 @@ You need a Cloudflare account with Workers Paid and R2 enabled. Cloudflare Acces
 
 ## Host on GoDaddy Node.js
 
-Download `huddle-loom-node.zip` from [Releases](https://github.com/sportwhiz/huddle-loom/releases), create a Node.js Hosting app with managed MySQL, and upload the ZIP. Set the app's HTTPS address and a private setup password in the hosting dashboard. The app creates its tables and keys on startup.
+Download `huddle-loom-node.zip` from [Releases](https://github.com/sportwhiz/open-whiteboard/releases), create a Node.js Hosting app with managed MySQL, and upload the ZIP. Add a private `SETUP_PASSWORD` in GoDaddy's secrets. After GoDaddy creates the app, open its Preview link and copy that HTTPS address into `AUTH_ORIGIN` in Preview settings. Restart and create your administrator account. GoDaddy handles dependencies and database connections; the app creates its tables and keys.
 
 [GoDaddy installation guide](docs/godaddy-nodejs-installation.md) includes the exact settings and the differences between Preview and Publish. Other Node hosts can use the same package with a full MySQL catalog. The [Node adapter](apps/web/src/node) is a separate source folder; it shares the editor and application services with Cloudflare.
 
@@ -86,6 +86,6 @@ Screenshots use sample boards. They contain no production accounts or credential
 
 ## Contribute or get help
 
-Open a [bug report or feature request](https://github.com/sportwhiz/huddle-loom/issues). For code changes, see [Contributing](CONTRIBUTING.md). Report security problems privately using the process in [SECURITY.md](SECURITY.md).
+Open a [bug report or feature request](https://github.com/sportwhiz/open-whiteboard/issues). For code changes, see [Contributing](CONTRIBUTING.md). Report security problems privately using the process in [SECURITY.md](SECURITY.md).
 
 Open Whiteboard's own code is [MIT licensed](LICENSE). Libraries and fonts keep their licenses, including MPL-2.0 components and OFL fonts. See [Third-party notices](THIRD_PARTY_NOTICES.md) and [Upstream](docs/upstream.md). Open Whiteboard is an independent project; upstream maintainers do not endorse it.

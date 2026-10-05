@@ -555,7 +555,7 @@ export function ConnectedApps() {
             <p>
               Ask the deployment owner to review the route split in{" "}
               <a
-                href="https://github.com/sportwhiz/huddle-loom/blob/main/docs/operations.md"
+                href="https://github.com/sportwhiz/open-whiteboard/blob/main/docs/operations.md"
                 target="_blank"
                 rel="noreferrer"
               >

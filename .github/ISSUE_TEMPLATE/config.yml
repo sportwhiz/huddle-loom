@@ -1,5 +1,5 @@
 blank_issues_enabled: true
 contact_links:
   - name: Report a security vulnerability
-    url: https://github.com/sportwhiz/huddle-loom/security/advisories/new
+    url: https://github.com/sportwhiz/open-whiteboard/security/advisories/new
     about: Send vulnerability details privately

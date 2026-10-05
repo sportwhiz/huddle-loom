@@ -1,4 +1,7 @@
-export const RELEASE_REPOSITORY = "sportwhiz/huddle-loom";
+export const RELEASE_REPOSITORY = "sportwhiz/open-whiteboard";
+// GitHub keeps this identity when the official repository is renamed. Pin the
+// release channel to it so an old name's redirect is never needed for discovery.
+export const RELEASE_REPOSITORY_ID = 1404455583;
 export const UPDATER_PROTOCOL = 1;
 export type Release = {
   version: string;

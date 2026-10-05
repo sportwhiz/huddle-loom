@@ -1,25 +1,53 @@
 # Open Whiteboard on GoDaddy Node.js Hosting
 
-This package runs the same editor, accounts, administration, OAuth/MCP and board services as the Cloudflare application. Managed MySQL stores board state, uploads and private installation keys. GoDaddy’s durable private volume stores the SQLite account/catalog database, retaining its security triggers without requiring MySQL trigger privileges. Other Node hosts can use a full MySQL catalog. The Cloudflare build and deployment commands keep their existing behavior.
+Upload the ready-made ZIP to GoDaddy, add two app settings, and open your board. GoDaddy installs the dependencies and supplies the managed MySQL connection and server port. Open Whiteboard creates its tables and private sign-in keys when it starts.
 
-A GoDaddy preview has been tested with administrator onboarding, connected notes, comments, collaboration, a package upgrade, and a restart with board data preserved. Before using Publish for important work, verify email, MCP, backups, and the provider limits below. Installation uses a dashboard ZIP upload.
+You can start with GoDaddy's Preview address. Choose a custom domain when you are ready to publish.
 
-## Package
+## Create your app
 
-Download `huddle-loom-node.zip` from [Releases](https://github.com/sportwhiz/huddle-loom/releases). Maintainers can build it with `pnpm package:node` from the repository root. This produces `apps/web/huddle-loom-node.zip` and a SHA-256 checksum file. The archive has a root `package.json`, pinned production dependencies, prebuilt server and editor, and database migrations. It excludes development tools, credentials and `node_modules`.
+1. Download `huddle-loom-node.zip` from [Open Whiteboard releases](https://github.com/sportwhiz/open-whiteboard/releases).
+2. In **GoDaddy Node.js Hosting**, create an app and upload the ZIP. Use GoDaddy's managed MySQL database and Node 22.16 or newer within Node 22.
+3. On **Add secrets**, add `SETUP_PASSWORD` with a private passphrase of at least 16 characters. If GoDaddy has not shown you an app address yet, leave `AUTH_ORIGIN` out for now. You can add it after GoDaddy creates the app.
+4. Open the app's **Preview** link. Open Whiteboard shows a setup guide with that app's address. Copy the displayed address, then add it as `AUTH_ORIGIN` in the app's **Preview** secrets/settings.
+5. Save the settings and restart or redeploy the Preview. Open its link again, enter your setup passphrase, and create your administrator account. Save your recovery code and enroll an authenticator to finish setting up your Studio.
 
-Users upload this archive through the Node.js Hosting dashboard. They do not need to build the repository, install a CLI, or configure GitHub sign-in. GoDaddy installs the production dependencies, validates the package and starts the server using its assigned port.
+These are the two settings you enter:
 
-## First installation
+| Setting | Value |
+| --- | --- |
+| `AUTH_ORIGIN` | The app's HTTPS address from GoDaddy's Preview link or the Open Whiteboard setup page. |
+| `SETUP_PASSWORD` | Your own private setup passphrase, at least 16 characters. You use it to create the first administrator account. |
 
-1. Create a Node.js Hosting app and enable its managed MySQL database. Use Node 22.16 or newer within Node 22. The host supplies `PORT` and the five `DB_*` connection settings; keep them in the hosting dashboard.
-2. You may upload the package before these two settings are ready. The app serves a public installation guide instead of crashing for a missing or invalid canonical address or setup passphrase. It never accepts a passphrase, writes settings, or lets a visitor claim ownership. Set `AUTH_ORIGIN` to the exact public application origin, such as `https://your-app.example.com`, without a path or trailing slash. Set a private `SETUP_PASSWORD` of at least 16 characters. Select the intended Preview or Publish settings tab; each variant has its own settings. No GitHub OAuth credentials are needed. Keep the setup password private.
-3. Upload `huddle-loom-node.zip`. Startup creates the database tables and private installation keys automatically once configured. The guide only handles address and setup-passphrase configuration; a missing database, unsupported permissions or conflicting active server prevents startup rather than exposing an incomplete app.
-4. Open that application URL. Enter your setup password, create your administrator username and password, save the recovery code and enroll an authenticator. Finish the Studio setup.
-5. Send a test email to your inbox from the setup screen. GoDaddy selects the sender. Enter the received code to confirm delivery. Private account invitation links work before email is confirmed.
-6. Create a board, open it in two browser sessions and verify collaboration. From Connected apps, connect the production origin ending in `/mcp` to your assistant and try a workflow with connected sticky notes.
+**`AUTH_ORIGIN` means “the address people use to open this app.”** Copy the actual address GoDaddy gives you. Use `https://` and the hostname, without a path or trailing slash. For example, if you open `https://my-board.example.com/settings/account`, enter `https://my-board.example.com`. The example is not an address to enter for your app.
 
-The default `HUDDLE_PLATFORM=godaddy` uses the qualified private catalog under `/private/huddle-loom` and enables the managed mail gateway. No extra storage setting is required. `node-mysql` selects the full MySQL catalog on other Node hosts; `node-private-volume` requires an explicitly configured persistent directory. Keep an existing installation’s backend and directory settings unchanged.
+Keep your setup passphrase in your password manager. Enter it in GoDaddy's secrets and, after restart, on the administrator setup screen. The first public guide only explains the settings; it does not ask you to enter a password.
+
+GoDaddy handles dependency installation, the port and database connection settings. Open Whiteboard handles table creation, storage and sign-in keys. You do not need terminal commands, a source build, a GitHub sign-in app, or hand-created database tables for this setup.
+
+You can create boards and invite people once your Studio is ready. The setup screen also lets you send a test email and confirm delivery. Connect an assistant later from **Connected apps**.
+
+## Publish when you are ready
+
+GoDaddy keeps **Preview** and **Publish** settings separate. In Publish settings, set `AUTH_ORIGIN` to the published HTTPS address GoDaddy gives you, or your connected custom domain. Set the private `SETUP_PASSWORD` there too.
+
+For a **new** published Studio, also set `HUDDLE_DATABASE_NAMESPACE=live` in Publish settings. This gives that Studio separate data from the existing Preview. Keep Preview's current settings. If your published Studio already has boards, keep its existing namespace and storage settings when you update it. Changing them selects different data.
+
+Select your hosting plan and publish through GoDaddy. Open the published address to finish its administrator setup. Check [GoDaddy's upload instructions](https://www.godaddy.com/en-ca/help/upload-my-ai-generated-app-to-godaddy-nodejs-hosting-42987) for the hosting screens.
+
+## Update an existing app
+
+Download the new release ZIP and upload it to the **same GoDaddy app**. Keep its address, secrets, database and namespace settings. Use GoDaddy's Preview or Publish action for the variant you are updating. After it starts, check your version under **Administration → Updates** and open an existing board.
+
+Open Whiteboard can check for new releases on Node.js Hosting. You install them through GoDaddy's dashboard; the app does not deploy the ZIP for you. Before replacing a Studio you rely on, follow the backup and process-replacement notes below.
+
+## Hosting reference
+
+The details below cover database security, backups and other Node hosts. They are separate from the GoDaddy setup steps above.
+
+Open Whiteboard uses managed MySQL for board state, uploads and private installation keys. On GoDaddy it keeps the SQLite account/catalog database in the durable private directory under `/private/huddle-loom`. The default `HUDDLE_PLATFORM=godaddy` also enables the managed mail gateway; you do not need an extra storage setting for a new GoDaddy app. Other Node hosts can select a full MySQL catalog with `node-mysql`, or configure a persistent directory with `node-private-volume`.
+
+A GoDaddy Preview has been exercised with administrator setup, collaboration, a package update, and a restart that retained board data. Verify email, assistant connections, backups and the hosting limits before relying on a published Studio for important work.
 
 ### Database security
 
@@ -49,7 +77,7 @@ This protects live collaboration from two servers keeping different in-memory st
 
 Use separate installations for preview and production. `HUDDLE_DATABASE_NAMESPACE=preview` or `live` can separate supported Node installations inside a shared managed database. GoDaddy has separate Preview and Publish secrets/settings tabs and a “Sync from Preview” action; the managed database and private volume are shared. Configure each variant separately. For a new production installation, use the default `HUDDLE_PLATFORM=godaddy` and `HUDDLE_DATABASE_NAMESPACE=live` in Publish, while preserving the existing Preview backend, data directory and namespace settings. Do not blindly sync Preview settings into Publish, especially when Preview uses the legacy private SQLite catalog. Do not switch namespace values on an existing installation during updates: the value identifies its data, not the deployment label. For private SQLite catalogs, a nonempty namespace selects a matching subdirectory inside the private data directory; an unset namespace preserves the original catalog path. The namespace-aware runtime isolates MySQL tables, keys, assets and ownership locks; verify the intended variant settings before running both concurrently.
 
-## Updates
+## Backup and replacement details
 
 1. Take a coordinated restorable backup of the private SQLite catalog and complete MySQL database, including installation keys, board state, history and uploaded assets. Full MySQL installations need that database alone. Test restores periodically.
 2. Upload the new package to the same app. Keep `AUTH_ORIGIN`, the database connection and setup settings.
@@ -59,7 +87,7 @@ Use separate installations for preview and production. `HUDDLE_DATABASE_NAMESPAC
 
 An older package can refuse a database migrated by a newer version. Do not treat an old code upload as a guaranteed rollback. Restore the matching full database backup and code together in an isolated environment, or use a documented forward repair. Replacing private installation keys invalidates sessions and can make encrypted settings unreadable.
 
-## Before a supported GoDaddy release
+## Maintainer qualification
 
 Verify on the actual hosting product:
 

@@ -88,7 +88,7 @@ There are two encryption systems: `AUTH_ENCRYPTION_KEYS` for configured secrets 
 
 Restrict registration, suspend affected accounts or revoke assistant grants, and preserve sanitized audit records. Protect hosting credentials separately from application accounts. Rotate a compromised credential using its supported procedure and review the data it could access.
 
-For a suspected product vulnerability, use [private reporting](https://github.com/sportwhiz/huddle-loom/security/advisories/new). Include the version and hosting adapter, with tokens and board content removed.
+For a suspected product vulnerability, use [private reporting](https://github.com/sportwhiz/open-whiteboard/security/advisories/new). Include the version and hosting adapter, with tokens and board content removed.
 
 ## Authenticator lockout
 

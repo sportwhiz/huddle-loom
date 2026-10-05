@@ -1,6 +1,6 @@
 {
   "name": "huddle-loom",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "packageManager": "pnpm@10.30.3",
   "pnpm": {
@@ -58,6 +58,6 @@
   "description": "A self-hosted whiteboard for shared ideas and editable workflows.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sportwhiz/huddle-loom.git"
+    "url": "https://github.com/sportwhiz/open-whiteboard.git"
   }
 }

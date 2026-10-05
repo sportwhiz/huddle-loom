@@ -10,7 +10,7 @@ import {
   schemaDigest,
 } from "../../../scripts/releases/build-info.mjs";
 
-const repository = "sportwhiz/huddle-loom";
+const repository = "sportwhiz/open-whiteboard";
 const active = "('queued','building','deploying','verifying','uncertain')";
 export const quote = (value) => "'" + String(value).replaceAll("'", "''") + "'";
 function run(command, args, options = {}) {
