@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+Dragging the empty canvas now selects an area, as it does in other whiteboards, without holding a modifier key. Right-drag, trackpad or mouse-wheel scrolling, Space and drag, and the hand tool move around the board. Right-drag also works inside a frame, so boards made from templates can be moved with the mouse. Board help, the board guides and the user guide describe the new controls.
+
 ## 0.3.2
 
 Node downloads now use `open-whiteboard-node.zip`, with an identical `huddle-loom-node.zip` compatibility copy to preserve existing links.

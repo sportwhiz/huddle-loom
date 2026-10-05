@@ -30,7 +30,7 @@ function fixture() {
     tool: { currentTool$: { peek: () => ({ toolName: 'default' }) } },
     viewport: { zoom: 2, toModelCoord: (x: number, y: number) => [x / 2, y / 2], applyDeltaCenter: delta },
     selection: { editing: false, isInSelectedRect: () => false },
-    getElementByPoint: vi.fn((): object | null => null),
+    getElementByPoint: vi.fn((): object[] => []),
   };
   const tool = new CanvasNavigationTool(gfx as never);
   tool.mounted();
@@ -52,61 +52,14 @@ afterEach(() => {
 });
 
 describe('empty canvas navigation', () => {
-  it('pans by screen distance at the current zoom without claiming a click', () => {
+  it('leaves plain left drags on empty canvas to area selection', () => {
     const { emit, delta, cursor } = fixture();
     expect(emit('pointerDown')).toBeUndefined();
+    expect(emit('dragStart')).toBeUndefined();
+    expect(emit('dragMove', pointer({}, 280, 340))).toBeUndefined();
+    expect(emit('dragEnd')).toBeUndefined();
     expect(delta).not.toHaveBeenCalled();
-    expect(emit('dragStart')).toBe(false);
-    expect(emit('dragMove', pointer({}, 280, 340))).toBe(false);
-    expect(delta).toHaveBeenLastCalledWith(-40, -20);
-    emit('dragMove', pointer({}, 300, 320));
-    expect(delta).toHaveBeenLastCalledWith(-10, 10);
-    expect(emit('dragEnd')).toBe(false);
-    expect(cursor).toHaveBeenLastCalledWith('canvas-panning', false);
-    expect(emit('dragMove')).toBeUndefined();
-  });
-
-  it.each(['shiftKey', 'altKey', 'ctrlKey', 'metaKey'])('preserves native modified gestures: %s', key => {
-    const { emit, delta } = fixture();
-    emit('pointerDown', pointer({ [key]: true }));
-    expect(emit('dragStart', pointer({ [key]: true }))).toBeUndefined();
-    expect(emit('dragMove')).toBeUndefined();
-    expect(delta).not.toHaveBeenCalled();
-  });
-
-  it('respects Shift pressed between pointer-down and the drag threshold', () => {
-    const { emit } = fixture();
-    emit('pointerDown');
-    expect(emit('dragStart', pointer({ shiftKey: true }))).toBeUndefined();
-  });
-
-  it('leaves objects, selection bounds, editing, and native handles with the editor', () => {
-    for (const kind of ['object', 'selection', 'editing', 'control']) {
-      const { emit, gfx, delta } = fixture();
-      if (kind === 'object') gfx.getElementByPoint.mockReturnValue({ id: 'note' });
-      if (kind === 'selection') gfx.selection.isInSelectedRect = () => true;
-      if (kind === 'editing') gfx.selection.editing = true;
-      emit('pointerDown', pointer(kind === 'control' ? { composedPath: () => [new TestElement()] } : {}));
-      expect(emit('dragStart')).toBeUndefined();
-      expect(delta).not.toHaveBeenCalled();
-      disposers.pop()!();
-    }
-  });
-
-  it('preserves creation tools, Hand, touch, pen and non-primary buttons', () => {
-    for (const toolName of ['shape', 'whiteboard:sticky', 'brush', 'pan']) {
-      const { emit, gfx } = fixture();
-      gfx.tool.currentTool$.peek = () => ({ toolName });
-      emit('pointerDown');
-      expect(emit('dragStart')).toBeUndefined();
-      disposers.pop()!();
-    }
-    for (const values of [{ pointerType: 'touch' }, { pointerType: 'pen' }, { button: 1 }, { button: 2 }, { isPrimary: false }]) {
-      const { emit } = fixture();
-      emit('pointerDown', pointer(values));
-      expect(emit('dragStart')).toBeUndefined();
-      disposers.pop()!();
-    }
+    expect(cursor).not.toHaveBeenCalledWith('canvas-panning', true);
   });
 
   it('routes native right dragging through the same blank-canvas hit test and zoom', () => {
@@ -122,10 +75,27 @@ describe('empty canvas navigation', () => {
     expect(delta).toHaveBeenLastCalledWith(-40, -20);
   });
 
+  it('pans from inside a frame but not from an object drawn on it', () => {
+    for (const [hits, pans] of [[[{ flavour: 'affine:frame' }], true], [[{ flavour: 'affine:frame' }, { flavour: 'affine:note' }], false]] as const) {
+      const { host, gfx, delta } = fixture();
+      gfx.getElementByPoint.mockReturnValue([...hits]);
+      const down = Object.assign(new Event('pointerdown', { cancelable: true }), {
+        button: 2, isPrimary: true, pointerType: 'mouse', pointerId: 1, clientX: 200, clientY: 300, composedPath: () => [],
+      });
+      host.dispatchEvent(down);
+      window.dispatchEvent(Object.assign(new Event('pointermove', { cancelable: true }), {
+        buttons: 2, pointerId: 1, clientX: 280, clientY: 340,
+      }));
+      expect(down.defaultPrevented).toBe(pans);
+      expect(delta).toHaveBeenCalledTimes(pans ? 1 : 0);
+      disposers.pop()!();
+    }
+  });
+
   it('preserves right-clicks on objects, selections, controls, and with creation tools', () => {
     for (const kind of ['object', 'selection', 'editing', 'control', 'shape']) {
       const { host, gfx, delta } = fixture();
-      if (kind === 'object') gfx.getElementByPoint.mockReturnValue({ id: 'note' });
+      if (kind === 'object') gfx.getElementByPoint.mockReturnValue([{ id: 'note' }]);
       if (kind === 'selection') gfx.selection.isInSelectedRect = () => true;
       if (kind === 'editing') gfx.selection.editing = true;
       if (kind === 'shape') gfx.tool.currentTool$.peek = () => ({ toolName: 'shape' });
@@ -138,18 +108,5 @@ describe('empty canvas navigation', () => {
       expect(delta).not.toHaveBeenCalled();
       disposers.pop()!();
     }
-  });
-
-  it.each(['blur', 'pointercancel', 'keydown'])('ends navigation cleanly on %s', type => {
-    const { emit, delta, cursor } = fixture();
-    emit('pointerDown');
-    emit('dragStart');
-    window.dispatchEvent(Object.assign(new Event(type), { key: 'Escape' }));
-    expect(cursor).toHaveBeenLastCalledWith('canvas-panning', false);
-    expect(emit('dragMove')).toBe(false);
-    expect(delta).not.toHaveBeenCalled();
-    emit('dragEnd');
-    emit('pointerDown');
-    expect(emit('dragStart')).toBe(false);
   });
 });

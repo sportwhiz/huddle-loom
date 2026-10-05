@@ -18,7 +18,7 @@ Drag a sticky-note or shape tool onto the canvas to place the last style you cho
 
 Use the connected-next-step control to add a note or shape with an arrow. Bound connectors follow their objects when you move them. Frames keep sections together; documents and tables hold details that would be difficult to read on a sticky note.
 
-Pan with the hand tool, Space and drag, or drag the empty background using the configured pointer behavior. Right-drag the empty background pans as well. Use the zoom controls to fit the board. Selection, tool, and editing shortcuts are listed in board help.
+Drag the empty background to select an area. To pan, scroll with a trackpad or mouse wheel, right-drag the empty background, hold Space and drag, or use the hand tool. Use the zoom controls to fit the board. Selection, tool, and editing shortcuts are listed in board help.
 
 Use History in the More menu to inspect saved versions. A native archive includes editable board data and referenced uploads. An image export is useful for reading or presenting elsewhere, but does not preserve editing behavior.
 

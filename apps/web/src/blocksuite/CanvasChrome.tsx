@@ -1503,7 +1503,7 @@ export function CanvasChrome({
               Browse templates
             </button>
           </div>
-          <small>Press N for a note · Drag empty canvas to move around</small>
+          <small>Press N for a note · Scroll or right-drag to move around</small>
         </div>
       ) : null}
       <div className="canvas-mode-hint">
@@ -1640,8 +1640,8 @@ export function CanvasChrome({
               ["Duplicate", "⌘ D"],
               ["Group / ungroup", "⌘ G / ⌘ ⇧ G"],
               ["Pan temporarily", "Space + drag"],
-              ["Pan with Select", "Left or right drag on blank canvas"],
-              ["Select an area", "Shift + drag"],
+              ["Pan", "Scroll, or right-drag on blank canvas"],
+              ["Select an area", "Drag on blank canvas"],
               ["Find on board", "⌘ F"],
               ["Finish editing / deselect", "Esc"],
               ["Laser pointer", "Shift + L"],
