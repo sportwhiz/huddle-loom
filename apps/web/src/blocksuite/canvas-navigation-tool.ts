@@ -27,11 +27,15 @@ export class CanvasNavigationTool extends BaseTool {
     const [x, y] = this.gfx.viewport.toModelCoord(viewX, viewY);
     const interactive = raw.composedPath().some(target => target instanceof HTMLElement &&
       target.matches('button, input, textarea, select, [contenteditable="true"], [role="button"], affine-toolbar-widget'));
-    // A frame's interior is background for navigation; anything drawn on top
-    // of it keeps its own right-click.
-    const onObject = this.gfx.getElementByPoint(x, y, { all: true })
-      .some(element => !('flavour' in element && element.flavour === 'affine:frame'));
-    return !this.gfx.selection.editing && !interactive &&
-      !this.gfx.selection.isInSelectedRect(x, y) && !onObject;
+    // A frame's interior is background for navigation, even while the frame
+    // is selected; anything drawn on top of it keeps its own right-click.
+    const isFrame = (element: unknown) =>
+      Boolean(element && typeof element === 'object' && 'flavour' in element &&
+        (element as { flavour: string }).flavour === 'affine:frame');
+    const onObject = this.gfx.getElementByPoint(x, y, { all: true }).some(element => !isFrame(element));
+    const selected = this.gfx.selection.selectedElements;
+    const inSelection = this.gfx.selection.isInSelectedRect(x, y) &&
+      !(selected.length > 0 && selected.every(isFrame));
+    return !this.gfx.selection.editing && !interactive && !inSelection && !onObject;
   }
 }

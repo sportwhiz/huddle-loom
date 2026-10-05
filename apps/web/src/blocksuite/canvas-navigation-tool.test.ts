@@ -29,7 +29,7 @@ function fixture() {
     std: { host },
     tool: { currentTool$: { peek: () => ({ toolName: 'default' }) } },
     viewport: { zoom: 2, toModelCoord: (x: number, y: number) => [x / 2, y / 2], applyDeltaCenter: delta },
-    selection: { editing: false, isInSelectedRect: () => false },
+    selection: { editing: false, isInSelectedRect: () => false, selectedElements: [] as object[] },
     getElementByPoint: vi.fn((): object[] => []),
   };
   const tool = new CanvasNavigationTool(gfx as never);
@@ -79,6 +79,25 @@ describe('empty canvas navigation', () => {
     for (const [hits, pans] of [[[{ flavour: 'affine:frame' }], true], [[{ flavour: 'affine:frame' }, { flavour: 'affine:note' }], false]] as const) {
       const { host, gfx, delta } = fixture();
       gfx.getElementByPoint.mockReturnValue([...hits]);
+      const down = Object.assign(new Event('pointerdown', { cancelable: true }), {
+        button: 2, isPrimary: true, pointerType: 'mouse', pointerId: 1, clientX: 200, clientY: 300, composedPath: () => [],
+      });
+      host.dispatchEvent(down);
+      window.dispatchEvent(Object.assign(new Event('pointermove', { cancelable: true }), {
+        buttons: 2, pointerId: 1, clientX: 280, clientY: 340,
+      }));
+      expect(down.defaultPrevented).toBe(pans);
+      expect(delta).toHaveBeenCalledTimes(pans ? 1 : 0);
+      disposers.pop()!();
+    }
+  });
+
+  it('pans inside a selected frame but not inside another selection', () => {
+    for (const [selected, pans] of [[[{ flavour: 'affine:frame' }], true], [[{ flavour: 'affine:note' }], false]] as const) {
+      const { host, gfx, delta } = fixture();
+      gfx.selection.isInSelectedRect = () => true;
+      gfx.selection.selectedElements = [...selected];
+      gfx.getElementByPoint.mockReturnValue([{ flavour: 'affine:frame' }]);
       const down = Object.assign(new Event('pointerdown', { cancelable: true }), {
         button: 2, isPrimary: true, pointerType: 'mouse', pointerId: 1, clientX: 200, clientY: 300, composedPath: () => [],
       });
