@@ -239,6 +239,13 @@ export function AdminPanel({ section }: { section: string }) {
       {data && section === "people" && (
         <>
           {!authSnapshot()?.email && <LocalInvitations />}
+          {!authSnapshot()?.email && (
+            <p>
+              Email sending is not set up yet. Use the private invitation link
+              above, or <a href="/settings/system">set up email in System</a>.
+              You can send a copied link from your own email account.
+            </p>
+          )}
           <div className="identity-toolbar">
             <input
               aria-label="Search people"
@@ -272,7 +279,7 @@ export function AdminPanel({ section }: { section: string }) {
               disabled={!authSnapshot()?.email}
               onClick={() => setInviteOpen(!inviteOpen)}
             >
-              {inviteOpen ? "Close form" : "Invite people"}
+              {inviteOpen ? "Close form" : "Invite by email"}
             </button>
           </div>
           {inviteOpen && (
@@ -380,7 +387,14 @@ export function AdminPanel({ section }: { section: string }) {
         <>
           <LocalInvitations />
           <h2>Email invitations</h2>
-          {!authSnapshot()?.email && <p>Connect email in System to invite people by email. Private links above are ready to use.</p>}
+          {!authSnapshot()?.email && (
+            <p>
+              The Studio cannot send email invitations until email is set up.
+              {" "}<a href="/settings/system">Set up email in System</a>, or copy
+              a private invitation link above and send it from your own email
+              account.
+            </p>
+          )}
           <div className="identity-toolbar">
             <input
               aria-label="Search invitations"
@@ -685,14 +699,20 @@ export function AdminPanel({ section }: { section: string }) {
       )}
       {data && section === "system" && (
         <>
-          {authSnapshot()?.account?.role === "owner" && <EmailSetup />}
+          {authSnapshot()?.account?.role === "owner" && (
+            <EmailSetup
+              onReady={() => {
+                void load().catch((failure) => setError(failure.message));
+              }}
+            />
+          )}
           <section className="identity-section">
             <h2>Installation</h2>
             <Status label="Canonical origin" value={data.origin} />
             <Status label="Authentication" value={data.authentication} />
             <Status label="Access integration" value={data.accessIntegration} />
             <Status
-              label="Email sender configured"
+              label="Email sending available"
               value={data.emailReady ? "Yes" : "No"}
             />
             <button
@@ -707,8 +727,8 @@ export function AdminPanel({ section }: { section: string }) {
               Send delivery test
             </button>
             <p>
-              Provider acceptance is recorded separately from delivery. Verify
-              your inbox and sender DNS.
+              Provider acceptance does not confirm inbox delivery. Check your
+              inbox and spam folder for the test message.
             </p>
             <a href={data.recoveryGuide}>
               Backup, restore, and emergency recovery guide

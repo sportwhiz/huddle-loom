@@ -73,7 +73,9 @@ Live data-format changes need their own migration/backup design and increase the
 
 ## Node.js / GoDaddy
 
-The manifest, version model, owner permissions, update history and UI are reusable. Cloudflare deployment hooks and D1 Time Travel are provider-specific. The Node package already includes its catalog adapters. Automatic GoDaddy updates still need a provider deployment and backup adapter. Use the dashboard ZIP replacement procedure for now. Do not store a GoDaddy account-wide deployment token in the Node runtime to shortcut this boundary.
+Node installations check release availability and show update notices, but they do not automatically install Open Whiteboard releases. Use [GoDaddy's dashboard ZIP replacement procedure](godaddy-nodejs-installation.md#update-an-existing-app) for now. GoDaddy's GitHub connection can redeploy a connected branch when it changes; it does not automatically select our stable release ZIP or keep a private installer repository synced with upstream.
+
+The manifest, version model, owner permissions, update history and UI are reusable. Cloudflare deployment hooks and D1 Time Travel are provider-specific. The Node package already includes its catalog adapters. Automatic GoDaddy updates still need a provider deployment and backup adapter. Do not store a GoDaddy account-wide deployment token in the Node runtime to shortcut this boundary.
 
 ## Local verification
 

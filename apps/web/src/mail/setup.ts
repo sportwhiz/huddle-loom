@@ -143,8 +143,8 @@ export async function mailSetupRoutes(
       const message = {
         to: recipient,
         subject: "Confirm email for your Open Whiteboard Studio",
-        text: `Your confirmation code is ${code}. Enter it in Open Whiteboard within 15 minutes to enable email.`,
-        html: `<p>Your Open Whiteboard confirmation code is <strong>${code}</strong>.</p><p>Enter it in your Studio within 15 minutes to enable email.</p>`,
+        text: `Your confirmation code is ${code}. Enter it in Open Whiteboard within 15 minutes to ${env.MANAGED_MAIL ? "confirm test delivery" : "enable email"}.`,
+        html: `<p>Your Open Whiteboard confirmation code is <strong>${code}</strong>.</p><p>Enter it in your Studio within 15 minutes to ${env.MANAGED_MAIL ? "confirm test delivery" : "enable email"}.</p>`,
       };
       if (env.MANAGED_MAIL) await env.MANAGED_MAIL.send(message);
       else await env.EMAIL!.send({ ...message, from: sender });
