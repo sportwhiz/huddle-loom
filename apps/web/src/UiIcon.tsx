@@ -11,6 +11,13 @@ const paths = {
       <path d="M7 4h6a4 4 0 0 1 0 8H7V4Zm0 8h7a4 4 0 0 1 0 8H7v-8Z" />
     </>
   ),
+  italic: <path d="M14 4h-4m4 0-4 16m0 0H6m4 0h4M14 4h4" />,
+  underline: <><path d="M7 4v7a5 5 0 0 0 10 0V4" /><path d="M5 20h14" /></>,
+  strike: <><path d="M16.5 7.5C16 5.6 14.3 4.5 12 4.5c-2.6 0-4.5 1.4-4.5 3.4 0 1.5 1 2.4 2.6 3.1" /><path d="M4 12h16" /><path d="M8 16.5c.5 1.9 2.2 3 4.5 3 2.6 0 4.5-1.4 4.5-3.4 0-.9-.3-1.5-.9-2.1" /></>,
+  textColor: <path d="m6 18 6-14 6 14M8.3 13h7.4" />,
+  alignLeft: <path d="M4 6h16M4 10h10M4 14h16M4 18h10" />,
+  alignCenter: <path d="M4 6h16M7 10h10M4 14h16M7 18h10" />,
+  alignRight: <path d="M4 6h16M10 10h10M4 14h16M10 18h10" />,
   lock: (
     <>
       <rect x="5" y="10" width="14" height="11" rx="2" />

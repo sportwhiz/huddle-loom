@@ -6,6 +6,7 @@ import { canvasPointAt } from "./canvas-hit-test";
 import {
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
   type ReactNode,
@@ -18,6 +19,8 @@ import {
 } from "@blocksuite/affine/model";
 import {
   STICKY_COLORS,
+  TEXT_MARKS,
+  type TextMark,
   type CanvasController,
   type CanvasOptions,
   type CanvasState,
@@ -26,7 +29,37 @@ import {
 import { CONNECTION_PORTS, type Direction, type Arrangement } from "./layout";
 import { usePointerDrag, type DragPoint } from "./pointer-drag";
 import { loadToolPreferences, saveToolPreferences } from "./tool-preferences";
+import {
+  STICKY_ALIGNMENTS,
+  STICKY_FONTS,
+  STICKY_SIZES,
+  STICKY_TEXT_COLORS,
+  stickyFontCss,
+  stickySizePx,
+  stickyTextCss,
+  type StickyAlign,
+  type StickyTextStyle,
+} from "./sticky-text-style";
+import {
+  createStickyInlineEditor,
+  MARK_SHORTCUTS,
+  markForShortcut,
+  pastedStickyText,
+  type StickyInlineEditor,
+} from "./sticky-rich-text";
 import "./canvas-chrome.css";
+
+const ALIGN_ICONS: Record<StickyAlign, IconName> = {
+  left: "alignLeft",
+  center: "alignCenter",
+  right: "alignRight",
+};
+const IS_MAC =
+  typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform);
+const shortcutLabel = (mark: TextMark) =>
+  (IS_MAC ? "⌘" : "Ctrl+") +
+  (MARK_SHORTCUTS[mark].shift ? (IS_MAC ? "⇧" : "Shift+") : "") +
+  MARK_SHORTCUTS[mark].key.toUpperCase();
 
 type IconName =
   | CanvasTool
@@ -45,6 +78,13 @@ type IconName =
   | "arrow"
   | "grid"
   | "bold"
+  | "italic"
+  | "underline"
+  | "strike"
+  | "textColor"
+  | "alignLeft"
+  | "alignCenter"
+  | "alignRight"
   | "lock"
   | "duplicate";
 function Icon({ name }: { name: IconName }) {
@@ -265,6 +305,14 @@ export function CanvasChrome({
   >(null);
   const [query, setQuery] = useState("");
   const [zoomMenu, setZoomMenu] = useState(false);
+  // The rich editor of the note being edited, and its last text selection,
+  // which survives focus moving to a toolbar menu.
+  const inlineRef = useRef<StickyInlineEditor | null>(null);
+  const lastRange = useRef<{ index: number; length: number } | null>(null);
+  const [, setInlineVersion] = useState(0);
+  const [textMenu, setTextMenu] = useState<"textColor" | "align" | null>(null);
+  const stickyBarRef = useRef<HTMLDivElement>(null);
+  const [stickyBarWidth, setStickyBarWidth] = useState(560);
   const [arranging, setArranging] = useState(false);
   const [grid, setGrid] = useState(true);
   const [notice, setNotice] = useState("");
@@ -479,6 +527,19 @@ export function CanvasChrome({
         setPalette(null);
         return;
       }
+      const shortcutMark = markForShortcut(event);
+      if (shortcutMark && !controller.isEditing()) {
+        const selection = controller.state().selection;
+        if (
+          selection.some((item) => item.simpleSticky) &&
+          selection.every((item) => item.simpleSticky || item.kind === "connector")
+        ) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+          controller.toggleTextMark(shortcutMark);
+          return;
+        }
+      }
       if (
         event.metaKey ||
         event.ctrlKey ||
@@ -627,14 +688,96 @@ export function CanvasChrome({
         left: Math.max(
           88,
           Math.min(
-            host.clientWidth - 440,
-            stickyBounds.x + stickyBounds.w / 2 - 210,
+            host.clientWidth - stickyBarWidth - 16,
+            stickyBounds.x + stickyBounds.w / 2 - stickyBarWidth / 2,
           ),
         ),
         bottom: "auto",
         transform: "none",
       }
     : undefined;
+  useLayoutEffect(() => {
+    const width = stickyBarRef.current?.offsetWidth;
+    if (width && Math.abs(width - stickyBarWidth) > 1) setStickyBarWidth(width);
+  });
+  const selectionKey = state.selection.map((item) => item.id).join(",");
+  useEffect(() => setTextMenu(null), [selectionKey]);
+  const stickyCss = useMemo(
+    () =>
+      stickyTextCss(
+        state.items
+          .filter((item) => item.kind === "note")
+          .map((item) => ({ id: item.id, style: item.textStyle })),
+      ),
+    [state.items],
+  );
+  const notesLocked = stickySelection.every((note) => note.locked);
+  // Selected words while editing; otherwise styles apply to whole notes.
+  const textTarget = () => {
+    const inline = inlineRef.current;
+    if (!inline) return null;
+    // The editor syncs its range a frame after the browser selection moves,
+    // so read the live selection when it is inside the note.
+    const selection = document.getSelection();
+    const live =
+      selection?.rangeCount && inline.rootElement?.contains(selection.anchorNode)
+        ? inline.toInlineRange(selection.getRangeAt(0))
+        : null;
+    const range = live ?? inline.getInlineRange() ?? lastRange.current;
+    return range && range.length > 0 ? { inline, range } : null;
+  };
+  const markActive = (mark: TextMark) => {
+    const target = textTarget();
+    return target
+      ? Boolean(target.inline.getFormat(target.range)[mark])
+      : stickySelection.length > 0 && stickySelection.every((note) => note.marks[mark]);
+  };
+  const toggleMark = (mark: TextMark) => {
+    const target = textTarget();
+    if (!target) return controller.toggleTextMark(mark);
+    const on = !target.inline.getFormat(target.range)[mark];
+    target.inline.formatText(target.range, { [mark]: on ? true : null });
+    target.inline.setInlineRange(target.range);
+    setInlineVersion((version) => version + 1);
+  };
+  const target = textTarget();
+  const textColor = target
+    ? (target.inline.getFormat(target.range).color ?? null)
+    : stickySelection.every((note) => note.textColor === stickySelection[0]?.textColor)
+      ? (stickySelection[0]?.textColor ?? null)
+      : undefined;
+  const applyTextColor = (color: string | null) => {
+    const current = textTarget();
+    if (current) {
+      current.inline.formatText(current.range, { color });
+      current.inline.setInlineRange(current.range);
+      setInlineVersion((version) => version + 1);
+    } else controller.setTextColor(color);
+    setTextMenu(null);
+  };
+  const sharedStyle = <K extends keyof StickyTextStyle>(key: K) =>
+    stickySelection.every((note) => note.textStyle[key] === stickySelection[0]?.textStyle[key])
+      ? stickySelection[0]?.textStyle[key]
+      : undefined;
+  const applyTextStyle = (patch: Partial<StickyTextStyle>) => {
+    controller.setTextStyle(patch);
+    // A menu took focus from the editor; return it to the same selection.
+    const inline = inlineRef.current;
+    if (inline?.rootElement) {
+      inline.rootElement.focus({ preventScroll: true });
+      if (lastRange.current) inline.setInlineRange(lastRange.current);
+    }
+  };
+  const onEditor = (inline: StickyInlineEditor | null) => {
+    inlineRef.current = inline;
+    lastRange.current = null;
+    setInlineVersion((version) => version + 1);
+    inline?.slots.inlineRangeSync.subscribe(() => {
+      const range = inline.getInlineRange();
+      if (range) lastRange.current = range;
+      setInlineVersion((version) => version + 1);
+    });
+  };
   useEffect(() => {
     host.classList.toggle("whiteboard-note-selection", noteSelection);
     return () => host.classList.remove("whiteboard-note-selection");
@@ -690,6 +833,8 @@ export function CanvasChrome({
           state={state}
           controller={controller}
           host={host}
+          onEditor={onEditor}
+          onToggleMark={toggleMark}
         />
       ) : null}
       {placement && editable ? (
@@ -1254,31 +1399,145 @@ export function CanvasChrome({
           ) : null}
         </div>
       ) : null}
+      {stickyCss ? <style>{stickyCss}</style> : null}
       {noteSelection && editable ? (
         <div
           className="sticky-selection-actions"
+          ref={stickyBarRef}
           style={stickyBarStyle}
           aria-label="Sticky note actions"
+          // Keep focus, and the text selection, in the note being edited.
+          onMouseDown={(event) => {
+            if (!(event.target as Element).closest("select")) event.preventDefault();
+          }}
         >
           <Palette
-            disabled={stickySelection.every((note) => note.locked)}
+            disabled={notesLocked}
             color={stickySelection[0].color}
             onChange={(color) => {
               setOptions((current) => ({ ...current, color }));
               controller.colorSelection(color);
             }}
           />
-          <button
-            className="canvas-icon-button small"
-            type="button"
-            aria-label="Bold note text"
-            aria-pressed={stickySelection.every((item) => item.bold)}
-            title="Bold"
-            disabled={stickySelection.every((note) => note.locked)}
-            onClick={() => controller.boldSelection()}
+          <span className="selection-divider" />
+          <select
+            className="sticky-text-select"
+            aria-label="Font"
+            title="Font"
+            disabled={notesLocked}
+            value={sharedStyle("font") ?? ""}
+            onChange={(event) =>
+              applyTextStyle({ font: event.target.value as StickyTextStyle["font"] })
+            }
           >
-            <Icon name="bold" />
-          </button>
+            {sharedStyle("font") ? null : <option value="" disabled>Mixed</option>}
+            {STICKY_FONTS.map((font) => (
+              <option key={font.id} value={font.id}>
+                {font.name}
+              </option>
+            ))}
+          </select>
+          <select
+            className="sticky-text-select"
+            aria-label="Text size"
+            title="Text size"
+            disabled={notesLocked}
+            value={sharedStyle("size") ?? ""}
+            onChange={(event) =>
+              applyTextStyle({ size: event.target.value as StickyTextStyle["size"] })
+            }
+          >
+            {sharedStyle("size") ? null : <option value="" disabled>Mixed</option>}
+            {STICKY_SIZES.map((size) => (
+              <option key={size.id} value={size.id}>
+                {size.name}
+              </option>
+            ))}
+          </select>
+          <span className="selection-divider" />
+          {TEXT_MARKS.map((mark) => (
+            <button
+              key={mark}
+              className="canvas-icon-button small"
+              type="button"
+              aria-label={MARK_SHORTCUTS[mark].label}
+              aria-pressed={markActive(mark)}
+              title={`${MARK_SHORTCUTS[mark].label} (${shortcutLabel(mark)})`}
+              disabled={notesLocked}
+              onClick={() => toggleMark(mark)}
+            >
+              <Icon name={mark} />
+            </button>
+          ))}
+          <div className="sticky-text-menu">
+            <button
+              className="canvas-icon-button small text-color-button"
+              type="button"
+              aria-label="Text color"
+              aria-expanded={textMenu === "textColor"}
+              title="Text color"
+              disabled={notesLocked}
+              onClick={() =>
+                setTextMenu((menu) => (menu === "textColor" ? null : "textColor"))
+              }
+            >
+              <Icon name="textColor" />
+              <span
+                className="text-color-bar"
+                style={{ background: textColor ?? "#303748" }}
+              />
+            </button>
+            {textMenu === "textColor" ? (
+              <div className="sticky-text-popover" role="group" aria-label="Text colors">
+                {STICKY_TEXT_COLORS.map((color) => (
+                  <button
+                    key={color.name}
+                    type="button"
+                    aria-label={`${color.name} text`}
+                    aria-pressed={textColor === color.value}
+                    title={color.name}
+                    style={{ color: color.value ?? "#303748" }}
+                    onClick={() => applyTextColor(color.value)}
+                  >
+                    A
+                  </button>
+                ))}
+              </div>
+            ) : null}
+          </div>
+          <div className="sticky-text-menu">
+            <button
+              className="canvas-icon-button small"
+              type="button"
+              aria-label="Text alignment"
+              aria-expanded={textMenu === "align"}
+              title="Text alignment"
+              disabled={notesLocked}
+              onClick={() => setTextMenu((menu) => (menu === "align" ? null : "align"))}
+            >
+              <Icon name={ALIGN_ICONS[sharedStyle("align") ?? "left"]} />
+            </button>
+            {textMenu === "align" ? (
+              <div className="sticky-text-popover" role="group" aria-label="Text alignment">
+                {STICKY_ALIGNMENTS.map((align) => (
+                  <button
+                    key={align.id}
+                    type="button"
+                    aria-label={align.name}
+                    aria-pressed={sharedStyle("align") === align.id}
+                    title={align.name}
+                    onClick={() => {
+                      applyTextStyle({ align: align.id });
+                      setTextMenu(null);
+                    }}
+                  >
+                    <Icon name={ALIGN_ICONS[align.id]} />
+                  </button>
+                ))}
+              </div>
+            ) : null}
+          </div>
+          <span className="selection-divider" />
           <button
             className="canvas-icon-button small"
             type="button"
@@ -1291,11 +1550,7 @@ export function CanvasChrome({
           <button
             className="canvas-icon-button small"
             type="button"
-            aria-label={
-              stickySelection.every((note) => note.locked)
-                ? "Unlock notes"
-                : "Lock notes"
-            }
+            aria-label={notesLocked ? "Unlock notes" : "Lock notes"}
             title="Lock or unlock"
             onClick={() => controller.lockSelection()}
           >
@@ -1655,6 +1910,8 @@ export function CanvasChrome({
               ["Copy / paste", "⌘ C / ⌘ V"],
               ["Duplicate", "⌘ D"],
               ["Group / ungroup", "⌘ G / ⌘ ⇧ G"],
+              ["Bold / italic / underline", "⌘ B / ⌘ I / ⌘ U"],
+              ["Strikethrough", "⌘ ⇧ X"],
               ["Pan temporarily", "Space + drag"],
               ["Pan with Select", "Left or right drag on blank canvas"],
               ["Select an area", "Shift + drag"],
@@ -1747,50 +2004,90 @@ function StickyTextEditor({
   state,
   controller,
   host,
+  onEditor,
+  onToggleMark,
 }: {
   state: CanvasState;
   controller: CanvasController;
   host: HTMLElement;
+  onEditor: (editor: StickyInlineEditor | null) => void;
+  onToggleMark: (mark: TextMark) => void;
 }) {
-  const ref = useRef<HTMLTextAreaElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
+  const inlineRef = useRef<StickyInlineEditor | null>(null);
+  const onEditorRef = useRef(onEditor);
+  onEditorRef.current = onEditor;
   const editing = state.editing!;
   const bounds = controller.viewBounds(editing.id);
+  const yText = controller.editingText()?.yText ?? null;
   useEffect(() => {
-    const input = ref.current;
-    input?.focus({ preventScroll: true });
-    if (input) input.setSelectionRange(input.value.length, input.value.length);
+    const root = ref.current;
+    if (!root || !yText) return;
+    // The rich editor writes straight to the note's shared text, so edits
+    // from collaborators and undo land in place without a draft to merge.
+    const inline = createStickyInlineEditor(yText);
+    inline.mount(root);
+    inlineRef.current = inline;
+    root.focus({ preventScroll: true });
+    inline.focusEnd();
+    onEditorRef.current(inline);
     host.classList.add("sticky-text-editing");
-    return () => host.classList.remove("sticky-text-editing");
-  }, [host]);
-  useLayoutEffect(() => {
-    controller.acknowledgeEditingText(editing.id, editing.draft);
-  }, [controller, editing.id, editing.draft]);
+    return () => {
+      host.classList.remove("sticky-text-editing");
+      onEditorRef.current(null);
+      inlineRef.current = null;
+      inline.unmount();
+    };
+  }, [host, yText]);
   if (!bounds) return null;
+  const style = editing.textStyle;
   return (
-    <textarea
+    <div
       ref={ref}
       className="sticky-text-editor"
+      role="textbox"
+      aria-multiline="true"
       aria-label="Edit sticky note"
-      value={editing.draft}
       spellCheck
-      maxLength={10_000}
       style={{
         left: bounds.x,
         top: bounds.y,
         width: bounds.w,
         height: bounds.h,
         background: editing.color,
-        fontSize: 20 * state.zoom,
-        fontWeight: editing.bold ? 700 : 400,
+        fontSize: stickySizePx(style.size) * state.zoom,
+        fontFamily: stickyFontCss(style.font) ?? undefined,
+        textAlign: style.align,
         padding: 24 * state.zoom,
         lineHeight: 1.4,
       }}
-      onChange={(event) =>
-        controller.setEditingText(event.target.value, editing.draft)
-      }
-      onBlur={() => controller.finishEditing(editing.id)}
+      onBlur={(event) => {
+        // Toolbar menus take focus without ending the edit.
+        const next = event.relatedTarget;
+        if (next instanceof Element && next.closest(".sticky-selection-actions")) return;
+        controller.finishEditing(editing.id);
+      }}
+      onPaste={(event) => {
+        event.preventDefault();
+        const inline = inlineRef.current;
+        const range = inline?.getInlineRange();
+        if (!inline || !range) return;
+        const text = pastedStickyText(
+          event.clipboardData.getData("text/plain"),
+          inline.yTextLength,
+          range.length,
+        );
+        inline.insertText(range, text);
+        inline.setInlineRange({ index: range.index + text.length, length: 0 });
+      }}
+      onDrop={(event) => event.preventDefault()}
       onKeyDown={(event) => {
-        if (
+        const mark = markForShortcut(event);
+        if (mark) {
+          event.preventDefault();
+          event.stopPropagation();
+          onToggleMark(mark);
+        } else if (
           event.key.toLowerCase() === "z" &&
           (event.metaKey || event.ctrlKey)
         ) {

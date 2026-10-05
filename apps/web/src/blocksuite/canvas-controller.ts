@@ -48,7 +48,12 @@ import {
   type Direction,
   type Arrangement,
 } from "./layout";
-import { CollaborativeTextDraft } from "./text-draft";
+import {
+  readStickyTextStyle,
+  storedStickyTextStyle,
+  STICKY_TEXT_STYLE_KEY,
+  type StickyTextStyle,
+} from "./sticky-text-style";
 import { canvasPointAt } from "./canvas-hit-test";
 
 export type CanvasTool =
@@ -223,9 +228,15 @@ export type CanvasItem = {
   h: number;
   color: string;
   locked: boolean;
-  bold: boolean;
+  /** Whether every character of the note's text has each style. */
+  marks: Record<TextMark, boolean>;
+  /** The text color shared by all of the note's text, or null. */
+  textColor: string | null;
+  textStyle: StickyTextStyle;
   simpleSticky: boolean;
 };
+export const TEXT_MARKS = ["bold", "italic", "underline", "strike"] as const;
+export type TextMark = (typeof TEXT_MARKS)[number];
 export type CanvasState = {
   tool: CanvasTool;
   zoom: number;
@@ -233,7 +244,7 @@ export type CanvasState = {
   canRedo: boolean;
   selection: CanvasItem[];
   items: CanvasItem[];
-  editing: (CanvasItem & { draft: string }) | null;
+  editing: CanvasItem | null;
 };
 
 export function createCanvasController(editor: WhiteboardEditorElement) {
@@ -245,13 +256,8 @@ export function createCanvasController(editor: WhiteboardEditorElement) {
     editor.isConnected &&
     !store.readonly &&
     !editor.closest<HTMLElement>(".editor-canvas")?.inert;
-  let editing: {
-    id: string;
-    draft: string;
-    session: CollaborativeTextDraft;
-  } | null = null;
+  let editing: { id: string } | null = null;
   const clearEditing = () => {
-    editing?.session.dispose();
     editing = null;
   };
   let cachedItems: CanvasItem[] | null = null;
@@ -271,6 +277,16 @@ export function createCanvasController(editor: WhiteboardEditorElement) {
         ? nativeBlockText(model)
         : String(props.text ?? props.title ?? "");
     const bound = model.elementBound;
+    const deltas =
+      kind === "note" && "children" in model && textValue.length
+        ? model.children.flatMap(
+            (child) => (child.props as { text?: Text }).text?.toDelta() ?? [],
+          )
+        : [];
+    const every = (test: (attributes: Record<string, unknown>) => boolean) =>
+      deltas.length > 0 &&
+      deltas.every((part) => test((part.attributes ?? {}) as Record<string, unknown>));
+    const firstColor = deltas[0]?.attributes?.color;
     const color = props.background ?? props.fillColor;
     const bg =
       color && typeof color === "object"
@@ -286,14 +302,15 @@ export function createCanvasController(editor: WhiteboardEditorElement) {
       h: bound.h,
       color: typeof bg === "string" && bg.startsWith("#") ? bg : "#e5eaf4",
       locked: Boolean(props.lockedBySelf ?? props.locked),
-      bold:
-        kind === "note" &&
-        "children" in model &&
-        Boolean(textValue.length) &&
-        model.children.every((child) => {
-          const text = (child.props as { text?: Text }).text;
-          return text?.toDelta().every((part) => part.attributes?.bold);
-        }),
+      marks: Object.fromEntries(
+        TEXT_MARKS.map((mark) => [mark, every((attributes) => Boolean(attributes[mark]))]),
+      ) as Record<TextMark, boolean>,
+      textColor:
+        typeof firstColor === "string" &&
+        every((attributes) => attributes.color === firstColor)
+          ? firstColor
+          : null,
+      textStyle: readStickyTextStyle(props.edgeless),
       simpleSticky:
         kind === "note" &&
         "children" in model &&
@@ -416,29 +433,39 @@ export function createCanvasController(editor: WhiteboardEditorElement) {
           note.id,
         ),
       )!;
-    editing = {
-      id,
-      draft: item(note).text,
-      session: new CollaborativeTextDraft(
-        (paragraph.props as { text: Text }).text.yText,
-      ),
-    };
-    if (initial !== undefined) setEditingText(initial);
+    editing = { id };
+    if (initial !== undefined) {
+      const text = (paragraph.props as { text: Text }).text;
+      store.transact(() => text.replace(0, text.length, initial));
+    }
     notify();
     return true;
   };
-  const setEditingText = (value: string, previous = editing?.draft) => {
-    if (!editing || !editable() || previous === undefined) return;
-    const note = gfx.getElementById<GfxModel>(editing.id);
-    if (!note || item(note).locked) {
-      clearEditing();
-      notify();
-      return;
-    }
-    editing.draft = editing.session.apply(value, previous, (change) =>
-      store.transact(change),
+  /** The single paragraph's text of the note being edited, for the rich editor. */
+  const editingText = () => {
+    const note = editing && gfx.getElementById<GfxModel>(editing.id);
+    if (!note || !("children" in note)) return null;
+    return (note.children[0]?.props as { text?: Text } | undefined)?.text ?? null;
+  };
+  const selectedNotes = () =>
+    gfx.selection.selectedElements.filter(
+      (model) =>
+        item(model).kind === "note" && !item(model).locked && "children" in model,
     );
-    notify();
+  const formatNotes = (attributes: Record<string, unknown>) => {
+    const notes = selectedNotes();
+    if (!editable() || !notes.length) return;
+    store.captureSync();
+    store.transact(() =>
+      notes.forEach((model) => {
+        if (!("children" in model)) return;
+        for (const child of model.children) {
+          const text = (child.props as { text?: Text }).text;
+          if (text?.length) text.format(0, text.length, attributes);
+        }
+      }),
+    );
+    store.captureSync();
   };
   const editShape = (model: GfxModel, initialText?: string) => {
     if (
@@ -656,10 +683,7 @@ export function createCanvasController(editor: WhiteboardEditorElement) {
     },
     isEditing: () => Boolean(editing) || gfx.selection.editing,
     startEditing,
-    setEditingText,
-    acknowledgeEditingText(id: string, value: string) {
-      if (editing?.id === id) editing.session.acknowledge(value);
-    },
+    editingText,
     finishEditing(id?: string) {
       if (id && editing?.id !== id) return;
       clearEditing();
@@ -711,7 +735,8 @@ export function createCanvasController(editor: WhiteboardEditorElement) {
     editSelectedNote(value?: string, replace = false) {
       if (!editable()) return false;
       if (editing) {
-        if (value) setEditingText(editing.draft + value);
+        const text = editingText();
+        if (value && text) store.transact(() => text.insert(value, text.length));
         return true;
       }
       const note = gfx.selection.selectedElements[0];
@@ -738,25 +763,16 @@ export function createCanvasController(editor: WhiteboardEditorElement) {
         canRedo: store.canRedo,
         selection: gfx.selection.selectedElements.map(item),
         items: cachedItems,
-        editing:
-          editing && editingModel
-            ? { ...item(editingModel), draft: editing.draft }
-            : null,
+        editing: editing && editingModel ? item(editingModel) : null,
       };
     },
     subscribe(onChange: () => void) {
       listeners.add(onChange);
       let frame = 0;
-      let refreshDraft = false;
       const schedule = () => {
         if (!frame)
           frame = requestAnimationFrame(() => {
             frame = 0;
-            if (refreshDraft && editing) {
-              const model = gfx.getElementById<GfxModel>(editing.id);
-              if (model) editing.draft = item(model).text;
-            }
-            refreshDraft = false;
             onChange();
           });
       };
@@ -801,10 +817,8 @@ export function createCanvasController(editor: WhiteboardEditorElement) {
           labelXYWH: bounds.toXYWH(),
         });
       };
-      const documentUpdated = (_update: Uint8Array, origin: unknown) => {
+      const documentUpdated = () => {
         cachedItems = null;
-        if (origin === "native-remote" || origin === store.history.undoManager)
-          refreshDraft = true;
         schedule();
       };
       editor.addEventListener("whiteboard-edit-note", beginEditing);
@@ -905,26 +919,34 @@ export function createCanvasController(editor: WhiteboardEditorElement) {
       );
       store.captureSync();
     },
-    boldSelection() {
-      if (!editable()) return;
-      const notes = gfx.selection.selectedElements.filter(
-        (model) => item(model).kind === "note" && !item(model).locked,
-      );
-      const bold = !notes.every((model) => item(model).bold);
+    /** Toggle a style on all text of the selected notes. */
+    toggleTextMark(mark: TextMark) {
+      const notes = selectedNotes();
+      const on = !notes.every((model) => item(model).marks[mark]);
+      formatNotes({ [mark]: on ? true : null });
+    },
+    /** Set the text color of the selected notes; null restores the default ink. */
+    setTextColor(color: string | null) {
+      formatNotes({ color });
+    },
+    /** Change font, size or alignment for the whole of each selected note. */
+    setTextStyle(patch: Partial<StickyTextStyle>) {
+      const notes = selectedNotes();
+      if (!editable() || !notes.length) return;
       store.captureSync();
       store.transact(() =>
         notes.forEach((model) => {
-          if (
-            item(model).kind !== "note" ||
-            item(model).locked ||
-            !("children" in model)
-          )
-            return;
-          for (const child of model.children) {
-            const text = (child.props as { text?: Text }).text;
-            if (!text) continue;
-            text.format(0, text.length, { bold });
-          }
+          const edgeless = (model as unknown as { props: { edgeless?: Record<string, unknown> } })
+            .props.edgeless;
+          crud.updateElement(model.id, {
+            edgeless: {
+              ...edgeless,
+              [STICKY_TEXT_STYLE_KEY]: storedStickyTextStyle({
+                ...readStickyTextStyle(edgeless),
+                ...patch,
+              }),
+            },
+          });
         }),
       );
       store.captureSync();
