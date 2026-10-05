@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+Selecting several sticky notes shows the note toolbar above them, so you can change their color, bold, duplicate or lock them together. This works when the selection also includes the arrows between the notes.
+
 ## 0.3.2
 
 Node downloads now use `open-whiteboard-node.zip`, with an identical `huddle-loom-node.zip` compatibility copy to preserve existing links.
