@@ -2,7 +2,7 @@
 
 ## Deploy button
 
-1. Open the [Deploy to Cloudflare form](https://deploy.workers.cloudflare.com/?url=https://github.com/sportwhiz/huddle-loom).
+1. Open the [Deploy to Cloudflare form](https://deploy.workers.cloudflare.com/?url=https://github.com/sportwhiz/open-whiteboard).
 2. Select your account and choose a Worker name. Enable Workers Paid and R2 in that account if you have not already done so.
 3. Set `SETUP_PASSWORD` to a private passphrase of at least 16 characters. Keep it in a password manager. This protects the first administrator claim.
 4. Finish deployment. The script provisions D1, R2, and Durable Objects, applies migrations, and discovers the app's workers.dev address. It creates persistent private authentication keys automatically.

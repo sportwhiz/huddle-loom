@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1
+
+The official GitHub repository is moving to `sportwhiz/open-whiteboard`. Release checks now use its permanent GitHub repository identity, so renaming it does not interrupt update discovery. The deployment runner and installation links use the new source URL.
+
+Existing Worker addresses, storage, authentication keys, update manifests, and Node download filenames remain compatible. This release keeps the existing database schema and board format. Install it before the repository rename; existing installer repositories should also refresh their deployment runner's source URL.
+
 ## 0.3.0
 
 Huddle Loom is now Open Whiteboard. The app has a new logo, a whiteboard look in light and dark themes, new illustrations, and the tagline "Work it out together." Patterns are now called Templates, Unravel is now History, the Huddle panel is now Workshop, and your thread color is now your marker color. The marker color presets are new; a color you picked before stays selected as a custom color.

@@ -1,6 +1,6 @@
 # Security reports
 
-Please report vulnerabilities through [GitHub's private vulnerability reporting](https://github.com/sportwhiz/huddle-loom/security/advisories/new). Do not post working credentials, private board content, or exploit details in a public issue.
+Please report vulnerabilities through [GitHub's private vulnerability reporting](https://github.com/sportwhiz/open-whiteboard/security/advisories/new). Do not post working credentials, private board content, or exploit details in a public issue.
 
 Include the affected version, hosting adapter, steps to reproduce, and the impact you observed. Use a disposable installation where possible. We will review the report and coordinate a fix and disclosure with you.
 

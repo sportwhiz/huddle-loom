@@ -4,7 +4,7 @@ import {
   compatibleRelease,
   compareVersions,
   parseRelease,
-  RELEASE_REPOSITORY,
+  RELEASE_REPOSITORY_ID,
   type Release,
 } from "./release";
 import { boundedBody, randomToken } from "../security/primitives";
@@ -70,7 +70,7 @@ export async function publishedRelease(
     Accept: "application/vnd.github+json",
   };
   const response = await fetch(
-    `https://api.github.com/repos/${RELEASE_REPOSITORY}/releases/${version ? `tags/v${version}` : "latest"}`,
+    `https://api.github.com/repositories/${RELEASE_REPOSITORY_ID}/releases/${version ? `tags/v${version}` : "latest"}`,
     { headers, signal: AbortSignal.timeout(15000), redirect: "manual" },
   );
   if (!version && response.status === 404) {
@@ -78,7 +78,7 @@ export async function publishedRelease(
     // Confirm that the repository is readable before reporting an empty channel.
     const releases = await remoteJson(
       await fetch(
-        `https://api.github.com/repos/${RELEASE_REPOSITORY}/releases?per_page=100`,
+        `https://api.github.com/repositories/${RELEASE_REPOSITORY_ID}/releases?per_page=100`,
         { headers, signal: AbortSignal.timeout(15000), redirect: "manual" },
       ),
     );
@@ -106,7 +106,7 @@ export async function publishedRelease(
   const manifest = parseRelease(
     await remoteJson(
       await fetch(
-        `https://api.github.com/repos/${RELEASE_REPOSITORY}/releases/assets/${asset.id}`,
+        `https://api.github.com/repositories/${RELEASE_REPOSITORY_ID}/releases/assets/${asset.id}`,
         {
           headers: { ...headers, Accept: "application/octet-stream" },
           signal: AbortSignal.timeout(15000),

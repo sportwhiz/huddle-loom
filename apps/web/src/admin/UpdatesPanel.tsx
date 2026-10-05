@@ -109,7 +109,7 @@ export function UpdatesPanel() {
             schema and applies supported migrations.
           </p>
           <a
-            href="https://github.com/sportwhiz/huddle-loom/blob/main/docs/godaddy-nodejs-installation.md#updates"
+            href="https://github.com/sportwhiz/open-whiteboard/blob/main/docs/godaddy-nodejs-installation.md#updates"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -371,7 +371,7 @@ export function UpdatesPanel() {
                   version.
                 </p>
                 <a
-                  href="https://github.com/sportwhiz/huddle-loom/releases"
+                  href="https://github.com/sportwhiz/open-whiteboard/releases"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
