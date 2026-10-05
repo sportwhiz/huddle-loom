@@ -4,6 +4,8 @@
 
 Selecting several sticky notes shows the note toolbar above them, so you can change their color, bold, duplicate or lock them together. This works when the selection also includes the arrows between the notes.
 
+Sticky notes now hold formatted text. Select words while editing to make them bold, italic, underlined, struck through, or colored, from the toolbar or with ⌘B, ⌘I, ⌘U, and ⌘⇧X. Each note also has a font (sans, serif, mono, or handwriting), a text size, and an alignment. Selecting several notes applies any of these to all of them. Installations that have not updated show the word styles and colors, and show font, size, and alignment as the default.
+
 ## 0.3.2
 
 Node downloads now use `open-whiteboard-node.zip`, with an identical `huddle-loom-node.zip` compatibility copy to preserve existing links.

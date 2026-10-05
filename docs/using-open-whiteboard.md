@@ -16,6 +16,8 @@ A board an assistant creates starts blank unless you ask for a template.
 
 Drag a sticky-note or shape tool onto the canvas to place the last style you chose. You can also select a tool and click to place it. Select an object to edit its text, color, size, and other available properties.
 
+Sticky notes have a toolbar for their color and text. Font, size, and alignment apply to the whole note. Bold, italic, underline, strikethrough, and text color apply to the words you select while editing, or to the whole note when you have selected the note itself. Select several notes to change them together. While editing, ⌘B, ⌘I, ⌘U, and ⌘⇧X (Ctrl on Windows and Linux) toggle bold, italic, underline, and strikethrough. Pasted text arrives as plain text.
+
 Use the connected-next-step control to add a note or shape with an arrow. Bound connectors follow their objects when you move them. Frames keep sections together; documents and tables hold details that would be difficult to read on a sticky note.
 
 Pan with the hand tool, Space and drag, or drag the empty background using the configured pointer behavior. Right-drag the empty background pans as well. Use the zoom controls to fit the board. Selection, tool, and editing shortcuts are listed in board help.
