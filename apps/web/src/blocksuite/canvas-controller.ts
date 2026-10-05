@@ -754,7 +754,8 @@ export function createCanvasController(editor: WhiteboardEditorElement) {
     },
     state(): CanvasState {
       const editingModel = editing && gfx.getElementById<GfxModel>(editing.id);
-      if (!editingModel || !editable()) clearEditing();
+      if (!editingModel || !editable() || item(editingModel).locked)
+        clearEditing();
       cachedItems ??= gfx.gfxElements.map(item);
       return {
         tool: toolNames[gfx.tool.currentToolName$.peek() ?? ""] ?? "select",
@@ -911,6 +912,10 @@ export function createCanvasController(editor: WhiteboardEditorElement) {
         (model) => item(model).kind === "note",
       );
       const lock = notes.some((model) => !item(model).locked);
+      // The rich editor writes straight to the note, so a locked note must
+      // stop being edited.
+      if (lock && editing && notes.some((model) => model.id === editing?.id))
+        clearEditing();
       store.captureSync();
       store.transact(() =>
         notes.forEach((model) =>
@@ -918,6 +923,7 @@ export function createCanvasController(editor: WhiteboardEditorElement) {
         ),
       );
       store.captureSync();
+      notify();
     },
     /** Toggle a style on all text of the selected notes. */
     toggleTextMark(mark: TextMark) {

@@ -42,6 +42,7 @@ import {
 } from "./sticky-text-style";
 import {
   createStickyInlineEditor,
+  IS_MAC,
   MARK_SHORTCUTS,
   markForShortcut,
   pastedStickyText,
@@ -54,8 +55,6 @@ const ALIGN_ICONS: Record<StickyAlign, IconName> = {
   center: "alignCenter",
   right: "alignRight",
 };
-const IS_MAC =
-  typeof navigator !== "undefined" && /Mac|iPhone|iPad/.test(navigator.platform);
 const shortcutLabel = (mark: TextMark) =>
   (IS_MAC ? "⌘" : "Ctrl+") +
   (MARK_SHORTCUTS[mark].shift ? (IS_MAC ? "⇧" : "Shift+") : "") +
@@ -309,6 +308,7 @@ export function CanvasChrome({
   // which survives focus moving to a toolbar menu.
   const inlineRef = useRef<StickyInlineEditor | null>(null);
   const lastRange = useRef<{ index: number; length: number } | null>(null);
+  const rangeSubscription = useRef<{ unsubscribe(): void } | null>(null);
   const [, setInlineVersion] = useState(0);
   const [textMenu, setTextMenu] = useState<"textColor" | "align" | null>(null);
   const stickyBarRef = useRef<HTMLDivElement>(null);
@@ -781,10 +781,13 @@ export function CanvasChrome({
     }
   };
   const onEditor = (inline: StickyInlineEditor | null) => {
+    rangeSubscription.current?.unsubscribe();
+    rangeSubscription.current = null;
     inlineRef.current = inline;
     lastRange.current = null;
     setInlineVersion((version) => version + 1);
-    inline?.slots.inlineRangeSync.subscribe(() => {
+    if (!inline) return;
+    rangeSubscription.current = inline.slots.inlineRangeSync.subscribe(() => {
       const range = inline.getInlineRange();
       if (range) lastRange.current = range;
       setInlineVersion((version) => version + 1);
